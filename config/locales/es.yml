@@ -1,0 +1,18 @@
+es:
+  attributes:
+    fechacreacion: Creación
+    fechadeshabilitacion: Deshabilitación 
+  activerecord:
+    models:
+      "jn316_gen/plantillahcm":
+        one: Plantilla para hoja de calculo con múltiples registros
+        other: Plantillas para hoja de calculo con múltiples registros
+    attributes:
+      "jn316_gen/doc":
+        nombremenu: Nombre por presentar en aplicación
+        tipodoc: Tipo de documento
+        filainicial: Fila inicial
+      "jn316_gen/plantillahcm":
+        nombremenu: Nombre por presentar en aplicación
+        filainicial: Fila inicial
+
