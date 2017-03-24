@@ -1,8 +1,5 @@
 # encoding: UTF-8
 
-require 'jn316_gen/engine'
-require 'font-awesome-rails'
-
 module Jn316Gen
   class Engine < ::Rails::Engine
     isolate_namespace Jn316Gen

@@ -14,14 +14,13 @@ gem 'sass'
 gem 'sass-rails'
 gem 'compass-rails'
 
+# Campos de selección bonitos
 gem 'chosen-rails'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -31,14 +30,6 @@ gem 'turbolinks'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 3.0'
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
 
 # Ambiente de CSS
 gem "twitter-bootstrap-rails"
@@ -66,12 +57,11 @@ gem 'twitter_cldr'
 # Maneja adjuntos
 gem "paperclip"#, "~> 4.1"
 
-gem 'libxml-ruby', '2.8.0' #https://github.com/xml4r/libxml-ruby/issues/127
-gem 'rspreadsheet'
-
 
 # Zonas horarias
 gem "tzinfo"
+
+gem 'net-ldap'
 
 # Motor de sistemas de información estilo Pasos de Jesús
 gem 'sip', git: "https://github.com/pasosdeJesus/sip.git"
@@ -79,7 +69,7 @@ gem 'sip', git: "https://github.com/pasosdeJesus/sip.git"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  #gem 'byebug', platform: :mri
+  gem 'byebug', platform: :mri
 end
 
 group :test do

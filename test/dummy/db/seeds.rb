@@ -16,6 +16,6 @@ conexion.execute("INSERT INTO usuario
 	(nusuario, email, encrypted_password, password, 
   fechacreacion, created_at, updated_at, rol) 
 	VALUES ('jn316', 'jn316@localhost', 
-	'$2a$10$FdubMrU.LZmkqMCFIaVXWORiOIQAM8/AqRrlC3SlkKsiZNCV/mmpC',  
+	'$2a$10$cuVDpUSmX9LZUQPJZgwrL.8xV4vtA15EpTMSGcPSzdHsoDzFohh1C',
 	'', '2014-08-14', '2014-08-14', '2014-08-14', 1);")
 

@@ -1,5 +1,5 @@
 # encoding: UTF-8
-class Ability  < Heb412Gen::Ability
+class Ability  < Jn316Gen::Ability
 
   # Autorizacion con CanCanCan
   def initialize(usuario = nil)
@@ -15,7 +15,7 @@ class Ability  < Heb412Gen::Ability
     can :descarga_anexo, Sip::Anexo
     can :nuevo, Sip::Ubicacion
     if usuario && usuario.rol then
-      can :read, Heb412Gen::Doc
+      #can :read, Jn316Gen::Doc
       case usuario.rol 
       when Ability::ROLANALI
         can :manage, Sip::Persona
@@ -24,7 +24,7 @@ class Ability  < Heb412Gen::Ability
         can [:update, :create, :destroy], Sip::Ubicacion
       when Ability::ROLADMIN
         can :manage, Sip::Ubicacion
-        can :manage, Heb412Gen::Doc
+        #can :manage, Jn316Gen::Doc
         can :manage, Sip::Persona
         can :manage, Usuario
         can :manage, :tablasbasicas

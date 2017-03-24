@@ -1,5 +1,5 @@
 # encoding: UTF-8
-module Heb412Gen
+module Jn316Gen
   module ApplicationHelper
 
     include ::FontAwesome::Rails::IconHelper

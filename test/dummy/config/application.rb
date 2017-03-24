@@ -28,12 +28,15 @@ module Dummy
 
     config.x.formato_fecha = 'yyyy-mm-dd'
 
-    config.x.url_colchon = 'colchon-articulos'
+    config.x.jn316_base = "ou=gente,dc=miorg,dc=net"
+    config.x.jn316_servidor = "ldap.miorg.net"
+    config.x.jn316_puerto = 389
+    config.x.jn316_opciones = {
+      encryption: {
+        method: :start_tls,
+        tls_options: OpenSSL::SSL::SSLContext::DEFAULT_PARAMS
+      }
+    }
 
-    config.x.jn316_ruta = Rails.root.join('public', 'jn316')
-
-    #FactoryGirl.definition_file_paths << Pathname.new("../factories") 
-    #FactoryGirl.definition_file_paths.uniq! 
-    #FactoryGirl.find_definitions
   end
 end
