@@ -235,7 +235,7 @@ Devise.setup do |config|
   #
    config.warden do |manager|
      #manager.intercept_401 = false
-     manager.default_strategies(:scope => :usuario).unshift :ldap_authenticatable
+     manager.default_strategies(:scope => :usuario).insert(1, :ldap_authenticatable)
    end
 
   # ==> Mountable engine configurations
