@@ -64,8 +64,8 @@ gem "tzinfo"
 gem 'net-ldap'
 
 # Motor de sistemas de información estilo Pasos de Jesús
-#gem 'sip', git: "https://github.com/pasosdeJesus/sip.git"
-gem 'sip', path: '../sip'
+gem 'sip', git: "https://github.com/pasosdeJesus/sip.git"
+#gem 'sip', path: '../sip'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

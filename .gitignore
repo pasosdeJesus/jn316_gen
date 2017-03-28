@@ -37,3 +37,4 @@ test/dummy/public/jn316/
 .byebug_history
 coverage
 corre.sh
+test/dummy/config/application.rb
