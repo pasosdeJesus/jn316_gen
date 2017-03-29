@@ -1,0 +1,5 @@
+es:
+  devise:
+    failure:
+      usuario:
+        invalid_login: 'Autenticación falló'

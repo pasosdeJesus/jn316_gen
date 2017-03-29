@@ -851,6 +851,7 @@ CREATE TABLE usuario (
     regionsjr_id integer,
     nombres character varying(50) COLLATE public.es_co_utf_8,
     apellidos character varying(50) COLLATE public.es_co_utf_8,
+    ultimasincldap date,
     CONSTRAINT usuario_check CHECK (((fechadeshabilitacion IS NULL) OR (fechadeshabilitacion >= fechacreacion))),
     CONSTRAINT usuario_rol_check CHECK ((rol >= 1))
 );
@@ -1298,7 +1299,7 @@ ALTER TABLE ONLY sip_ubicacion
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO "$user", public;
+SET search_path TO public, pg_catalog;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20150413160156'),
@@ -1326,6 +1327,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20161103081041'),
 ('20161103083352'),
 ('20161108102349'),
-('20170327132108');
+('20170327132108'),
+('20170328172001');
 
 

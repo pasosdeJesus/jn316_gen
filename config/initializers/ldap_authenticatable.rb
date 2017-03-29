@@ -10,7 +10,6 @@ module Devise
 
       # Busca usuario nusuario como admin y retorna toda la información 
       def ldap_busca_como_admin(nusuario, prob)
-        prob = ""
         if !ENV['JN316_CLAVE']
           prob='Falta clave LDAP para buscar'
           return nil
@@ -45,12 +44,68 @@ module Devise
       end
 
 
-      def actualiza_usuario(usuario, ldapus, clave=nil)
-        usuario.nombres=ldapus.givenname if ldapus.givenname
-        usuario.apellidos=ldapus.sn if ldapus.sn
-        usuario.email=ldapus.mail if ldapus.mail
-        usuario.email=ldapus.mail[0] if is_array?(ldapus.mail)
+      def actualizar_usuario(usuario, ldapus, prob, clave=nil)
+        usuario.nombres = ldapus.givenname if ldapus.givenname
+        usuario.apellidos = ldapus.sn if ldapus.sn
+        usuario.email = ldapus.mail if ldapus.mail
+        usuario.email = ldapus.mail[0] if ldapus.mail.kind_of?(Array)
+        if (ldapus.userPassword.nil? && usuario.fechadeshbilitacion.nil?)
+          # deshabilitar
+          usuario.fechadeshabilitacion = Date.today
+        else 
+          # habilitado, guardar clave si hay
+          unless clave.nil?
+            usuario.encrypted_password = BCrypt::Password.create(
+              clave, 
+              {:cost => Rails.application.config.devise.stretches}
+            )
+          end
+        end
+        usuario.ultimasincldap = Date.today
+        usuario.save
+        if (usuario.errors.messages.length > 0)
+          prob = usuario.errors.messages.to_s
+          return nil
+        end
+        return usuario
       end
+
+
+      def crear_usuario_min(nusuario, ldapus, prob, clave)
+        email = nusuario + '@porcompletar.org'
+        email = ldapus.mail if ldapus.mail
+        email = ldapus.mail[0] if ldapus.mail.kind_of?(Array)
+        ep = 'x'
+        ep = BCrypt::Password.create( clave, {
+          cost: Rails.application.config.devise.stretches}) if !clave.nil?
+        usuario = Usuario.create(
+          nusuario: nusuario,
+          email: email,
+          encrypted_password: ep, 
+          fechacreacion: Date.today
+        )
+        if (usuario.errors.messages.length > 0)
+          prob = usuario.errors.messages.to_s
+          return nil
+        end
+
+        return usuario
+      end
+
+
+      # crea un usuario y/o actualizarlo si ya existe
+      def crear_actualizar_usuario(nusuario, ldapus, prob, clave = nil)
+        usuario = Usuario.where(nusuario: nusuario).take
+        if usuario.nil?
+          usuario = crear_usuario_min(nusuario, ldapus, prob, clave)
+          if usuario.nil?
+            prob = 'No pudo crear usuario: ' + prob
+            return nil
+          end
+        end
+        return actualizar_usuario(usuario, ldapus, prob, clave)
+      end
+
 
       def authenticate!
         if params[:usuario]
@@ -66,36 +121,34 @@ module Devise
               password: password 
             }
           }.merge(Rails.application.config.x.jn316_opcon)
+          prob = ""
           ldap_con = Net::LDAP.new( opcon )
-
           if ldap_con.bind
-            usuario = Usuario.find_or_create_by(nusuario: nusuario)
             ldapus = ldap_busca_como_admin(nusuario, prob)
-            actualiza_usuario(usuario, ldapus, password)
-
-            if (!usuario.email) then
-              usuario.email = 'x' # aqui completar registro de usuario con información de LDAP considerar tambien el tema de sincronizar
+            usuario = crear_actualizar_usuario(
+              nusuario, ldapus, prob, password)
+            if usuario.nil?
+              prob = "No pudo crear/actualizar usuario en base de datos" + prob
+              puts prob
+              self.errors.add :nusuario, prob
+              fail(prob)
+              @halted = true
+              return nil
             end
-            success!(usuario)
+              success!(usuario) 
           else
-            # No se logró autenticar, bien porque el usuario no existe 
+            # No se logró autenticar, bien porque el usuario no existe en LDAP
             #   o bien porque la clave es errada
-            #byebug
-            prob = ""
             ldapus = ldap_busca_como_admin(nusuario, prob)
             unless ldapus.nil?
-              usuario = Usuario.find_or_create_by(nusuario: nusuario)
-              actualiza_usuario(usuario, ldapus)
-              if ldapus.userpassword == '' && 
-                usuario.fechadeshabiltiacion == ''
-                # si está deshabilitado en LDAP pero no en base 
-                # también deshabilita en base
-                usuario.fechadeshabilitacion = Date.today
-              end
+              # el usuario existe en el LDAP, crear o actualizar en base
+              # pero sin clave porque fue errada
+              usuario = crear_actualizar_usuario(nusuario, ldapus, prob)
               prob = "No pudo autenticar: " + prob
               puts prob
               self.errors.add :nusuario, prob
-              fail(:invalid_login)
+              fail(prob)
+              @halted = true
               return nil
             end
 
@@ -103,10 +156,11 @@ module Devise
             return pass
           end
         end
-        rescue Exception => exception
-        puts "No pudo conectarse a servido LDAP"
-        fail('No pudo conectarse a servidor LDAP')
-        self.errors.add :nusuario, "Servidor LDAP no opera?"  
+      rescue Exception => exception
+        prob = "¿Opera el servidor LDAP? " + prob + ' Excepción: ' + 
+          exception.to_s
+        puts prob
+        self.errors.add :nusuario, prob
         return pass
       end
 

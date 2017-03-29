@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   as :usuario do
     get 'usuarios/edit' => 'devise/registrations#edit', 
       :as => 'editar_registro_usuario'    
-    put 'usuarios/:id' => 'devise/registrations#update', 
+    put 'usuarios/:id' => 'jn316_gen/registrations#update', 
       :as => 'registro_usuario'            
   end
   resources :usuarios, path_names: { new: 'nuevo', edit: 'edita' } 

@@ -39,6 +39,9 @@ module Dummy
         tls_options: OpenSSL::SSL::SSLContext::DEFAULT_PARAMS
       }
     }
+    # Otros valores iniciales para usuario establecerlos como
+    # valores por omisión del modelo, en particular el rol
+
 
   end
 end
