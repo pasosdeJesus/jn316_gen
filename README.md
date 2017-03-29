@@ -59,42 +59,73 @@ básicas de adminsitración de usuarios y grupos
 
 # Configuración
 
-* La conexión LDAP si la hace cifrada requiere un certificao firmado cuyo
+1. LDAP utilizable
+  La conexión LDAP si la hace cifrada requiere un certificao firmado cuyo
   subject sea el nombre del servidor al que se conecta y con una autoridad
   ceritificadora reconocida por el servidor donde reside la aplicación.
   Si usa su propia autoridad certificadora asegurese de incluir la llave
   pública entre las conocidas por el sistema (en adJ /etc/ssl/cert.pem).
 
- 
-En el proyecto (que use el motor ```sip```  <https://github.com/pasosdeJesus/sip> ) donde quiera usarlo:
-
-* Incluya la gema
-
-
-Aplican practicamente las mismas instrucciones de otro motor genérico
-basado en sip:
-	https://github.com/pasosdeJesus/sal7711_gen
-
-Para incluirlo en su aplicación rails:
-1. Agregue las gemas necesarias en Gemfile:
+2. Agregue la gema en Gemfile:
 
 gem 'jn316_gen', git: 'https://github.com/pasosdeJesus/jn316_gen.git'
-gem 'font-awesome-rails'
-gem 'chosen-rails'
 
-2. Cree un directorio que será la raíz del sistema de archivos y que
-debe poder ser escrito por el usuario que ejecute la aplicación, e.g
-mkdir public/jn316/
+3. Especificar datos de conexión LDAP agregando a config/application.rb
 
-3. Configure esa ruta en su aplicación en config/application.rb con
-config.x.jn316_ruta = Rails.root.join('public', 'jn316')
+    config.x.jn316_base = "ou=gente,dc=miorg,dc=net"
+    config.x.jn316_admin = "cn=admin,dc=miorg,dc=net"
+    config.x.jn316_servidor = "apbd2.miorg.net"
+    config.x.jn316_puerto = 389
+    config.x.jn316_opcon = {
+      encryption: {
+        method: :start_tls,
+        tls_options: OpenSSL::SSL::SSLContext::DEFAULT_PARAMS
+      }
+    }
 
-4. Agregue un menú o enlaces a los urls de , por ejemplo en
+3. Ejecute migraciones que añadirán campos a la tabla usuario
+
+4. Amplie el modelo Usuario, el más simple sería en app/models/usuario:
+
+```
+# encoding: UTF-8
+
+require 'jn316_gen/concerns/models/usuario'
+require 'sip/concerns/models/usuario'
+
+class Usuario < ActiveRecord::Base
+  include Sip::Concerns::Models::Usuario
+  include Jn316Gen::Concerns::Models::Usuario
+
+end
+```
+
+5. Para activar cambio de clave en directorio LDAP en ```config/routes.rb```
+  agregar:
+```
+    devise_for :usuarios, :skip => [:registrations], module: :devise
+as :usuario do
+      get 'usuarios/edit' => 'devise/registrations#edit', 
+        :as => 'editar_registro_usuario'    
+    put 'usuarios/:id' => 'jn316_gen/registrations#update', 
+    :as => 'registro_usuario'            
+    end
+    resources :usuarios, path_names: { new: 'nuevo', edit: 'edita' } 
+```
+ 
+   y agregue un menú o enlaces para permitirlo, por ejemplo en
    app/views/layouts/application:
-<%= menu_item "Nube", jn316_gen.sisini_path %>
+  <%= menu_item "Clave", main_app.editar_registro_usuario_path %>
 
-5. Configure rutas en config/routes.rb
-	mount Jn316Gen::Engine => "/", as: 'jn316_gen'
+6. Cuando inicie el servidor especifique la clave del usuario
+  especificado en config.x.jn316_admin en la variable
+  de ambiente JN316_CLAVE por ejemplo
 
-6. Si hace falta agregue en su application_helper.rb
-	include FontAwesome::Rails::IconHelper 
+JN316_CLAVE=estaclave rails s
+
+  Se requiere usuario y clave de administrador para realizar búsquedas
+  en el directorio y proximamente para administrar usuarios.  Si no necesita la
+  funcionalidad de administrar usuarios puede especificar un usuario
+  sólo con privilegios de busqueatre los usuarios del directorio.
+
+

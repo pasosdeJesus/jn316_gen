@@ -7,7 +7,7 @@ module Jn316Gen
     module Models
       module Usuario
         extend ActiveSupport::Concern
-        include Sip::Concerns::Models::Usuario
+        #include Sip::Concerns::Models::Usuario
 
         included do
           validates_format_of :nusuario, 
