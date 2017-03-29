@@ -11,7 +11,7 @@ module Devise
       # Busca usuario nusuario como admin y retorna toda la información 
       def ldap_busca_como_admin(nusuario, prob)
         if !ENV['JN316_CLAVE']
-          prob='Falta clave LDAP para buscar'
+          prob << 'Falta clave LDAP para buscar'
           return nil
         end
         opcon = {
@@ -36,10 +36,10 @@ module Devise
 #            end
 #          end
         end
-        prob = 'Credenciales de administracion LDAP invalidas'
+        prob << 'Credenciales de administracion LDAP invalidas'
         return nil
       rescue
-        prob = 'Problema conectando a servidor LDAP'
+        prob << 'Problema conectando a servidor LDAP'
         return nil
       end
 
@@ -64,7 +64,7 @@ module Devise
         usuario.ultimasincldap = Date.today
         usuario.save
         if (usuario.errors.messages.length > 0)
-          prob = usuario.errors.messages.to_s
+          prob << usuario.errors.messages.to_s
           return nil
         end
         return usuario
@@ -72,20 +72,18 @@ module Devise
 
 
       def crear_usuario_min(nusuario, ldapus, prob, clave)
-        email = nusuario + '@porcompletar.org'
-        email = ldapus.mail if ldapus.mail
-        email = ldapus.mail[0] if ldapus.mail.kind_of?(Array)
-        ep = 'x'
-        ep = BCrypt::Password.create( clave, {
+        usuario = Usuario.new
+        usuario.nusuario = nusuario
+        usuario.email = nusuario + '@porcompletar.org'
+        usuario.email = ldapus.mail if ldapus.mail
+        usuario.email = ldapus.mail[0] if ldapus.mail.kind_of?(Array)
+        usuario.encrypted_password = 'x'
+        usuario.encrypted_password = BCrypt::Password.create( clave, {
           cost: Rails.application.config.devise.stretches}) if !clave.nil?
-        usuario = Usuario.create(
-          nusuario: nusuario,
-          email: email,
-          encrypted_password: ep, 
-          fechacreacion: Date.today
-        )
+        usuario.fechacreacion = Date.today
+        usuario.save
         if (usuario.errors.messages.length > 0)
-          prob = usuario.errors.messages.to_s
+          prob << usuario.errors.messages.to_s
           return nil
         end
 
@@ -99,7 +97,7 @@ module Devise
         if usuario.nil?
           usuario = crear_usuario_min(nusuario, ldapus, prob, clave)
           if usuario.nil?
-            prob = 'No pudo crear usuario: ' + prob
+            prob << 'No pudo crear usuario: ' + prob
             return nil
           end
         end
@@ -125,6 +123,14 @@ module Devise
           ldap_con = Net::LDAP.new( opcon )
           if ldap_con.bind
             ldapus = ldap_busca_como_admin(nusuario, prob)
+            if ldapus.nil?
+              prob = "No pudo obtenerse usuario de LDAP: " + prob
+              puts prob
+              self.errors.add :nusuario, prob
+              fail(prob)
+              @halted = true
+              return nil
+            end
             usuario = crear_actualizar_usuario(
               nusuario, ldapus, prob, password)
             if usuario.nil?
@@ -135,7 +141,7 @@ module Devise
               @halted = true
               return nil
             end
-              success!(usuario) 
+            success!(usuario) 
           else
             # No se logró autenticar, bien porque el usuario no existe en LDAP
             #   o bien porque la clave es errada
