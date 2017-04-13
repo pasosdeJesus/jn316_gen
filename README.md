@@ -100,6 +100,11 @@ class Usuario < ActiveRecord::Base
 end
 ```
 
+Si hace validaciones adicionales, por ejemplo requerir nombre y apellido
+asegurese de poner valores por omisión en la base de datos. Así mismo
+asegurese de tener valores como rol, oficina y otros necesarios.  
+Ver ejemplo en cor1440_cinep-ldap/db/migrate/nombres_apellidos_poromision
+
 5. Para activar cambio de clave en directorio LDAP en ```config/routes.rb```
   agregar:
 ```
