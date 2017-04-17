@@ -21,7 +21,7 @@ module Jn316Gen
         port: Rails.application.config.x.jn316_puerto,
         auth: {
           method: :simple, 
-          username: "cn=#{nusuario},#{Rails.application.config.x.jn316_base}",
+          username: "cn=#{nusuario},#{Rails.application.config.x.jn316_basegente}",
           password: claveactual
         }
       }.merge(Rails.application.config.x.jn316_opcon)
@@ -31,7 +31,7 @@ module Jn316Gen
         return false
       end
       ldap_con.open do |ldap|
-        dn="cn=#{nusuario},#{Rails.application.config.x.jn316_base}"
+        dn="cn=#{nusuario},#{Rails.application.config.x.jn316_basegente}"
         hash = "{SHA}" + Base64.encode64(
           Digest::SHA1.digest(nuevaclave)
         ).chomp! 

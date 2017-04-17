@@ -7,18 +7,8 @@
 <% end %>
 
 <% content_for :menu do %>
-  <%= menu_group do %>
-    <% if !current_usuario.nil? %>
-      <!--%= menu_item "Examinar", jn316_gen.examinar_path %-->
-      <%= menu_item "Nueva Entrada", jn316_gen.new_doc_path %>
-    <% end %>
-  <% end %>
   <%= menu_group :pull => :right do %>
     <% if !current_usuario.nil? %>
-      <%= drop_down "Documentos" do %>
-        <%= menu_item "Nube", jn316_gen.sisini_path %>
-        <%= menu_item "Definir Plantilla Hoja de Calculo M", jn316_gen.new_plantillahcm_path %>
-      <% end %>
       <%= drop_down "Administrar" do %>
         <%= menu_item "Clave", main_app.editar_registro_usuario_path %>
         <% if current_usuario.rol == Ability::ROLADMIN %>

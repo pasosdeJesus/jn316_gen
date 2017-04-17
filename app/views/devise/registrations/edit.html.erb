@@ -11,6 +11,14 @@
       :required => false, :autofocus => true 
     %>
 
+    <div class='input string'>
+      <label class='string control-label'>Grupos:</label>
+      <ul>
+        <% current_usuario.sip_grupo.each do |g| %>
+          <li> <%= g.nombre %> </li>
+        <% end %>
+      </ul>
+    </div>
     <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
       <p>Aún esperando confirmación para: 
       <%= resource.unconfirmed_email %>

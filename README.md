@@ -8,7 +8,7 @@ básicas de adminsitración de usuarios y grupos
 
 * El directorio LDAP es autoridad respecto a identificación y autenticacion
 	- Se usa prioritariamente
-	- No puede escribirse aunque un usuario puede cambiar su clave
+	- Un usuario tipo no puede modificarlo excepto cambiar su clave
 	- Quien registra un usuario debe emplear el nombre preciso de nuevas
 	  personas como aparece en el documento de identificación principal
 * RFC2307 https://www.ietf.org/rfc/rfc2307.txt
@@ -54,8 +54,13 @@ básicas de adminsitración de usuarios y grupos
   base de datos.  Si el usuario no está en el directorio LDAP sólo se 
   actualiza clave en base de datos.  
 
-
-* Grupos ....
+* Grupos.  Se  implementó en sip primero, un grupo referencia varios
+  usuarios. No maneja concepto de grupo principal. 
+  Cuando un usuario se autentica, se actualiza la información de 
+  grupos a los que pertenece sincronizandola en base.  Si un grupo del LDAP
+  no está en la base de datos se crear para poder agregar el usuario.
+  Después se actualizan los grupos del usuario para asegurar que está
+  sólo en los del directorio LDAP.
 
 # Configuración
 
@@ -72,7 +77,8 @@ gem 'jn316_gen', git: 'https://github.com/pasosdeJesus/jn316_gen.git'
 
 3. Especificar datos de conexión LDAP agregando a config/application.rb
 
-    config.x.jn316_base = "ou=gente,dc=miorg,dc=net"
+    config.x.jn316_basegente = "ou=gente,dc=miorg,dc=net"
+    config.x.jn316_basegrupos = "ou=grupos,dc=miorg,dc=net"
     config.x.jn316_admin = "cn=admin,dc=miorg,dc=net"
     config.x.jn316_servidor = "apbd2.miorg.net"
     config.x.jn316_puerto = 389
