@@ -61,6 +61,10 @@ básicas de adminsitración de usuarios y grupos
   no está en la base de datos se crear para poder agregar el usuario.
   Después se actualizan los grupos del usuario para asegurar que está
   sólo en los del directorio LDAP.
+  Una dificultad con phpldapadmin o con ldapd es que no pueden crearse grupos 
+  que en su nombre tengan una coma u otros caracteres, aunque
+  https://www.ietf.org/rfc/rfc4514.txt específica la posibilidad
+  de escapar coma y otros caracteres.
 
 # Configuración
 

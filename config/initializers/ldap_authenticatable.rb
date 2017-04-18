@@ -42,7 +42,9 @@ module Devise
       # que debe pertenecer el usuario
       def actualizar_usuario(usuario, ldapus, grupos, prob, clave=nil)
         usuario.nombres = ldapus.givenname if ldapus.givenname
+        usuario.nombres = ldapus.givenname[0] if ldapus.givenname.kind_of?(Array)
         usuario.apellidos = ldapus.sn if ldapus.sn
+        usuario.apellidos = ldapus.sn[0] if ldapus.givenname.kind_of?(Array)
         usuario.email = ldapus.mail if ldapus.mail
         usuario.email = ldapus.mail[0] if ldapus.mail.kind_of?(Array)
         if (ldapus.userPassword.nil? && usuario.fechadeshabilitacion.nil?)
