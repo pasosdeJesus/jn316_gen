@@ -1,0 +1,37 @@
+<h1>Sincronización de LDAP a Base de Datos</h1>
+
+<h2><%= @gactualizados.length %> grupo(s)s creados/actualizados</h2>
+<ul>
+  <% @gactualizados.each do |g| %>
+    <li><%= Sip::Grupo.find(g).cn %></li>
+  <% end %>
+</ul>
+
+<h2><%= @gdeshabilitados.length %> grupos deshabilitados (eliminados en LDAP)</h2>
+<ul>
+  <% @gdeshabilitados.each do |g| %>
+    <li><%= Sip::Grupo.find(g).cn %></li>
+  <% end %>
+</ul>
+
+<h2>Problemas al sincronizar grupos</h2>
+<%= @gprob %>
+
+<h2><%= @uactualizados.length %> usuarios creados/actualizados</h2>
+<ul>
+  <% @uactualizados.each do |u| %>
+    <li><%= ::Usuario.find(u).nusuario %></li>
+<% end %>
+</ul>
+
+
+<h2><%= @udeshabilitados.length %> usuarios deshabiltiados (eliminados en LDAP)</h2>
+<ul>
+  <% @udeshabilitados.each do |u| %>
+    <li><%= ::Usuario.find(u).nusuario %></li>
+  <% end %>
+</ul>
+
+
+<h2>Problemas al sincronizar usuarios</h2>
+<%= @uprob %>

@@ -6,6 +6,5 @@ module Jn316Gen
   class Usuario < ActiveRecord::Base
 
     include Jn316Gen::Concerns::Models::Usuario
-
   end
 end

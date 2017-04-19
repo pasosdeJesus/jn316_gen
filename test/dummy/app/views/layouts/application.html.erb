@@ -12,6 +12,8 @@
       <%= drop_down "Administrar" do %>
         <%= menu_item "Clave", main_app.editar_registro_usuario_path %>
         <% if current_usuario.rol == Ability::ROLADMIN %>
+          <%= menu_item "Sincronizar usuarios y grupos", 
+            main_app.sincronizaug_path %>
           <%= menu_item "Usuarios", main_app.usuarios_path %>
         <% end %>
         <% if current_usuario.rol == Ability::ROLADMIN %>

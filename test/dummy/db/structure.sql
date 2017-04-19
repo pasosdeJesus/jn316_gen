@@ -499,7 +499,8 @@ CREATE TABLE sip_grupo (
     fechadeshabilitacion date,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    ultimasincldap date
+    ultimasincldap date,
+    cn character varying(255)
 );
 
 
@@ -870,7 +871,7 @@ CREATE SEQUENCE usuario_id_seq
 --
 
 CREATE TABLE usuario (
-    nusuario character varying(15) NOT NULL,
+    nusuario character varying(63) NOT NULL,
     password character varying(64) DEFAULT ''::character varying NOT NULL,
     descripcion character varying(50),
     rol integer DEFAULT 4,
@@ -1408,6 +1409,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170405104322'),
 ('20170413185012'),
 ('20170414035328'),
-('20170417131432');
+('20170417131432'),
+('20170418143627'),
+('20170419010845');
 
 

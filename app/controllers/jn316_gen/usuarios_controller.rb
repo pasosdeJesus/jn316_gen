@@ -2,7 +2,7 @@
 
 require 'jn316_gen/concerns/controllers/usuarios_controller'
 
-module Sip
+module Jn316Gen
   class UsuariosController < ApplicationController
 
     include Jn316Gen::Concerns::Controllers::UsuariosController

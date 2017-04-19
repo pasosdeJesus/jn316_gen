@@ -2,6 +2,8 @@
 
 Jn316Gen::Engine.routes.draw do
 
+  get '/sincronizarug' => 'usuarios#sincronizarug', as: 'sincronizarug'
+
   namespace :admin do
     ab = ::Ability.new
     ab.tablasbasicas.each do |t|

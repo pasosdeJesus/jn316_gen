@@ -6,7 +6,32 @@
   <%= f.error_notification %>
 
   <div class="form-inputs">
-  
+
+    <div class='input string'>
+      <label class='string control-label'>Usuario:</label>
+      <%= @usuario.nusuario %>
+    </div>
+
+    <div class='input string'>
+      <label class='string control-label'>Nombres:</label>
+      <%= @usuario.nombres %>
+    </div>
+
+    <div class='input string'>
+      <label class='string control-label'>Apellidos:</label>
+      <%= @usuario.apellidos%>
+    </div>
+
+    <div class='input string'>
+      <label class='string control-label'>Correo:</label>
+      <%= @usuario.email%>
+    </div>
+
+    <div class='input string'>
+      <label class='string control-label'>Oficina:</label>
+      <%= @usuario.oficina.nombre %>
+    </div>
+ 
     <%= f.input :descripcion, label: 'Descripción',
       :required => false, :autofocus => true 
     %>
@@ -14,11 +39,20 @@
     <div class='input string'>
       <label class='string control-label'>Grupos:</label>
       <ul>
-        <% current_usuario.sip_grupo.each do |g| %>
+        <% @usuario.sip_grupo.each do |g| %>
           <li> <%= g.nombre %> </li>
         <% end %>
       </ul>
     </div>
+
+    <div class='input string'>
+      <label class='string control-label'>Rol:</label>
+      <% r = Ability::ROLES.select { |r| r[1] == @usuario.rol } %></dd>
+      <%= r[0][0] %>
+    </div>
+
+    <%= render partial: 'edit_antesclave', locals: {f: f} %>
+
     <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
       <p>Aún esperando confirmación para: 
       <%= resource.unconfirmed_email %>

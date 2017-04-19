@@ -5,10 +5,11 @@ require 'sip/concerns/controllers/usuarios_controller'
 module Jn316Gen
   module Concerns
     module Controllers
-      module UsuariosControllers
+      module UsuariosController
 
         extend ActiveSupport::Concern
         include Sip::Concerns::Controllers::UsuariosController
+        include Jn316Gen::LdapHelper
 
         included do
 
@@ -32,6 +33,29 @@ module Jn316Gen
             )
             return p
           end
+
+          def sincronizarug
+            authorize! :manage, ::Usuario
+            @gprob = ""
+            @gactualizados = []
+            @gdeshabilitados = []
+            vg = ldap_sincroniza_grupos(@gprob)
+            if vg
+              @gactualizados = vg[0]
+              @gdeshabilitados = vg[1]
+            end
+
+            @uactualizados = []
+            @udeshabilitados = []
+            @uprob = ""
+            vu = ldap_sincroniza_usuarios(@uprob)
+            if vu
+              @uactualizados = vu[0]
+              @udeshabilitados = vu[1]
+            end
+            render :sincronizarug, layout: '/application'
+          end
+
 
         end  # included
 
