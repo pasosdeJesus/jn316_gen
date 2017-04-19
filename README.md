@@ -12,6 +12,26 @@ básicas de adminsitración de usuarios y grupos
 	- Quien registra un usuario debe emplear el nombre preciso de nuevas
 	  personas como aparece en el documento de identificación principal
 * RFC2307 https://www.ietf.org/rfc/rfc2307.txt
+* Nos evitamos problemas de compatibilidad con reglas estrictas para
+  las identificaciones de usuario y grupos así (por ejemplo hay problema entre 
+  phpldapadmin y ldapd para escapar caracteres en un cn como la coma
+  aunque es lo esperado de acuerdo a  https://www.ietf.org/rfc/rfc4514.txt ):
+  * Un usuario del LDAP tiene objectClass posixAccount con cn igual al uid 
+    y en base de datos es el mismo campo nusuario de modelo Usuario.  
+    Esta identificación puede constar sólo de letras mínusculas del alfabeto 
+    inglés, mayúsculas del alfabeto ingles, digitos del 0 a 9 y `_`, su
+    longitud máxima es 63.
+    Recomendamos emplear sólo minúsculas.  Los nombres y apellidos completos 
+    en UTF-8 van en campos givenName y sn en LDAP y en campos nombres y 
+    apellidos del modelo Usuario (longitud máxima 50 cada uno).
+  * Un grupo del LDAP es objeto con objectClass posixGroup tiene cn con las 
+    mismas reglas de caracteres de un cn de usuario, limitado a 255
+    caracteres. En base de datos se almacena en el campo cn del modelo 
+    Sip::Grupo.  Para facilitar compatibilidad recomendamos usar 
+    capitalización camello con el nombre completo del grupo (sin espacios, 
+    cambiando tildes, eñes y sin espacios).  El nombre completo en UTF-8 
+    va en el campo description del LDAP y en el campo nombre del modelo 
+    Sip::Grupo, máximo 500 caracteres.
 
 # Características 
 
@@ -61,10 +81,6 @@ básicas de adminsitración de usuarios y grupos
   no está en la base de datos se crear para poder agregar el usuario.
   Después se actualizan los grupos del usuario para asegurar que está
   sólo en los del directorio LDAP.
-  Una dificultad con phpldapadmin o con ldapd es que no pueden crearse grupos 
-  que en su nombre tengan una coma u otros caracteres, aunque
-  https://www.ietf.org/rfc/rfc4514.txt específica la posibilidad
-  de escapar coma y otros caracteres.
 
 # Configuración
 
