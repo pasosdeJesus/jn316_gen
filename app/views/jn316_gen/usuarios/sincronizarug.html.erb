@@ -7,17 +7,23 @@
   <% end %>
 </ul>
 
-<h2><%= @gdeshabilitados.length %> grupos deshabilitados (eliminados en LDAP)</h2>
-<ul>
+<% if @gdeshabilitados.length > 0 %>
+  <h2><%= @gdeshabilitados.length %> grupos deshabilitados porque ya no se encuentran en LDAP</h2>
+  <ul>
   <% @gdeshabilitados.each do |g| %>
-    <li><%= Sip::Grupo.find(g).cn %></li>
+    <li><%= Sip::Grupo.find(g).nombre %> - <%= Sip::Grupo.find(g).cn %></li>
   <% end %>
-</ul>
+  </ul>
+<% end %>
 
-<h2>Problemas al sincronizar grupos</h2>
-<%= @gprob %>
+<% if @gprob && @gprob.strip != ''%>
+  <div class='alert alert-error'>
+    <h2>Problemas al sincronizar grupos</h2>
+    <%= @gprob %>
+  </div>
+<% end %>
 
-<h2><%= @uactualizados.length %> usuarios creados/actualizados</h2>
+<h2><%= @uactualizados.length %> usuario(s) creados/actualizados</h2>
 <ul>
   <% @uactualizados.each do |u| %>
     <li><%= ::Usuario.find(u).nusuario %></li>
@@ -25,13 +31,19 @@
 </ul>
 
 
-<h2><%= @udeshabilitados.length %> usuarios deshabiltiados (eliminados en LDAP)</h2>
-<ul>
+<% if @udeshabilitados.length > 0 %>
+  <h2><%= @udeshabilitados.length %> usuarios deshabiltiados porque ya no se encuentran en LDAP</h2>
+  <ul>
   <% @udeshabilitados.each do |u| %>
     <li><%= ::Usuario.find(u).nusuario %></li>
   <% end %>
-</ul>
+  </ul>
+<% end %>
 
 
-<h2>Problemas al sincronizar usuarios</h2>
-<%= @uprob %>
+<% if @uprob && @uprob.strip != ''%> %>
+  <div class='alert alert-error'>
+    <h2>Problemas al sincronizar usuarios</h2>
+    <%= @uprob %>
+  </div>
+<% end %>

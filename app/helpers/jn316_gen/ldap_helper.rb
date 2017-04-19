@@ -37,6 +37,13 @@ module Jn316Gen
       return nil
     end
 
+    # Retorna valor de un campo ldap de un registro r
+    def valor_campo_ldap(r, campo)
+      return nil unless r.respond_to?(campo.to_sym)
+      return r[campo.to_sym][0] if r[campo.to_sym].kind_of?(Array)
+      return r[campo.to_sym]
+    end
+
     # Actualiza en base de datos informacion de usuario sacada de LDAP
     # usuario es modelo de usuario por actualizar
     # ldapus es entrada en LDAP del usuario
@@ -44,12 +51,10 @@ module Jn316Gen
     # que debe pertenecer el usuario
     # prob es colchon de errores
     def actualizar_usuario(usuario, ldapus, grupos, prob, clave=nil)
-      usuario.nombres = ldapus.givenname if ldapus.givenname
-      usuario.nombres = ldapus.givenname[0] if ldapus.givenname.kind_of?(Array)
-      usuario.apellidos = ldapus.sn if ldapus.sn
-      usuario.apellidos = ldapus.sn[0] if ldapus.givenname.kind_of?(Array)
-      usuario.email = ldapus.mail if ldapus.mail
-      usuario.email = ldapus.mail[0] if ldapus.mail.kind_of?(Array)
+      usuario.nombres = valor_campo_ldap(ldapus, :givenname)
+      usuario.apellidos = valor_campo_ldap(ldapus, :sn)
+      usuario.email = valor_campo_ldap(ldapus, :mail)
+      usuario.uidNumber = valor_campo_ldap(ldapus, :uidNumber)
       if (!ldapus.respond_to?(:userPassword) && 
           usuario.fechadeshabilitacion.nil?)
         # deshabilitar
@@ -98,9 +103,8 @@ module Jn316Gen
     def crear_usuario_min(nusuario, ldapus, prob, clave)
       usuario = Usuario.new
       usuario.nusuario = nusuario
-      usuario.email = nusuario + '@porcompletar.org'
-      usuario.email = ldapus.mail if ldapus.mail
-      usuario.email = ldapus.mail[0] if ldapus.mail.kind_of?(Array)
+      usuario.email = valor_campo_ldap(ldapus, :mail)
+      usuario.email = nusuario + '@porcompletar.org' unless usuario.email
       usuario.encrypted_password = 'x'
       usuario.encrypted_password = BCrypt::Password.create( clave, {
         cost: Rails.application.config.devise.stretches}) if !clave.nil?
@@ -144,6 +148,7 @@ module Jn316Gen
       end
       grupo.cn = cn
       grupo.nombre = d
+      grupo.gidNumber = valor_campo_ldap(ldapgr, :gidNumber)
       grupo.ultimasincldap = Date.today
       grupo.fechadeshabilitacion = nil
       grupo.save
@@ -362,6 +367,59 @@ module Jn316Gen
         exception.to_s
       return false
     end
+
+
+
+    # Crea un usuario LDAP con las convenciones descritas en README.md
+    def ldap_crea_usuario(usuario, clave, prob)
+      byebug
+      if !ENV['JN316_CLAVE']
+        prob='Falta clave LDAP para agregar usuario'
+        return nil
+      end
+      opcon = {
+        host: Rails.application.config.x.jn316_servidor,
+        port: Rails.application.config.x.jn316_puerto,
+        auth: {
+          method: :simple, 
+          username: "cn=#{nusuario},#{Rails.application.config.x.jn316_basegente}",
+          password: claveactual
+        }
+      }.merge(Rails.application.config.x.jn316_opcon)
+      ldap_con = Net::LDAP.new( opcon )
+      cn = limpia_cn(nusuario)
+      dn = "cn=#{cn},#{Rails.application.config.x.jn316_basegente}"
+      hash2 = "{SHA}" + Base64.encode64(
+        Digest::SHA1.digest(clave)
+      ).chomp! 
+      hash =  Net::LDAP::Password.generate(:sha, clave)
+      raise Exception('no funciona Net::LDAP::Password.generate') unless 
+        hash2 == hash
+      u=Usuario.maximum('uidNumber')
+      attr = {
+        cn: cn,
+        uid: cn,
+        objectclass: ["inetOrgPerson", "posixAccount"],
+        mail: usuario.email,
+        gidNumber: Rails.application.config.x.jn316_gidgenerico,
+        givenName: usuario.nombres,
+        sn: usuario.apellidos,
+        homeDirectory: "/home/#{cn}",
+        loginShell: "/bin/ksh",
+        userPassword: hash,
+        uidNumber: u
+      }
+      if !ldap.add(:dn => dn, :attributes => attr)
+        prob = 'Problema añadiendo en LDAP'
+        return false
+      end
+      return true
+    rescue Exception => exception
+      prob = 'Problema conectando a servidor LDAP. Excepción: ' + 
+        exception.to_s
+      return false
+    end
+
 
     # Un cn portable solo puede tener letras del alfabet inglés, digitos y _
     # Evitamos escapar pues https://www.ietf.org/rfc/rfc4514.txt no

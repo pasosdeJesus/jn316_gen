@@ -16,7 +16,7 @@ module Sip
       end
   
       def atributos_index
-        [ "id", "nombre", "cn"] +
+        [ "id", "nombre", "cn", "gidNumber", "ultimasincldap" ] +
           [ :usuario_ids => [] ] +
           ["observaciones", "fechacreacion", "fechadeshabilitacion" ]
       end

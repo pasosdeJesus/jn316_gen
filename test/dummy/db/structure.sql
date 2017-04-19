@@ -500,7 +500,8 @@ CREATE TABLE sip_grupo (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     ultimasincldap date,
-    cn character varying(255)
+    cn character varying(255),
+    "gidNumber" integer
 );
 
 
@@ -898,6 +899,7 @@ CREATE TABLE usuario (
     nombres character varying(50) COLLATE public.es_co_utf_8,
     apellidos character varying(50) COLLATE public.es_co_utf_8,
     ultimasincldap date,
+    "uidNumber" integer,
     CONSTRAINT usuario_check CHECK (((fechadeshabilitacion IS NULL) OR (fechadeshabilitacion >= fechacreacion))),
     CONSTRAINT usuario_rol_check CHECK ((rol >= 1))
 );
@@ -1411,6 +1413,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170414035328'),
 ('20170417131432'),
 ('20170418143627'),
-('20170419010845');
+('20170419010845'),
+('20170419135948');
 
 

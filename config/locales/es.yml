@@ -15,4 +15,8 @@ es:
       "jn316_gen/plantillahcm":
         nombremenu: Nombre por presentar en aplicación
         filainicial: Fila inicial
+      "sip/grupo":
+        cn: cn en LDAP
+        ultimasincldap: Fecha última sincronización desde LDAP
+        gidNumber: gid en LDAP
 
