@@ -4,6 +4,8 @@ Jn316Gen::Engine.routes.draw do
 
   get '/sincronizarug' => 'usuarios#sincronizarug', as: 'sincronizarug'
 
+  delete '/usuarioldap/:id' => 'usuarios#destroyldap', as: 'usuarioldap'
+
   namespace :admin do
     ab = ::Ability.new
     ab.tablasbasicas.each do |t|

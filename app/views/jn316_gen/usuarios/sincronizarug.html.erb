@@ -1,28 +1,5 @@
 <h1>Sincronización de LDAP a Base de Datos</h1>
 
-<h2><%= @gactualizados.length %> grupo(s)s creados/actualizados</h2>
-<ul>
-  <% @gactualizados.each do |g| %>
-    <li><%= Sip::Grupo.find(g).cn %></li>
-  <% end %>
-</ul>
-
-<% if @gdeshabilitados.length > 0 %>
-  <h2><%= @gdeshabilitados.length %> grupos deshabilitados porque ya no se encuentran en LDAP</h2>
-  <ul>
-  <% @gdeshabilitados.each do |g| %>
-    <li><%= Sip::Grupo.find(g).nombre %> - <%= Sip::Grupo.find(g).cn %></li>
-  <% end %>
-  </ul>
-<% end %>
-
-<% if @gprob && @gprob.strip != ''%>
-  <div class='alert alert-error'>
-    <h2>Problemas al sincronizar grupos</h2>
-    <%= @gprob %>
-  </div>
-<% end %>
-
 <h2><%= @uactualizados.length %> usuario(s) creados/actualizados</h2>
 <ul>
   <% @uactualizados.each do |u| %>
@@ -47,3 +24,28 @@
     <%= @uprob %>
   </div>
 <% end %>
+
+<h2><%= @gactualizados.length %> grupo(s)s creados/actualizados</h2>
+<ul>
+  <% @gactualizados.each do |g| %>
+    <li><%= Sip::Grupo.find(g).cn %></li>
+  <% end %>
+</ul>
+
+<% if @gdeshabilitados.length > 0 %>
+  <h2><%= @gdeshabilitados.length %> grupos deshabilitados porque ya no se encuentran en LDAP</h2>
+  <ul>
+  <% @gdeshabilitados.each do |g| %>
+    <li><%= Sip::Grupo.find(g).nombre %> - <%= Sip::Grupo.find(g).cn %></li>
+  <% end %>
+  </ul>
+<% end %>
+
+<% if @gprob && @gprob.strip != ''%>
+  <div class='alert alert-error'>
+    <h2>Problemas al sincronizar grupos</h2>
+    <%= @gprob %>
+  </div>
+<% end %>
+
+

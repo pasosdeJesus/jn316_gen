@@ -19,4 +19,10 @@ es:
         cn: cn en LDAP
         ultimasincldap: Fecha última sincronización desde LDAP
         gidNumber: gid en LDAP
+      usuario:
+        nusuario: Identificación
+        sip_grupo: Grupo(s)
+        email: Correo
+        encrypted_password: Clave
+        uidNumber: uidNumber en LDAP
 

@@ -29,7 +29,7 @@
 
     <div class='input string'>
       <label class='string control-label'>Oficina:</label>
-      <%= @usuario.oficina.nombre %>
+      <%= @usuario.oficina.nombre if @usuario.oficina %>
     </div>
  
     <%= f.input :descripcion, label: 'Descripción',

@@ -102,6 +102,7 @@ gem 'jn316_gen', git: 'https://github.com/pasosdeJesus/jn316_gen.git'
     config.x.jn316_admin = "cn=admin,dc=miorg,dc=net"
     config.x.jn316_servidor = "apbd2.miorg.net"
     config.x.jn316_puerto = 389
+    config.x.jn316_gidgenerico = 500  #gidNumber de grupo genérico ya existente en LDAP
     config.x.jn316_opcon = {
       encryption: {
         method: :start_tls,

@@ -16,9 +16,27 @@ module Jn316Gen
           def create
             authorize! :edit, ::Usuario
             @usuario = ::Usuario.new(usuario_params)
+            unless @usuario.validate
+                render 'sip/usuarios/edit', layout: 'application'
+                return
+            end
             prob = ""
-            #ldap_crea_usuario(usuario, usuario_params[:password], prob)
-            create_gen(@usuario)
+            no_modificar_ldap = 
+              request.params[:usuario][:no_modificar_ldap] == '1'
+            creo_ldap = false            
+            unless no_modificar_ldap
+              creo_ldap = ldap_crea_usuario(@usuario, usuario_params[:encrypted_password], prob)
+              unless creo_ldap
+                flash[:error] = 'No pudo crear usuario en directorio LDAP:' +
+                  prob + '. Saltando creación en base de datos'
+                render 'sip/usuarios/edit', layout: 'application'
+                return
+              end
+            end
+
+            if creo_ldap || no_modificar_ldap
+              create_gen(@usuario)
+            end
           end
 
           # PATCH/PUT /usuarios/1
@@ -44,28 +62,39 @@ module Jn316Gen
             end
           end
 
-          # DELETE /usuarios/1
-          # DELETE /usuarios/1.json
+
+          # Elimina un usuario de base (pero no de LDAP)
           def destroy
-            authorize! :edit, ::Usuario
+            authorize! :manage, ::Usuario
             @usuario.destroy
             respond_to do |format|
-              format.html { redirect_to usuarios_url }
+              format.html { redirect_to main_app.usuarios_url }
               format.json { head :no_content }
+            end
+          end
+
+          # Elimina un usuario del LDAP y de la base
+          def destroyldap
+            authorize! :manage, ::Usuario
+            set_usuario
+            prob = ""
+            if ldap_elimina_usuario(@usuario.nusuario, prob)
+              destroy
+              #@usuario.destroy
+              #respond_to do |format|
+             #   format.html { redirect_to main_app.usuarios_url }
+             #   format.json { head :no_content }
+             # end
+            else
+              flash[:error] = 'No pudo eliminar usuario de LDAP: ' + prob +
+                '.  Saltando eliminado de base de datos'
+              redirect_to main_app.usuario_url(@usuario), layout: 'application'
             end
           end
 
 
           def sincronizarug
             authorize! :manage, ::Usuario
-            @gprob = ""
-            @gactualizados = []
-            @gdeshabilitados = []
-            vg = ldap_sincroniza_grupos(@gprob)
-            if vg
-              @gactualizados = vg[0]
-              @gdeshabilitados = vg[1]
-            end
 
             @uactualizados = []
             @udeshabilitados = []
@@ -75,25 +104,36 @@ module Jn316Gen
               @uactualizados = vu[0]
               @udeshabilitados = vu[1]
             end
-            render :sincronizarug, layout: '/application'
+
+            @gprob = ""
+            @gactualizados = []
+            @gdeshabilitados = []
+            vg = ldap_sincroniza_grupos(@gprob)
+            if vg
+              @gactualizados = vg[0]
+              @gdeshabilitados = vg[1]
+            end
+
+            render 'jn316_gen/usuarios/sincronizarug', layout: '/application'
           end
+
 
           def usuario_params
             p = params.require(:usuario).permit(
               :id, :nusuario, :password, 
               :nombres, :apellidos, :descripcion, :oficina_id,
+              :uidNumber,
               :rol, :idioma, :email, :encrypted_password, 
               :fechacreacion_localizada, :fechadeshabilitacion_localizada, 
               :reset_password_token, 
               :reset_password_sent_at, :remember_created_at, :sign_in_count, 
               :current_sign_in_at, :last_sign_in_at, :current_sign_in_ip, 
               :failed_attempts, :unlock_token, :locked_at,
-              :last_sign_in_ip, :etiqueta_ids => []
+              :last_sign_in_ip, :etiqueta_ids => [],
+              :sip_grupo_ids => []
             )
             return p
           end
-
-
 
         end  # included
 

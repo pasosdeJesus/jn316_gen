@@ -31,7 +31,8 @@ module Devise
             # Intentar con otra estrategia.
             return pass
           end
-          grupos = ldap_busca_grupos_usuario_como_admin(ldapus, prob)
+          grupos = ldap_busca_grupos_usuario_como_admin(
+            ldapus.uid[0], ldapus.gidnumber[0], prob)
           if grupos.nil?
             prob = 'No pudo adquirir grupos. ' + prob
             puts prob

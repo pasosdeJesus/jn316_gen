@@ -27,10 +27,31 @@
     label: "Rol",
     include_blank: false
   %>
+  <% if can?(:manage, Sip::Grupo) %>
+    <%= f.association :sip_grupo,
+      collection: Sip::Grupo.habilitados,
+      label_method: :nombre,
+      value_method: :id,
+      input_html: { class: 'chosen-select' }
+    %>
+  <% end %>
   <%= f.input :idioma %>
   <%= f.input :email %>
-	<%= f.input :encrypted_password %>
-  <%= f.input :uidNumber %>
+  <%= f.input :encrypted_password %>
+  <%= f.input :no_modificar_ldap,
+    as: :boolean,
+    inline_label: "No modificar directorio LDAP",
+    boolean_style: :nested,
+    input_html: {
+      "data-toggle" => 'tooltip', 
+      "title" => 'Si elije esta opción los cambios que haga sólo se harán en la base local pero no en el directorio LDAP'}
+  %>
+
+  <%= f.input :uidNumber,
+    input_html: {
+    "data-toggle" => 'tooltip', 
+    "title" => 'Número único en LDAP (si lo deja en blanco el sistema asignará uno)'}
+  %>
 
   <%= f.input :fechacreacion_localizada,
     input_html: { "data-behaviour" => "datepicker" }, 

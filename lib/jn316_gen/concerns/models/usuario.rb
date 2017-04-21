@@ -10,6 +10,12 @@ module Jn316Gen
         #include Sip::Concerns::Models::Usuario
 
         included do
+
+          attr :no_modificar_ldap
+
+          belongs_to :oficina, class_name: 'Sip::Oficina',
+            foreign_key: "oficina_id", validate: true
+
           validates_format_of :nusuario, 
             with: /\A[a-zA-Z_0-9]+\z/
 
