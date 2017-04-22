@@ -56,6 +56,7 @@ básicas de administración de usuarios y grupos
 * Un grupo LDAP tiene los objectClass top y posixGroup. En base de datos
   usamos Sip::Grupo y Sip::GrupoUsuario así:
 	cn 			<-> cn (255)
+	gidNumber		<-> gidNumber
 	description		<-> nombre en UTF-8 máximo 500
 	memberUid	        <-> registros de Sip::GrupoUsuario	
   El dn usa el cn.  El cn se limita a 255 caracteres.  Para facilitar 
