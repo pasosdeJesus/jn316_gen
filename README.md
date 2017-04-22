@@ -2,38 +2,65 @@
 [![Esado Construcción](https://api.travis-ci.org/pasosdeJesus/jn316_gen.svg?branch=master)](https://travis-ci.org/pasosdeJesus/jn316_gen) [![Clima del Código](https://codeclimate.com/github/pasosdeJesus/jn316_gen/badges/gpa.svg)](https://codeclimate.com/github/pasosdeJesus/jn316_gen) [![Cobertura de Pruebas](https://codeclimate.com/github/pasosdeJesus/jn316_gen/badges/coverage.svg)](https://codeclimate.com/github/pasosdeJesus/jn316_gen) [![security](https://hakiri.io/github/pasosdeJesus/jn316_gen/master.svg)](https://hakiri.io/github/pasosdeJesus/jn316_gen/master) [![Dependencias](https://gemnasium.com/pasosdeJesus/jn316_gen.svg)](https://gemnasium.com/pasosdeJesus/jn316_gen) 
 
 Este es un motor para autenticar con directorio LDAP y realizar operaciones 
-básicas de adminsitración de usuarios y grupos
+básicas de administración de usuarios y grupos
 
 # Invariatnes
 
 * El directorio LDAP es autoridad respecto a identificación y autenticacion
 	- Se usa prioritariamente
-	- Un usuario tipo no puede modificarlo excepto cambiar su clave
-	- Quien registra un usuario debe emplear el nombre preciso de nuevas
-	  personas como aparece en el documento de identificación principal
-* RFC2307 https://www.ietf.org/rfc/rfc2307.txt
-* Nos evitamos problemas de compatibilidad con reglas estrictas para
-  las identificaciones de usuario y grupos así (por ejemplo hay problema entre 
-  phpldapadmin y ldapd para escapar caracteres en un cn como la coma
-  aunque es lo esperado de acuerdo a  https://www.ietf.org/rfc/rfc4514.txt ):
-  * Un usuario del LDAP tiene objectClass posixAccount con cn igual al uid 
-    y en base de datos es el mismo campo nusuario de modelo Usuario.  
-    Esta identificación puede constar sólo de letras mínusculas del alfabeto 
-    inglés, mayúsculas del alfabeto ingles, digitos del 0 a 9 y `_`, su
-    longitud máxima es 63.
-    Recomendamos emplear sólo minúsculas.  Los nombres y apellidos completos 
-    en UTF-8 van en campos givenName y sn en LDAP y en campos nombres y 
-    apellidos del modelo Usuario (longitud máxima 50 cada uno).
-  * Un grupo del LDAP es objeto con objectClass posixGroup tiene cn con las 
-    mismas reglas de caracteres de un cn de usuario, limitado a 255
-    caracteres. En base de datos se almacena en el campo cn del modelo 
-    Sip::Grupo.  Para facilitar compatibilidad recomendamos usar 
-    capitalización camello con el nombre completo del grupo (sin espacios, 
-    cambiando tildes, eñes y sin espacios).  El nombre completo en UTF-8 
-    va en el campo description del LDAP y en el campo nombre del modelo 
-    Sip::Grupo, máximo 500 caracteres.
+	- Un usuario típico no puede modificarlo excepto cambiar su clave,
+	  sólo administradores (o por ejemplo un  grupo con privilegios 
+	  como recurso humanos).
+
+* Se usan tablas para usuarios y grupos en la base de datos que replican
+  información del LDAP, aunque puede haber usuarios y grupos solo en
+  base (los que tienen su campo ultimasincldap en NULL).  
+  Esto permite renombrar usuarios y grupos con facilidad (que es soportado 
+  por LDAPv3, pero no por LDAPv2 que es el protocolo soportado por algunos 
+  motores LDAP como ldapd de OpenBSD).
+
+* El directorio LDAP se basa en la propuesta de grupos y usuarios para 
+  LDAP del RFC2307 https://www.ietf.org/rfc/rfc2307.txt.  Pero agregando:
+	- Se requiere un grupo genérico (digamos usuarios con gid 500) que 
+	  se utilice como grupo principal de todos los usuarios. 
+	- Mayores restricciones para las identificaciones (cn) de usuarios y 
+   	  grupos para evitar incompatibilidades[^1].  Una identificación  (cn)
+	  puede constar sólo de letras mínusculas del alfabeto 
+  	  inglés, mayúsculas del alfabeto ingles, digitos del 0 a 9 y `_`
+
+[^1] Por ejemplo hay problema entre phpldapadmin y ldapd para 
+	escapar caracteres en un cn como la coma aunque es lo esperado 
+ 	de acuerdo a  https://www.ietf.org/rfc/rfc4514.txt. 
 
 # Características 
+
+* Un usuario LDAP tiene los objectClass top, posixAccount e inetOrgPerson,
+  en base de datos usa el modelo ::Usuario con campos que corresponden asi:
+
+	cn y uid (iguales) 	<-> nusuario (máximo 63 caracteres)
+	userPassword 		<-> encrypted_password
+	mail 			<-> email
+	givenName		<-> nombres en UTF-8 máximo 50 
+	sn			<-> apellidos en UTF-8 máximo 50
+	uidNumber		<-> uidNumber
+
+  gidNumber debe corresponder al gid del grupo genérico.
+  El dn usa el cn. El cn debe ser igual al uid y en base de datos es el mismo 
+  campo nusuario de modelo Usuario, su longitud máxima es 63.
+  Un usuario está desactivado en LDAP cuando su campo userPassword no está
+  y en base de datos cuando el campo fechadeshabilitacion
+  no es NULL (además en base de datos se borra clave cuando fechadeshabilitacion
+  no es NULL).
+
+
+* Un grupo LDAP tiene los objectClass top y posixGroup. En base de datos
+  usamos Sip::Grupo y Sip::GrupoUsuario así:
+	cn 			<-> cn (255)
+	description		<-> nombre en UTF-8 máximo 500
+	memberUid	        <-> registros de Sip::GrupoUsuario	
+  El dn usa el cn.  El cn se limita a 255 caracteres.  Para facilitar 
+  compatibilidad recomendamos usar capitalización camello con el nombre 
+  completo del grupo (cambiando tildes, eñes y sin espacios).  
 
 * Esta gema emplea Devise y la tabla usuario de sip, pone la estrategía 
   ```ldap_authenticable``` después de la estrategía que usa cookies 
@@ -43,10 +70,10 @@ básicas de adminsitración de usuarios y grupos
   después las del directorio LDAP y si el usuario no está en el LDAP o si 
   no se puede establecer la conexión con el directorio LDAP se usan las 
   que estén almacenadas en la base de datos (más parecido a la forma como 
-  hace un cliente en un dominio Windows que a la forma que usa GLPI al usar un 
-  directorio LDAP).  Así que la prioridad la tiene el directorio LDAP
-  mientras esté disponible, pero se usa base de datos local para respaldar
-  el LDAP y para permitir usuarios que no estén en el LDAP.
+  hace un cliente en un dominio Windows que a la forma que usa por ejemplo
+  GLPI al usar un directorio LDAP).  Así que la prioridad la tiene el 
+  directorio LDAP mientras esté disponible, pero se usa base de datos local 
+  para respaldar el LDAP y para permitir usuarios que no estén en el LDAP.
 
 * Tras cada conexión con el directorio LDAP para autenticar un usuario
   se actualizan datos del usuario de la base de datos (siempre y cuando
@@ -57,15 +84,6 @@ básicas de adminsitración de usuarios y grupos
   y extración de datos de un usuario) requiere privilegios especiales
   en LDAP por lo que la aplicación debe tener configurado un usuario con
   estos privilegios
-
-* Sería bueno tener bitácora de conexiones e intentos.  Junto con cada
-  usuario mantener fecha de la última sincronización exitosa desde el
-  LDAP.
-
-* La forma de deshabilitar usuarios es desde el directorio LDAP
-  dejando la clave en blanco (es decir eliminando el atributo userPassword).
-  Cuando se sincroniza LDAP en base de un usuario, a los deshabilitados
-  se les pone fecha de deshabilitación.
 
 * La aplicación permite cambiar clave a un usuario, este cambio se intenta
   primero en el directorio LDAP mientras el usuario esté activo (si no 
@@ -82,27 +100,55 @@ básicas de adminsitración de usuarios y grupos
   Después se actualizan los grupos del usuario para asegurar que está
   sólo en los del directorio LDAP.
 
-# Configuración
+# Aún no implementado
 
-1. LDAP utilizable
+* Al renombrar un usuario o cambiar grupos en el momento también debe 
+  darse nueva clave
+* Aún nos falta creación, eliminación, actualización de grupos
+* Se puede mejorar implementación de actualización de grupos de un usuario
+  en LDAP (en el momento se hace igual que renombrabiento, borrando todo y
+   agregando todo)
+* Mejorar deshabilitación de usuarios (en base) para que se trasmita a LDAP
+* Diseñar e implementar deshabilitación de grupos
+
+* Sería bueno tener bitácora de conexiones e intentos.  Junto con cada
+  usuario mantener fecha de la última sincronización exitosa desde el
+  LDAP.
+
+
+# Configuración de este motor en su aplicación
+
+
+1. Asegurese de que su aplicación use el motor sip para manejar
+   usuarios y grupos
+
+2. LDAP utilizable con las convenciones descritas al comienzo. La
+  funcionalidad de sincronizar puede ayudarle a detectar problemas en
+  su directorio LDAP respecto a esas convenciones.
+
   La conexión LDAP si la hace cifrada requiere un certificao firmado cuyo
   subject sea el nombre del servidor al que se conecta y con una autoridad
   ceritificadora reconocida por el servidor donde reside la aplicación.
   Si usa su propia autoridad certificadora asegurese de incluir la llave
   pública entre las conocidas por el sistema (en adJ /etc/ssl/cert.pem).
 
-2. Agregue la gema en Gemfile:
+3. Agregue la gema en Gemfile:
 
 gem 'jn316_gen', git: 'https://github.com/pasosdeJesus/jn316_gen.git'
 
-3. Especificar datos de conexión LDAP agregando a config/application.rb
+bundle install
+
+4. Ejecute migraciones para hacer cambios a modelos usuario y sip::grupo
+rake db:migrate
+
+5. Especificar datos de conexión LDAP agregando a config/application.rb
 
     config.x.jn316_basegente = "ou=gente,dc=miorg,dc=net"
     config.x.jn316_basegrupos = "ou=grupos,dc=miorg,dc=net"
     config.x.jn316_admin = "cn=admin,dc=miorg,dc=net"
     config.x.jn316_servidor = "apbd2.miorg.net"
     config.x.jn316_puerto = 389
-    config.x.jn316_gidgenerico = 500  #gidNumber de grupo genérico ya existente en LDAP
+    config.x.jn316_gidgenerico = 500  #gid de grupo genérico existente en LDAP
     config.x.jn316_opcon = {
       encryption: {
         method: :start_tls,
@@ -110,9 +156,7 @@ gem 'jn316_gen', git: 'https://github.com/pasosdeJesus/jn316_gen.git'
       }
     }
 
-3. Ejecute migraciones que añadirán campos a la tabla usuario
-
-4. Amplie el modelo Usuario, el más simple sería en app/models/usuario:
+6. Amplie el modelo Usuario, el más simple sería en app/models/usuario:
 
 ```
 # encoding: UTF-8
@@ -132,8 +176,8 @@ asegurese de poner valores por omisión en la base de datos. Así mismo
 asegurese de tener valores como rol, oficina y otros necesarios.  
 Ver ejemplo en cor1440_cinep-ldap/db/migrate/nombres_apellidos_poromision
 
-5. Para activar cambio de clave en directorio LDAP en ```config/routes.rb```
-  agregar:
+7. Para activar cambio de clave por parte de usuarios en directorio LDAP 
+   en ```config/routes.rb``` agregar:
 ```
     devise_for :usuarios, :skip => [:registrations], module: :devise
 as :usuario do
@@ -149,15 +193,15 @@ as :usuario do
    app/views/layouts/application:
   <%= menu_item "Clave", main_app.editar_registro_usuario_path %>
 
-6. Cuando inicie el servidor especifique la clave del usuario
+8. Cuando inicie el servidor especifique la clave del usuario
   especificado en config.x.jn316_admin en la variable
   de ambiente JN316_CLAVE por ejemplo
 
 JN316_CLAVE=estaclave rails s
 
-  Se requiere usuario y clave de administrador para realizar búsquedas
-  en el directorio y proximamente para administrar usuarios.  Si no necesita la
+  Se requiere usuario y clave del administrador LDAP para realizar búsquedas
+  en el directorio y para administrar usuarios.  Si no necesita la
   funcionalidad de administrar usuarios puede especificar un usuario
-  sólo con privilegios de busqueatre los usuarios del directorio.
+  sólo con privilegios de busqueda sobre grupos y usuarios del directorio.
 
 
