@@ -19,7 +19,28 @@ module Jn316Gen
             @usuario.no_modificar_ldap = 
               request.params[:usuario][:no_modificar_ldap] == '1'
             @usuario.clave_ldap = usuario_params[:encrypted_password]
+            prob = ''
+            unless @usuario.no_modificar_ldap
+              unless ldap_crea_usuario(
+                @usuario, @usuario.clave_ldap, nil, prob)
+                @usuario.errors.add(
+                  :base, 'No pudo crear usuario en directorio LDAP:' +
+                  prob + '. Saltando creación en base de datos')
+                respond_to do |format|
+                  format.html { render 'sip/usuarios/new' }
+                  format.json { render json: usuario.errors,  
+                                status: :unprocessable_entity }  
+                  return
+                end
+              end
+            end
             create_gen(@usuario)
+          end
+
+
+          def edit
+            authorize! :manage, ::Usuario
+            render 'sip/usuarios/edit', layout: '/application'
           end
 
           # PATCH/PUT /usuarios/1
@@ -39,7 +60,6 @@ module Jn316Gen
                 params[:usuario][:encrypted_password],
                 {:cost => Rails.application.config.devise.stretches})
             elsif !params[:usuario][:fechadeshabilitacion].nil?
-              byebug
               @usuario.clave = params[:usuario][:encrypted_password] = ''
             else
               params[:usuario].delete(:encrypted_password)

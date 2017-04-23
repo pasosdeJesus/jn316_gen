@@ -21,7 +21,7 @@
   <tbody>
     <% @usuarios.try(:each) do |usuario| %>
       <tr>
-        <td><%= link_to usuario.id, usuario_path(usuario) %></td>
+        <td><%= link_to usuario.id, main_app.usuario_path(usuario) %></td>
         <td><%= usuario.nusuario %></td>
         <td><%= usuario.nombres %></td>
         <td><%= usuario.apellidos %></td>
@@ -35,9 +35,9 @@
         <td><%= usuario.created_at_localizada.to_s %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_usuario_path(usuario), :class => 'btn btn-xs' %>
+                      main_app.edit_usuario_path(usuario), :class => 'btn btn-xs' %>
           <%= link_to 'Eliminar de base',
-                      usuario_path(usuario),
+                      main_app.usuario_path(usuario),
                       :method => :delete,
                       :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                       :class => 'btn btn-xs btn-danger' %>
@@ -56,5 +56,5 @@
 
 <%= will_paginate @usuario, { param_name: :pagina }  %>
 <%= link_to t('.new', :default => t("helpers.links.new")),
-            new_usuario_path,
+            main_app.new_usuario_path,
             :class => 'btn btn-primary' %>

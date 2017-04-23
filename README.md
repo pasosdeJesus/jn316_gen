@@ -177,7 +177,18 @@ asegurese de poner valores por omisión en la base de datos. Así mismo
 asegurese de tener valores como rol, oficina y otros necesarios.  
 Ver ejemplo en cor1440_cinep-ldap/db/migrate/nombres_apellidos_poromision
 
-7. Para activar cambio de clave por parte de usuarios en directorio LDAP 
+7. Extienda el controlador de usuarios, el más simple es 
+   app/controllers/usuarios_controller.rb 
+
+```
+# encoding: UTF-8
+
+class UsuariosController < Jn316Gen::UsuariosController
+
+end
+```
+
+8. Para activar cambio de clave por parte de usuarios en directorio LDAP 
    en ```config/routes.rb``` agregar:
 ```
     devise_for :usuarios, :skip => [:registrations], module: :devise
@@ -194,7 +205,7 @@ as :usuario do
    app/views/layouts/application:
   <%= menu_item "Clave", main_app.editar_registro_usuario_path %>
 
-8. Cuando inicie el servidor especifique la clave del usuario
+9. Cuando inicie el servidor especifique la clave del usuario
   especificado en config.x.jn316_admin en la variable
   de ambiente JN316_CLAVE por ejemplo
 
@@ -205,4 +216,5 @@ JN316_CLAVE=estaclave rails s
   funcionalidad de administrar usuarios puede especificar un usuario
   sólo con privilegios de busqueda sobre grupos y usuarios del directorio.
 
-
+10. Ingrese con un administrador que esté en base de datos pero no en LDAP
+   y sincronice. 

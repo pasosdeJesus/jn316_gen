@@ -114,15 +114,17 @@ module Jn316Gen
       usuario.email = nusuario + '@porcompletar.org' unless usuario.email
       usuario.encrypted_password = 'x'
       usuario.encrypted_password = BCrypt::Password.create( clave, {
-        cost: Rails.application.config.devise.stretches}) if !clave.nil?
-        usuario.fechacreacion = Date.today
-        usuario.save
-        if (usuario.errors.messages.length > 0)
-          prob << usuario.errors.messages.to_s
-          return nil
-        end
+        cost: Rails.application.config.devise.stretches
+      }) if !clave.nil?
+      usuario.fechacreacion = Date.today
+      usuario.no_modificar_ldap = "1"
+      usuario.save
+      if (usuario.errors.messages.length > 0)
+        prob << usuario.errors.messages.to_s
+        return nil
+      end
 
-        return usuario
+      return usuario
     end
 
 
@@ -396,6 +398,10 @@ module Jn316Gen
         prob << 'Falta clave LDAP para agregar usuario'
         return nil
       end
+      if Rails.application.config.x.jn316_gidgenerico.nil?
+        prob << 'No ha asignado gid de grupo generico config.x.jn316_gidgenerico'
+        return nil
+      end
       opcon = {
         host: Rails.application.config.x.jn316_servidor,
         port: Rails.application.config.x.jn316_puerto,
@@ -412,7 +418,12 @@ module Jn316Gen
         hash =  Net::LDAP::Password.generate(:sha, clave)
       end
       if usuario.uidNumber.nil?
-        usuario.uidNumber = Usuario.maximum('uidNumber') + 1
+        usuario.uidNumber = Usuario.maximum('uidNumber')
+        if usuario.uidNumber.nil?
+          prob << "No pudo obtenerse uidNumber máximo.  Parece que no ha sincronizado (cree algún usuario en LDAP antes)"
+          return false
+        end
+        usuario.uidNumber += 1
       end
       attr = {
         cn: cn,

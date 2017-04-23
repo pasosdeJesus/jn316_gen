@@ -22,19 +22,6 @@ module Jn316Gen
           attr :gruposini
           attr_accessor :gruposini
 
-          before_create do
-            prob = ''
-            unless self.no_modificar_ldap
-              unless ldap_crea_usuario(self, self.clave_ldap, nil, prob)
-                self.errors.add(
-                  :base, 'No pudo crear usuario en directorio LDAP:' +
-                  prob + '. Saltando creación en base de datos')
-                raise ActiveRecord::Rollback
-              end
-            end
-          end
-
-
           before_update do
             if !nusuarioini.nil?  && # Pasó por controlador
               !ultimasincldap.nil? &&  # Proviene de LDAP
