@@ -103,13 +103,15 @@ básicas de administración de usuarios y grupos
 
 # Aún no implementado
 
-* Al renombrar un usuario o cambiar grupos en el momento también debe 
-  darse nueva clave
 * Aún nos falta creación, eliminación, actualización de grupos
-* Se puede mejorar implementación de actualización de grupos de un usuario
-  en LDAP (en el momento se hace igual que renombrabiento, borrando todo y
-   agregando todo)
-* Mejorar deshabilitación de usuarios (en base) para que se trasmita a LDAP
+* Se puede mejorar implementación de actualización en LDAP de un
+  usuario cuando sus grupos cambian
+  (en el momento se hace igual que renombrabiento, borrando 
+  todo y agregando todo, pero podría: ver grupos eliminados
+  y grupos nuevos, sacar de eliminados, agregar a nuevos)
+* Mejorar deshabilitación de usuarios (en base) para que se 
+  trasmita a LDAP (tanto al editar, como al crear, como 
+  al sincronizar).
 * Diseñar e implementar deshabilitación de grupos
 
 * Sería bueno tener bitácora de conexiones e intentos.  Junto con cada
