@@ -33,6 +33,7 @@ module Jn316Gen
                   return
                 end
               end
+              @usuario.ultimasincldap = Date.today
             end
             create_gen(@usuario)
           end

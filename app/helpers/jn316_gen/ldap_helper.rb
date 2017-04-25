@@ -414,7 +414,7 @@ module Jn316Gen
       ldap_conadmin = Net::LDAP.new( opcon )
       cn = limpia_cn(usuario.nusuario)
       dn = "cn=#{cn},#{Rails.application.config.x.jn316_basegente}"
-      unless clave.nil?
+      if clave.nil? && clave != ''
         hash =  Net::LDAP::Password.generate(:sha, clave)
       end
       if usuario.uidNumber.nil?
@@ -532,12 +532,12 @@ module Jn316Gen
       if cambios.include?('nusuario') ||
         cambios.include?('grupos')
         hash = nil
-        if clave.nil?
+        if clave.nil? || clave == ""
           entry1 = ldap_busca_como_admin(nusuarioini, prob)
           if entry1.nil?
             return false
           end
-          hash = entry1.userPassword[0] if entry1.respond_to?(userPassword)
+          hash = entry1.userPassword[0] if entry1.respond_to?(:userPassword)
         end
         if ldap_elimina_usuario(nusuarioini, prob)
           if ldap_crea_usuario(usuario, clave, hash, prob)
