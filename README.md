@@ -129,7 +129,7 @@ básicas de administración de usuarios y grupos
   funcionalidad de sincronizar puede ayudarle a detectar problemas en
   su directorio LDAP respecto a esas convenciones.
 
-  La conexión LDAP si la hace cifrada requiere un certificao firmado cuyo
+  La conexión LDAP si la hace cifrada requiere un certificado firmado cuyo
   subject sea el nombre del servidor al que se conecta y con una autoridad
   ceritificadora reconocida por el servidor donde reside la aplicación.
   Si usa su propia autoridad certificadora asegurese de incluir la llave
