@@ -12,11 +12,6 @@
 <tr><td rowspan="1" colspan="3">eliminar_usuario_a</td></tr>
 </thead><tbody>
 <tr>
-	<td>open</td>
-	<td>/</td>
-	<td></td>
-</tr>
-<tr>
 	<td>click</td>
 	<td>link=Administrar</td>
 	<td></td>
@@ -46,7 +41,6 @@
 	<td>//td[9]</td>
 	<td>a@a.com</td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

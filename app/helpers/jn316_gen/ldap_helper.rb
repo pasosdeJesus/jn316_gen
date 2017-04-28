@@ -420,7 +420,7 @@ module Jn316Gen
       ldap_conadmin = Net::LDAP.new( opcon )
       cn = limpia_cn(usuario.nusuario)
       dn = "cn=#{cn},#{Rails.application.config.x.jn316_basegente}"
-      if clave.nil? && clave != ''
+      if !clave.nil? && clave != ''
         hash =  Net::LDAP::Password.generate(:sha, clave)
       end
       if usuario.uidNumber.nil?

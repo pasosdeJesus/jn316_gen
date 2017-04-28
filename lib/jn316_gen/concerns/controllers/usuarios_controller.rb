@@ -26,12 +26,8 @@ module Jn316Gen
                 @usuario.errors.add(
                   :base, 'No pudo crear usuario en directorio LDAP:' +
                   prob + '. Saltando creación en base de datos')
-                respond_to do |format|
-                  format.html { render 'sip/usuarios/new' }
-                  format.json { render json: usuario.errors,  
-                                status: :unprocessable_entity }  
-                  return
-                end
+                  render 'sip/usuarios/new', layout: 'application' 
+                return
               end
               @usuario.ultimasincldap = Date.today
             end
