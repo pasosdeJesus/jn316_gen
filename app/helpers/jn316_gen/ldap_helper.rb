@@ -189,6 +189,12 @@ module Jn316Gen
         base: Rails.application.config.x.jn316_basegrupos, 
         filter: filter 
       )
+      if lgrupos.nil?
+        prob << 'No se pudieron cargar grupos: '+
+          ldap_conadmin.get_operation_result.code.to_s +
+          ' - ' + ldap_conadmin.get_operation_result.message 
+        return nil
+      end
       lgrupos.each do |entry|
         if (entry.gidnumber && gidnumber && 
             entry.gidnumber[0] == gidnumber) || 
@@ -203,8 +209,8 @@ module Jn316Gen
       end
       return grupos
     rescue Exception => exception
-      prob << 'Problema conectando a servidor LDAP "+
-        "(ldap_busca_grupos_usuario_como_admin). Excepción: ' + exception.to_s
+      prob << 'Problema conectando a servidor LDAP '+
+        '(ldap_busca_grupos_usuario_como_admin). Excepción: ' + exception.to_s
       puts prob
       return nil
     end
