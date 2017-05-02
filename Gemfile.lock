@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/pasosdeJesus/sip.git
-  revision: 769a3b51aa2c72e8dc59afaa39c8ffef88071425
+  revision: 1a5bb96fcdd7f37cfad309bffa0b2260dd0a583d
   specs:
     sip (2.0.b3)
       bootstrap-datepicker-rails
@@ -121,8 +121,8 @@ GEM
     erubis (2.7.0)
     execjs (2.7.0)
     ffi (1.9.18)
-    font-awesome-rails (4.7.0.1)
-      railties (>= 3.2, < 5.1)
+    font-awesome-rails (4.7.0.2)
+      railties (>= 3.2, < 5.2)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
     i18n (0.8.1)
@@ -145,7 +145,7 @@ GEM
       tilt
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
-    mail (2.6.4)
+    mail (2.6.5)
       mime-types (>= 1.16, < 4)
     method_source (0.8.2)
     mime-types (3.1)
@@ -201,8 +201,9 @@ GEM
     rb-fsevent (0.9.8)
     rb-inotify (0.9.8)
       ffi (>= 0.5.0)
-    responders (2.3.0)
-      railties (>= 4.2.0, < 5.1)
+    responders (2.4.0)
+      actionpack (>= 4.2.0, < 5.3)
+      railties (>= 4.2.0, < 5.3)
     sass (3.4.23)
     sass-rails (5.0.6)
       railties (>= 4.0.0, < 6)
@@ -232,13 +233,13 @@ GEM
     tilt (2.0.7)
     turbolinks (5.0.1)
       turbolinks-source (~> 5)
-    turbolinks-source (5.0.0)
+    turbolinks-source (5.0.1)
     twitter-bootstrap-rails (4.0.0)
       actionpack (~> 5.0, >= 5.0.1)
       execjs (~> 2.7)
       less-rails (~> 2.8, >= 2.8.0)
       railties (~> 5.0, >= 5.0.1)
-    twitter_cldr (4.3.1)
+    twitter_cldr (4.4.0)
       camertron-eprun
       cldr-plurals-runtime-rb (~> 1.0)
       tzinfo

@@ -238,6 +238,11 @@ module Jn316Gen
         base: Rails.application.config.x.jn316_basegente, 
         filter: filter 
       )
+      if lusuarios.nil?
+          prob << ldap_conadmin.get_operation_result.code.to_s +
+            ' - ' + ldap_conadmin.get_operation_result.message 
+          return nil
+      end
       lusuarios.each do |entry|
         u = crear_actualizar_usuario(entry.cn[0], entry, nil, prob)
         if (u.nil?)
