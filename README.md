@@ -46,7 +46,7 @@ básicas de administración de usuarios y grupos
 
   gidNumber debe corresponder al gid del grupo genérico, por ejemplo:
   El dn de un usuario usa el cn (en lugar del uid) 
-	cn=nombre,ou=gente,dc=miong,dc=org,dc=co
+	cn=nombre,ou=gente,dc=miorg,dc=net
   Un usuario está desactivado en LDAP cuando su campo userPassword no está
   y en base de datos cuando el campo fechadeshabilitacion
   no es NULL (además en base de datos se borra clave cuando fechadeshabilitacion
@@ -96,9 +96,9 @@ básicas de administración de usuarios y grupos
 
 ```
   deny access to any by any
-  allow bind access to children of "ou=gente,dc=miong,dc=org,dc=co" by any
+  allow bind access to children of "ou=gente,dc=miorg,dc=net" by any
   allow read access to any by self
-  allow write access to children of "ou=gente,dc=miong,dc=org,dc=co" by self
+  allow write access to children of "ou=gente,dc=miorg,dc=net" by self
 ```
 
 * Grupos.  Se  implementó en sip primero, un grupo referencia varios
@@ -130,7 +130,6 @@ básicas de administración de usuarios y grupos
 
 # Configuración de este motor en su aplicación
 
-
 1. Asegurese de que su aplicación use el motor sip para manejar
    usuarios y grupos
 
@@ -143,6 +142,41 @@ básicas de administración de usuarios y grupos
   ceritificadora reconocida por el servidor donde reside la aplicación.
   Si usa su propia autoridad certificadora asegurese de incluir la llave
   pública entre las conocidas por el sistema (en adJ /etc/ssl/cert.pem).
+
+  Un ejemplo de configuración en el caso de ldapd es:
+```
+schema "/etc/ldap/core.schema"
+schema "/etc/ldap/inetorgperson.schema"
+schema "/etc/ldap/nis.schema"
+schema "/etc/ldap/misc.schema"
+schema "/etc/ldap/courier.schema"
+schema "/etc/ldap/mozillaOrgPerson.schema"
+schema "/etc/ldap/cosine.schema"
+schema "/etc/ldap/samba3.schema"
+
+if1="em0"
+listen on $if1 tls certificate apbd1.miorg.org.co 
+#TLS es recomendado, pero para pruebas también usamos ldaps:
+listen on $if1 ldaps certificate apbd1.miorg.org.co 
+listen on "/var/run/ldapi"
+
+namespace "dc=miorg,dc=net" {
+	rootdn		"cn=admin,dc=miorg,dc=net"
+	rootpw		"{SHA}aTUzMjd3ryR2UjC8xAk1/TEL5h0="
+	index		sn
+	index		givenName
+	index		cn
+	index		mail
+	index           objectClass
+
+        fsync           on
+
+	deny access to any by any
+        allow bind access to children of "ou=gente,dc=miorg,dc=net" by any
+	allow read access to any by self
+        allow write access to children of "ou=gente,dc=miorg,dc=net" by self
+}
+```
 
 3. Agregue la gema en Gemfile:
 ```
