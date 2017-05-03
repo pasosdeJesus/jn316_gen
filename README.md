@@ -38,20 +38,19 @@ básicas de administración de usuarios y grupos
   en base de datos usa el modelo ::Usuario con campos que corresponden asi:
 
 	cn y uid (iguales) 	<-> nusuario (máximo 63 caracteres)
-	userPassword 		<-> encrypted_password
+	userPassword (sha) 	<-> encrypted_password (bcrypt)
 	mail 			<-> email
 	givenName		<-> nombres en UTF-8 máximo 50 
 	sn			<-> apellidos en UTF-8 máximo 50
 	uidNumber		<-> uidNumber
 
-  gidNumber debe corresponder al gid del grupo genérico.
-  El dn usa el cn. El cn debe ser igual al uid y en base de datos es el mismo 
-  campo nusuario de modelo Usuario, su longitud máxima es 63.
+  gidNumber debe corresponder al gid del grupo genérico, por ejemplo:
+  El dn de un usuario usa el cn (en lugar del uid) 
+	cn=nombre,ou=gente,dc=miong,dc=org,dc=co
   Un usuario está desactivado en LDAP cuando su campo userPassword no está
   y en base de datos cuando el campo fechadeshabilitacion
   no es NULL (además en base de datos se borra clave cuando fechadeshabilitacion
   no es NULL).
-
 
 * Un grupo LDAP tiene los objectClass top y posixGroup. En base de datos
   usamos Sip::Grupo y Sip::GrupoUsuario así:
@@ -91,10 +90,19 @@ básicas de administración de usuarios y grupos
   está activo debe sincronizar y sacar de la cuenta al usuario).  Si el
   usuario está en el directorio LDAP se pone la nueva clave y en 
   base de datos.  Si el usuario no está en el directorio LDAP sólo se 
-  actualiza clave en base de datos.  
+  actualiza clave en base de datos.   El directorio LDAP debe permitir
+  este cambio, en el caso de ldapd se logra con una configuración como esta
+  en ```/etc/ldapd.conf```:
+
+```
+  deny access to any by any
+  allow bind access to children of "ou=gente,dc=miong,dc=org,dc=co" by any
+  allow read access to any by self
+  allow write access to children of "ou=gente,dc=miong,dc=org,dc=co" by self
+```
 
 * Grupos.  Se  implementó en sip primero, un grupo referencia varios
-  usuarios. No maneja concepto de grupo principal. 
+  usuarios. En base de datos no maneja concepto de grupo principal. 
   Cuando un usuario se autentica, se actualiza la información de 
   grupos a los que pertenece sincronizandola en base.  Si un grupo del LDAP
   no está en la base de datos se crear para poder agregar el usuario.
@@ -113,6 +121,7 @@ básicas de administración de usuarios y grupos
   trasmita a LDAP (tanto al editar, como al crear, como 
   al sincronizar).
 * Diseñar e implementar deshabilitación de grupos
+* Diseñar e implementar subgrupos
 
 * Sería bueno tener bitácora de conexiones e intentos.  Junto con cada
   usuario mantener fecha de la última sincronización exitosa desde el
@@ -136,16 +145,22 @@ básicas de administración de usuarios y grupos
   pública entre las conocidas por el sistema (en adJ /etc/ssl/cert.pem).
 
 3. Agregue la gema en Gemfile:
-
+```
 gem 'jn316_gen', git: 'https://github.com/pasosdeJesus/jn316_gen.git'
-
+```
+y ejecute:
+```
 bundle install
+```
 
 4. Ejecute migraciones para hacer cambios a modelos usuario y sip::grupo
+```
 rake db:migrate
+```
 
 5. Especificar datos de conexión LDAP agregando a config/application.rb
 
+```
     config.x.jn316_basegente = "ou=gente,dc=miorg,dc=net"
     config.x.jn316_basegrupos = "ou=grupos,dc=miorg,dc=net"
     config.x.jn316_admin = "cn=admin,dc=miorg,dc=net"
@@ -158,6 +173,7 @@ rake db:migrate
         tls_options: OpenSSL::SSL::SSLContext::DEFAULT_PARAMS
       }
     }
+```
 
 6. Amplie el modelo Usuario, el más simple sería en app/models/usuario:
 
@@ -205,13 +221,17 @@ as :usuario do
  
    y agregue un menú o enlaces para permitirlo, por ejemplo en
    app/views/layouts/application:
+```
   <%= menu_item "Clave", main_app.editar_registro_usuario_path %>
+```
 
 9. Cuando inicie el servidor especifique la clave del usuario
   especificado en config.x.jn316_admin en la variable
   de ambiente JN316_CLAVE por ejemplo
 
+```
 JN316_CLAVE=estaclave rails s
+```
 
   Se requiere usuario y clave del administrador LDAP para realizar búsquedas
   en el directorio y para administrar usuarios.  Si no necesita la

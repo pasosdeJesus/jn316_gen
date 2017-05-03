@@ -19,10 +19,13 @@ class Jn316Gen::RegistrationsController < ::Devise::RegistrationsController
       else
         flash[:error] = 'No pudo cambiar clave en directorio LDAP: ' + prob
         redirect_to Rails.configuration.relative_url_root
+        return
       end
     end
     super
   rescue Exception => exception
+    flash[:error] = 'No pudo cambiar clave en directorio LDAP: ' + 
+      exception.to_s
     redirect_to Rails.configuration.relative_url_root
   end
 
