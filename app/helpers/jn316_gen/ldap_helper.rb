@@ -260,7 +260,8 @@ module Jn316Gen
           deshab << u.id
         end
       end
-      puts "Deshabilitados " + deshab.length.to_s + " registros de usuarios que ya no estan en LDAP"
+      puts "Deshabilitados " + deshab.length.to_s + 
+        " registros de usuarios que estuvieron en LDAP pero ya no"
       
       return [usuarios, deshab]
     rescue Exception => exception
@@ -360,7 +361,8 @@ module Jn316Gen
         port: Rails.application.config.x.jn316_puerto,
         auth: {
           method: :simple, 
-          username: "cn=#{nusuario},#{Rails.application.config.x.jn316_basegente}",
+          username: "cn=#{nusuario}," +
+            "#{Rails.application.config.x.jn316_basegente}",
           password: claveactual
         }
       }.merge(Rails.application.config.x.jn316_opcon)
@@ -376,7 +378,12 @@ module Jn316Gen
         #).chomp! 
         hash =  Net::LDAP::Password.generate(:sha, nuevaclave)
         puts 'userPassword: '+hash+"\n" 
-        ldap.replace_attribute dn, :userPassword, hash
+        unless ldap.replace_attribute dn, :userPassword, hash
+          prob << ldap.get_operation_result.code.to_s +
+            ' - ' + ldap.get_operation_result.message 
+          puts "OJO prob=#{prob}"
+          return false
+        end
       end
       return true
     rescue Exception => exception
