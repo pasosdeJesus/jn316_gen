@@ -66,7 +66,7 @@ module Jn316Gen
                 format.html { redirect_to @usuario, notice: 'Usuario actualizado con éxito.' }
                 format.json { head :no_content }
               else
-                format.html { render action: 'edit', layout: '/application' }
+                format.html { render 'sip/usuarios/edit', layout: '/application' }
                 format.json { render json: @usuario.errors, status: :unprocessable_entity }
               end
             end
