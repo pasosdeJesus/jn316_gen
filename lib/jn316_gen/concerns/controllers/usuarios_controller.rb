@@ -16,38 +16,48 @@ module Jn316Gen
           def create
             authorize! :edit, ::Usuario
             @usuario = ::Usuario.new(usuario_params)
-            unless @usuario.validate
-                render 'sip/usuarios/edit', layout: 'application'
-                return
-            end
-            prob = ""
-            no_modificar_ldap = 
+            @usuario.no_modificar_ldap = 
               request.params[:usuario][:no_modificar_ldap] == '1'
-            creo_ldap = false            
-            unless no_modificar_ldap
-              creo_ldap = ldap_crea_usuario(@usuario, usuario_params[:encrypted_password], prob)
-              unless creo_ldap
-                flash[:error] = 'No pudo crear usuario en directorio LDAP:' +
-                  prob + '. Saltando creación en base de datos'
-                render 'sip/usuarios/edit', layout: 'application'
+            @usuario.clave_ldap = usuario_params[:encrypted_password]
+            prob = ''
+            unless @usuario.no_modificar_ldap
+              unless ldap_crea_usuario(
+                @usuario, @usuario.clave_ldap, nil, prob)
+                @usuario.errors.add(
+                  :base, 'No pudo crear usuario en directorio LDAP:' +
+                  prob + '. Saltando creación en base de datos')
+                  render 'sip/usuarios/new', layout: 'application' 
                 return
               end
+              @usuario.ultimasincldap = Date.today
             end
+            create_gen(@usuario)
+          end
 
-            if creo_ldap || no_modificar_ldap
-              create_gen(@usuario)
-            end
+
+          def edit
+            authorize! :manage, ::Usuario
+            render 'sip/usuarios/edit', layout: '/application'
           end
 
           # PATCH/PUT /usuarios/1
           # PATCH/PUT /usuarios/1.json
           def update
-            authorize! :edit, ::Usuario
-            if (!params[:usuario][:encrypted_password].nil? &&
+            authorize! :manage, ::Usuario
+            @usuario.no_modificar_ldap = 
+              request.params[:usuario][:no_modificar_ldap] == '1'
+            @usuario.clave_ldap = usuario_params[:encrypted_password]
+            @usuario.nusuarioini = @usuario.nusuario
+            @usuario.gruposini = Sip::GrupoUsuario.where(
+              usuario_id: @usuario.id).map(&:sip_grupo_id).sort
+            if (params[:usuario][:fechadeshabilitacion].nil? &&
+                !params[:usuario][:encrypted_password].nil? &&
                 params[:usuario][:encrypted_password] != "")
               params[:usuario][:encrypted_password] = BCrypt::Password.create(
                 params[:usuario][:encrypted_password],
                 {:cost => Rails.application.config.devise.stretches})
+            elsif !params[:usuario][:fechadeshabilitacion].nil?
+              @usuario.clave = params[:usuario][:encrypted_password] = ''
             else
               params[:usuario].delete(:encrypted_password)
             end
@@ -56,7 +66,7 @@ module Jn316Gen
                 format.html { redirect_to @usuario, notice: 'Usuario actualizado con éxito.' }
                 format.json { head :no_content }
               else
-                format.html { render action: 'edit', layout: '/application' }
+                format.html { render 'sip/usuarios/edit', layout: '/application' }
                 format.json { render json: @usuario.errors, status: :unprocessable_entity }
               end
             end

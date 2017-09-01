@@ -8,10 +8,46 @@ module Jn316Gen
       module Usuario
         extend ActiveSupport::Concern
         #include Sip::Concerns::Models::Usuario
+        include Jn316Gen::LdapHelper 
 
         included do
 
+
           attr :no_modificar_ldap
+          attr_accessor :no_modificar_ldap
+          attr :clave_ldap
+          attr_accessor :clave_ldap
+          attr :nusuarioini
+          attr_accessor :nusuarioini
+          attr :gruposini
+          attr_accessor :gruposini
+
+          before_update do
+            if !nusuarioini.nil?  && # Pasó por controlador
+              !ultimasincldap.nil? &&  # Proviene de LDAP
+              !no_modificar_ldap && # El usuario sabe del cambio LDAP
+              (changed.include?('encrypted_password') || # Campo de LDAP
+               changed.include?('nusuario') ||
+               changed.include?('email') ||
+               changed.include?('nombres') ||
+               changed.include?('apellidos') ||
+               changed.include?('uidNumber') ||
+               sip_grupo_usuario.map(&:sip_grupo_id).sort != gruposini
+              ) 
+              prob = ''
+              cambios = changed
+              if sip_grupo_usuario.map(&:sip_grupo_id).sort != gruposini
+                cambios << "grupos"
+              end
+              unless ldap_actualiza_usuario(
+                nusuarioini, self, clave_ldap, cambios, prob)
+                self.errors.add(
+                  :base, 'No pudo actualizar usuario en directorio LDAP:' +
+                  prob + '. Saltando actualización en base de datos')
+                raise ActiveRecord::Rollback
+              end
+            end
+          end
 
           belongs_to :oficina, class_name: 'Sip::Oficina',
             foreign_key: "oficina_id", validate: true
