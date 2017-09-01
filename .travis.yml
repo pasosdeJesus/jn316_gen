@@ -17,6 +17,7 @@ before_install:
         - psql -c 'CREATE DATABASE jn316gen_pru;' -U postgres
         - bundle install
         - cp config/database.travis.yml config/database.yml
+        - cp test/dummy/config/application.rb.plantilla test/dummy/config/application.rb
         - rake db:setup
         - rake sip:indices
         - cd ../..
