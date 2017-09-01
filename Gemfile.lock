@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/pasosdeJesus/sip.git
-  revision: 2fc371ab298a0f15ddb77461546862e76c5eded0
+  revision: f71e4c8b7747b661f2494470b5f1a2b6e7fec8a4
   specs:
-    sip (2.0.b3)
+    sip (2.0.b4)
       bootstrap-datepicker-rails
       cancancan
       chosen-rails
@@ -11,7 +11,7 @@ GIT
       devise-i18n
       jquery-rails
       jquery-ui-rails
-      minitest (= 5.10.1)
+      minitest
       paperclip
       rails
       rails-i18n
@@ -299,4 +299,4 @@ DEPENDENCIES
   will_paginate
 
 BUNDLED WITH
-   1.15.1
+   1.15.4
