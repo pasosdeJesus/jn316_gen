@@ -2,12 +2,10 @@ language: ruby
 rvm:
         - 2.4.0
 addons:
-        postgresql: 9.6
+        postgresql: '9.6'
 notifications:
         email: false
 script: bundle exec rails test -b
-after_success:
-        - CODECLIMATE_REPO_TOKEN= bundle exec codeclimate-test-reporter
 env:
         global:
                 - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
@@ -19,6 +17,7 @@ before_install:
         - psql -c 'CREATE DATABASE jn316gen_pru;' -U postgres
         - bundle install
         - cp config/database.travis.yml config/database.yml
+        - cp config/application.rb.plantilla config/application.rb
         - rake db:setup
         - rake sip:indices
         - cd ../..

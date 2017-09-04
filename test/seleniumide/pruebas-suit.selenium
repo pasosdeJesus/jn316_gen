@@ -10,6 +10,9 @@
 <tr><td><b>Test Suite</b></td></tr>
 <tr><td><a href="nuevo_usuario_a.selenium">nuevo_usuario_a</a></td></tr>
 <tr><td><a href="iniciar_sesion_como_usuario_a_y_salir.selenium">iniciar_sesion_como_usuario_a_y_salir</a></td></tr>
+<tr><td><a href="cambiar_atributos_usuario_a_por_aa.selenium">cambiar_atributos_usuario_a_por_aa</a></td></tr>
+<tr><td><a href="renombrar_usuario_a_por_aa_ingresar_y_salir">renombrar_usuario_a_por_aa_ingresar_y_salir</a></td></tr>
+<tr><td><a href="renombrar_usuario_aa_por_a">renombrar_usuario_aa_por_a</a></td></tr>
 <tr><td><a href="eliminar_usuario_a.selenium">eliminar_usuario_a</a></td></tr>
 </tbody></table>
 </body>

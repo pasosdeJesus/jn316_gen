@@ -28,20 +28,18 @@ module Dummy
 
     config.x.formato_fecha = 'yyyy-mm-dd'
 
-
-    config.x.jn316_base = "ou=gente,dc=miorg,dc=net"
-    config.x.jn316_admin = "cn=admin,dc=miorg,dc=net"
-    config.x.jn316_servidor = "ldap.miorg.net"
+    config.x.jn316_basegente = "ou=gente,dc=miong,dc=org,dc=co"
+    config.x.jn316_basegrupos = "ou=grupos,dc=miong,dc=org,dc=co"
+    config.x.jn316_admin = "cn=admin,dc=miong,dc=org,dc=co"
+    config.x.jn316_servidor = "miserv.miong.org.co"
     config.x.jn316_puerto = 389
-    config.x.jn316_opcon = {
-      encryption: {
-        method: :start_tls,
-        tls_options: OpenSSL::SSL::SSLContext::DEFAULT_PARAMS
-      }
-    }
-    # Otros valores iniciales para usuario establecerlos como
-    # valores por omisión del modelo, en particular el rol
-
+    config.x.jn316_gidgenerico = 500
+#    config.x.jn316_opcon = {
+#      encryption: {
+#        method: :start_tls,
+#        tls_options: OpenSSL::SSL::SSLContext::DEFAULT_PARAMS
+#      }
+#    }
 
   end
 end
