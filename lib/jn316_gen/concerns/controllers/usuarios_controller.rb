@@ -13,6 +13,40 @@ module Jn316Gen
 
         included do
 
+          def atributos_index
+            [ "id",
+              "nusuario",
+              "nombres",
+              "apellidos",
+              "rol",
+              "email",
+              "created_at_localizada"
+            ]
+          end
+
+          def atributos_form
+            r = [ 
+              "nusuario",
+              "nombres",
+              "apellidos",
+              "descripcion",
+              "rol",
+              "email",
+            ]
+            if can?(:manage, Sip::Grupo)
+              r += ["sip_grupo"]
+            end
+            r += [
+              "idioma",
+              "encrypted_password",
+              "fechacreacion_localizada",
+              "fechadeshabilitacion_localizada",
+              "failed_attempts",
+              "unlock_token",
+              "locked_at"
+            ]
+          end
+
           def create
             authorize! :edit, ::Usuario
             @usuario = ::Usuario.new(usuario_params)
@@ -37,7 +71,7 @@ module Jn316Gen
 
           def edit
             authorize! :manage, ::Usuario
-            render 'sip/usuarios/edit', layout: '/application'
+            render layout: '/application'
           end
 
           # PATCH/PUT /usuarios/1
@@ -66,7 +100,7 @@ module Jn316Gen
                 format.html { redirect_to @usuario, notice: 'Usuario actualizado con éxito.' }
                 format.json { head :no_content }
               else
-                format.html { render 'sip/usuarios/edit', layout: '/application' }
+                format.html { render 'usuarios/edit', layout: '/application' }
                 format.json { render json: @usuario.errors, status: :unprocessable_entity }
               end
             end
@@ -97,7 +131,7 @@ module Jn316Gen
              # end
             else
               flash[:error] = 'No pudo eliminar usuario de LDAP: ' + prob +
-                '.  Saltando eliminado de base de datos'
+                '.  Saltando eliminación de base de datos'
               redirect_to main_app.usuario_url(@usuario), layout: 'application'
             end
           end
@@ -128,6 +162,8 @@ module Jn316Gen
           end
 
 
+          private
+
           def usuario_params
             p = params.require(:usuario).permit(
               :id, :nusuario, :password, 
@@ -144,6 +180,7 @@ module Jn316Gen
             )
             return p
           end
+
 
         end  # included
 
