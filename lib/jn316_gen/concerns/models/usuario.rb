@@ -64,6 +64,16 @@ module Jn316Gen
             r += ' ' + self.apellidos if self.apellidos
             r 
           end
+
+
+          scope :filtro_nombres, lambda { |n|
+              where("unaccent(nombres) ILIKE '%' || unaccent(?) || '%'", n)
+          }
+
+          scope :filtro_apellidos, lambda { |n|
+              where("unaccent(apellidos) ILIKE '%' || unaccent(?) || '%'", n)
+          }
+
         end
 
       end
