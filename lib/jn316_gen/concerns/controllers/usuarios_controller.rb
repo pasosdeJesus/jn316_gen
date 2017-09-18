@@ -8,10 +8,10 @@ module Jn316Gen
       module UsuariosController
 
         extend ActiveSupport::Concern
-        include Sip::Concerns::Controllers::UsuariosController
-        include Jn316Gen::LdapHelper
 
         included do
+          include Sip::Concerns::Controllers::UsuariosController
+          include Jn316Gen::LdapHelper
 
           def atributos_index
             [ "id",
@@ -39,6 +39,8 @@ module Jn316Gen
             r += [
               "idioma",
               "encrypted_password",
+              "no_modificar_ldap",
+              "uidNumber",
               "fechacreacion_localizada",
               "fechadeshabilitacion_localizada",
               "failed_attempts",
@@ -49,7 +51,7 @@ module Jn316Gen
 
           def create
             authorize! :edit, ::Usuario
-            @usuario = ::Usuario.new(usuario_params)
+            @registro = @usuario = ::Usuario.new(usuario_params)
             @usuario.no_modificar_ldap = 
               request.params[:usuario][:no_modificar_ldap] == '1'
             @usuario.clave_ldap = usuario_params[:encrypted_password]
@@ -57,10 +59,10 @@ module Jn316Gen
             unless @usuario.no_modificar_ldap
               unless ldap_crea_usuario(
                 @usuario, @usuario.clave_ldap, nil, prob)
-                @usuario.errors.add(
-                  :base, 'No pudo crear usuario en directorio LDAP:' +
-                  prob + '. Saltando creación en base de datos')
-                  render 'sip/usuarios/new', layout: 'application' 
+                mens = 'No pudo crear usuario en directorio LDAP:' +
+                  prob + '. Saltando creación en base de datos'
+                @usuario.errors.add( :base, mens)
+                render action: "new", layout: 'application' 
                 return
               end
               @usuario.ultimasincldap = Date.today
@@ -168,8 +170,8 @@ module Jn316Gen
             p = params.require(:usuario).permit(
               :id, :nusuario, :password, 
               :nombres, :apellidos, :descripcion, :oficina_id,
-              :uidNumber,
               :rol, :idioma, :email, :encrypted_password, 
+              :no_modificar_ldap, :uidNumber,
               :fechacreacion_localizada, :fechadeshabilitacion_localizada, 
               :reset_password_token, 
               :reset_password_sent_at, :remember_created_at, :sign_in_count, 

@@ -7,11 +7,10 @@ module Jn316Gen
     module Models
       module Usuario
         extend ActiveSupport::Concern
-        #include Sip::Concerns::Models::Usuario
-        include Jn316Gen::LdapHelper 
 
         included do
-
+          #include Sip::Concerns::Models::Usuario
+          include Jn316Gen::LdapHelper 
 
           attr :no_modificar_ldap
           attr_accessor :no_modificar_ldap
@@ -23,6 +22,7 @@ module Jn316Gen
           attr_accessor :gruposini
 
           before_update do
+            #byebug
             if !nusuarioini.nil?  && # Pasó por controlador
               !ultimasincldap.nil? &&  # Proviene de LDAP
               !no_modificar_ldap && # El usuario sabe del cambio LDAP
