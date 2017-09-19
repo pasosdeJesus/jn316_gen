@@ -22,43 +22,36 @@ module Jn316Gen
           attr_accessor :gruposini
 
           before_update do
-            if nusuarioini.nil?
-              return
-            end
-            if ultimasincldap.nil?
-              return
-            end
-            if no_modificar_ldap && no_modificar_ldap != '0'
-              return
-            end
-            i = changed & ['encrypted_password', 'nusuario',
-               'email','nombres', 'apellidos', 'uidNumber']
-            gruposd = sip_grupo_usuario.map(&:sip_grupo_id).sort 
-            if i == [] && gruposd == gruposini
-              return
-            end
-
-            prob = ''
-            cambios = changed
-            if sip_grupo_usuario.map(&:sip_grupo_id).sort != gruposini
-              cambios << "grupos"
-            end
-            if !self.valid?
-              m = 'Cambio no es válido. ' +
-                'Saltando actualización en LDAP y base de datos'
-              puts "* Error: #{m}"
-              self.errors.add(:base, m)
-              raise raise ActiveRecord::Rollback
-              return false
-            end 
-            unless ldap_actualiza_usuario(
-              nusuarioini, self, clave_ldap, cambios, prob)
-              m = 'No pudo actualizar usuario en directorio LDAP:' +
-                prob + '. Saltando actualización en base de datos'
-              puts "* Error: #{m}"
-              self.errors.add(:base, m)
-              raise raise ActiveRecord::Rollback
-              return false
+            if !nusuarioini.nil?  && 
+              !ultimasincldap.nil?  && 
+              !(no_modificar_ldap && no_modificar_ldap != '0')
+              i = changed & ['encrypted_password', 'nusuario',
+                             'email','nombres', 'apellidos', 'uidNumber']
+              gruposd = sip_grupo_usuario.map(&:sip_grupo_id).sort 
+              if i != [] || gruposd == gruposini
+                prob = ''
+                cambios = changed
+                if sip_grupo_usuario.map(&:sip_grupo_id).sort != gruposini
+                  cambios << "grupos"
+                end
+                if !self.valid?
+                  m = 'Cambio no es válido. ' +
+                    'Saltando actualización en LDAP y base de datos'
+                  puts "* Error: #{m}"
+                  self.errors.add(:base, m)
+                  raise raise ActiveRecord::Rollback
+                  return false
+                end 
+                unless ldap_actualiza_usuario(
+                  nusuarioini, self, clave_ldap, cambios, prob)
+                  m = 'No pudo actualizar usuario en directorio LDAP:' +
+                    prob + '. Saltando actualización en base de datos'
+                  puts "* Error: #{m}"
+                  self.errors.add(:base, m)
+                  raise raise ActiveRecord::Rollback
+                  return false
+                end
+              end
             end
           end
 
