@@ -50,12 +50,20 @@ module Jn316Gen
           end
 
           def create
+            #byebug
             authorize! :edit, ::Usuario
             @registro = @usuario = ::Usuario.new(usuario_params)
             @usuario.no_modificar_ldap = 
               request.params[:usuario][:no_modificar_ldap] == '1'
             @usuario.clave_ldap = usuario_params[:encrypted_password]
             prob = ''
+            if !@usuario.valid?
+              mens = 'Usuario no valido'
+              @usuario.errors.add( :base, mens)
+              render action: "new", layout: 'application' 
+              #redirect_back fallback_location: root_path,
+              return
+            end
             unless @usuario.no_modificar_ldap
               unless ldap_crea_usuario(
                 @usuario, @usuario.clave_ldap, nil, prob)
@@ -102,7 +110,15 @@ module Jn316Gen
                 format.html { redirect_to @usuario, notice: 'Usuario actualizado con éxito.' }
                 format.json { head :no_content }
               else
-                format.html { render 'usuarios/edit', layout: '/application' }
+                format.html {
+                  if !@usuario.valid?
+                    #redirect_back fallback_location: root_path
+                    render action: "edit", layout: 'application' 
+                  else
+                    redirect_back fallback_location: root_path,
+                      flash: {error: "No pudo actualizar usuario"}
+                  end
+                }
                 format.json { render json: @usuario.errors, status: :unprocessable_entity }
               end
             end
