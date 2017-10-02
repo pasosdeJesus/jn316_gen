@@ -105,6 +105,7 @@ module Jn316Gen
             else
               params[:usuario].delete(:encrypted_password)
             end
+            @registro = @usuario
             respond_to do |format|
               if @usuario.update(usuario_params)
                 format.html { redirect_to @usuario, notice: 'Usuario actualizado con éxito.' }
@@ -125,32 +126,20 @@ module Jn316Gen
           end
 
 
-          # Elimina un usuario de base (pero no de LDAP)
-          def destroy
-            authorize! :manage, ::Usuario
-            @usuario.destroy
-            respond_to do |format|
-              format.html { redirect_to main_app.usuarios_url }
-              format.json { head :no_content }
-            end
-          end
-
           # Elimina un usuario del LDAP y de la base
           def destroyldap
             authorize! :manage, ::Usuario
             set_usuario
             prob = ""
             if ldap_elimina_usuario(@usuario.nusuario, prob)
+              @usuario.update_attribute('uidNumber', nil)
+              @registro = @usuario
               destroy
-              #@usuario.destroy
-              #respond_to do |format|
-             #   format.html { redirect_to main_app.usuarios_url }
-             #   format.json { head :no_content }
-             # end
             else
               flash[:error] = 'No pudo eliminar usuario de LDAP: ' + prob +
                 '.  Saltando eliminación de base de datos'
               redirect_to main_app.usuario_url(@usuario), layout: 'application'
+              return
             end
           end
 
