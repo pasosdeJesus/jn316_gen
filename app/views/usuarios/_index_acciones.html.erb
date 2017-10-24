@@ -1,26 +1,28 @@
-<%= link_to t('.edit', :default => t("helpers.links.edit")),
-  edit_modelo_path(registro), :class => 'btn btn-xs' 
-%>
-<%= link_to 'Eliminar de base',
-  main_app.usuario_path(registro),
-  :method => :delete,
-  :data => { 
-    :confirm => t('.confirm', 
-                  :default => t("helpers.links.confirm", 
-                                :default => 'Are you sure?')) 
-  },
-  :class => 'btn btn-xs btn-danger' 
-%>
-<% if registro.uidNumber %>
-  <%= link_to 'Eliminar de base y LDAP',
-    jn316_gen.usuarioldap_path(registro),
+<% if can?(:edit, ::Usuario) %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+    edit_modelo_path(registro), :class => 'btn btn-xs'
+  %>
+<% end %>
+<% if can?(:destroy, ::Usuario) %>
+  <%= link_to 'Eliminar de base',
+    main_app.usuario_path(registro),
     :method => :delete,
     :data => { 
       :confirm => t('.confirm', 
                     :default => t("helpers.links.confirm", 
                                   :default => 'Are you sure?')) 
     },
-    :class => 'btn btn-xs btn-danger' 
-  %>
-<% end %>
+    :class => 'btn btn-xs btn-danger' %>
+  <% if registro.uidNumber %>
+    <%= link_to 'Eliminar de base y LDAP',
+      jn316_gen.usuarioldap_path(registro),
+      :method => :delete,
+      :data => { 
+        :confirm => t('.confirm', 
+                      :default => t("helpers.links.confirm", 
+                                    :default => 'Are you sure?')) 
+      },
+      :class => 'btn btn-xs btn-danger' %>
+  <% end %>
 
+<% end %>

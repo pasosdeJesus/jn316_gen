@@ -80,14 +80,14 @@ module Jn316Gen
 
 
           def edit
-            authorize! :manage, ::Usuario
+            authorize! :edit, ::Usuario
             render layout: '/application'
           end
 
           # PATCH/PUT /usuarios/1
           # PATCH/PUT /usuarios/1.json
           def update
-            authorize! :manage, ::Usuario
+            authorize! :edit, ::Usuario
             @usuario.no_modificar_ldap = 
               request.params[:usuario][:no_modificar_ldap] == '1'
             @usuario.clave_ldap = usuario_params[:encrypted_password]
