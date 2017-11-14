@@ -12,7 +12,6 @@ gem 'colorize'
 # Use SCSS for stylesheets
 gem 'sass'
 gem 'sass-rails'
-gem 'compass-rails'
 
 # Campos de selección bonitos
 gem 'chosen-rails'
