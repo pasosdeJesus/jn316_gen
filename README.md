@@ -280,3 +280,8 @@ JN316_CLAVE=estaclave rails s
 
 10. Ingrese con un administrador que esté en base de datos pero no en LDAP
    y sincronice. 
+
+# Personalizaciones y apoyo para usar en una organización
+
+Si necesita usar este motor en una organización y eventualmente personalizarlo, 
+desde Pasos de Jesús podemos apoyar  por horas (contacto vtamara@pasosdeJesus.org).
