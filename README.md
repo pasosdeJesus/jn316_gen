@@ -4,7 +4,7 @@
 Este es un motor para autenticar con directorio LDAP y realizar operaciones 
 básicas de administración de usuarios y grupos
 
-# Invariatnes
+# Invariantes
 
 * El directorio LDAP es autoridad respecto a identificación y autenticacion
 	- Se usa prioritariamente
