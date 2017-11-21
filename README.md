@@ -37,12 +37,14 @@ básicas de administración de usuarios y grupos
 * Un usuario LDAP tiene los objectClass top, posixAccount e inetOrgPerson,
   en base de datos usa el modelo ::Usuario con campos que corresponden asi:
 
-	cn y uid (iguales) 	<-> nusuario (máximo 63 caracteres)
-	userPassword (sha) 	<-> encrypted_password (bcrypt)
-	mail 			<-> email
-	givenName		<-> nombres en UTF-8 máximo 50 
-	sn			<-> apellidos en UTF-8 máximo 50
-	uidNumber		<-> uidNumber
+	|Campo(s)            | Contenido                          |
+	|--------------------|------------------------------------|
+	|cn y uid (iguales)  | <-> nusuario (máximo 63 caracteres)|
+	|userPassword (sha)  | <-> encrypted_password (bcrypt)    |
+	|mail                | <-> email                          |
+	|givenName           | <-> nombres en UTF-8 máximo 50     |
+	|sn                  | <-> apellidos en UTF-8 máximo 50   |
+	|uidNumber           | <-> uidNumber                      |
 
   gidNumber debe corresponder al gid del grupo genérico, por ejemplo:
   El dn de un usuario usa el cn (en lugar del uid) 
