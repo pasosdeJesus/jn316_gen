@@ -34,13 +34,13 @@ básicas de administración de usuarios y grupos
 
 # Características 
 
-* Un usuario LDAP tiene los objectClass top, posixAccount e inetOrgPerson,
-  en base de datos usa el modelo ::Usuario con campos que corresponden asi:
+* Un usuario LDAP tiene los objectClass: `top`, `posixAccount` e `inetOrgPerson`.
+  En base de datos usa el modelo `::Usuario` con campos que corresponden asi:
 
 	|Campo(s)            | Contenido                          |
 	|--------------------|------------------------------------|
-	|cn y uid (iguales)  | <-> nusuario (máximo 63 caracteres)|
-	|userPassword (sha)  | <-> encrypted_password (bcrypt)    |
+	|`cn` y `uid` (iguales) | <-> `nusuario` (máximo 63 caracteres)|
+	|userPassword (sha)  | <-> `encrypted_password` (bcrypt)    |
 	|mail                | <-> email                          |
 	|givenName           | <-> nombres en UTF-8 máximo 50     |
 	|sn                  | <-> apellidos en UTF-8 máximo 50   |
