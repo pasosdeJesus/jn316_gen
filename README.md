@@ -37,7 +37,7 @@ básicas de administración de usuarios y grupos
 * Un usuario LDAP tiene los objectClass: `top`, `posixAccount` e `inetOrgPerson`.
   En base de datos usa el modelo `::Usuario` con campos que corresponden asi:
 
-	|Campo(s)            | Contenido                          |
+	|LDAP                   | Base de Datos                    |
 	|-----------------------|----------------------------------|
 	|`cn` y `uid` (iguales) | `nusuario` (máximo 63 caracteres)|
 	|`userPassword` (sha)   | `encrypted_password` (bcrypt)    |
@@ -57,6 +57,9 @@ básicas de administración de usuarios y grupos
 
 * Un grupo LDAP tiene los `objectClass`: `top` y `posixGroup`. En base de datos
   usamos `Sip::Grupo` y `Sip::GrupoUsuario` así:
+  
+  	|LDAP          | Base de datos                  |
+	|--------------|--------------------------------|
 	|`cn`          | `cn` máximo 255 caracteres     |
 	|`gidNumber`   | `gidNumber`                    |
 	|`description` | `nombre` en UTF-8 máximo 500   |
