@@ -29,7 +29,7 @@ básicas de administración de usuarios y grupos
 
 [^1] Por ejemplo hay problema entre phpldapadmin y ldapd para 
 	escapar caracteres en un cn como la coma, aunque es válido
-	tener un cn con una coma de acuerdo a https://www.ietf.org/rfc/rfc4514.txt. 
+	tener una coma en un cn de acuerdo a https://www.ietf.org/rfc/rfc4514.txt. 
 
 # Características 
 
