@@ -78,7 +78,7 @@ básicas de administración de usuarios y grupos
   que estén almacenadas en la base de datos (más parecido a la forma como 
   hace un cliente en un dominio Windows que a la forma que usa por ejemplo
   GLPI al usar un directorio LDAP).  Así que la prioridad la tiene el 
-  directorio LDAP mientras esté disponible, pero se usa base de datos local 
+  directorio LDAP mientras esté disponible, pero se usa base de datos 
   para respaldar el LDAP y para permitir usuarios que no estén en el LDAP.
 
 * Tras cada conexión con el directorio LDAP para autenticar un usuario
