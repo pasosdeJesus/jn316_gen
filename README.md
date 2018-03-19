@@ -6,7 +6,7 @@ básicas de administración de usuarios y grupos
 
 # Invariantes
 
-* El directorio LDAP es autoridad respecto a identificación y autenticacion
+* El directorio LDAP es autoridad respecto a identificación y autenticación
 	- Se usa prioritariamente
 	- Un usuario típico no puede modificarlo excepto cambiar su clave,
 	  sólo administradores (o por ejemplo un  grupo con privilegios 
@@ -15,9 +15,8 @@ básicas de administración de usuarios y grupos
 * Se usan tablas para usuarios y grupos en la base de datos que replican
   información del LDAP, aunque puede haber usuarios y grupos solo en
   base (los que tienen su campo ultimasincldap en NULL).  
-  Esto permite renombrar usuarios y grupos con facilidad (que es soportado 
-  por LDAPv3, pero no por LDAPv2 que es el protocolo soportado por algunos 
-  motores LDAP como ldapd de OpenBSD).
+  Esto permite renombrar usuarios y grupos con facilidad en servidores LDAPv2
+  que no lo soportan (como ocurre con ldapd de OpenBSD).
 
 * El directorio LDAP se basa en la propuesta de grupos y usuarios para 
   LDAP del RFC2307 https://www.ietf.org/rfc/rfc2307.txt.  Pero agregando:
