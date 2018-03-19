@@ -28,8 +28,8 @@ básicas de administración de usuarios y grupos
   	  inglés, mayúsculas del alfabeto ingles, digitos del 0 a 9 y `_`
 
 [^1] Por ejemplo hay problema entre phpldapadmin y ldapd para 
-	escapar caracteres en un cn como la coma aunque es lo esperado 
- 	de acuerdo a  https://www.ietf.org/rfc/rfc4514.txt. 
+	escapar caracteres en un cn como la coma, aunque es válido
+	tener un cn con una coma de acuerdo a https://www.ietf.org/rfc/rfc4514.txt. 
 
 # Características 
 
