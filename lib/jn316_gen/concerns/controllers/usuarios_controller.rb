@@ -140,12 +140,17 @@ module Jn316Gen
             if ldap_elimina_usuario(@usuario.nusuario, prob)
               @usuario.update_attribute('uidNumber', nil)
               @registro = @usuario
-              destroy
+              @registro.destroy
             else
               flash[:error] = 'No pudo eliminar usuario de LDAP: ' + prob +
                 '.  Saltando eliminación de base de datos'
               redirect_to main_app.usuario_url(@usuario), layout: 'application'
               return
+            end
+            respond_to do |format|
+              format.html { redirect_to main_app.usuarios_path,
+                            notice: 'Usuario eliminado con éxito.' }
+              format.json { head :no_content }
             end
           end
 
