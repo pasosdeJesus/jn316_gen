@@ -88,7 +88,7 @@ module Jn316Gen
 
 
           # Elimina un grupo del LDAP y de la base
-          def destroy
+          def destroyldap
             authorize! :manage, Sip::Grupo
             set_grupo
             prob = ""
