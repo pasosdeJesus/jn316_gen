@@ -600,12 +600,56 @@ module Jn316Gen
 
       return ret
     rescue Exception => exception
-      prob << 'Problema conectando a servidor LDAP (ldap_crea_usuario). ' +
+      prob << 'Problema conectando a servidor LDAP (ldap_actualiza_usuario). ' +
         ' Excepción: ' + exception.to_s
       puts prob
       return false
     end
 
+    # Actualiza un grupo LDAP
+    # Soporta renombramiento en caso LDAPv2 eliminando anterior y agregando
+    # nuevo (incluyendo usuarios).
+    # Hace lo mismo en caso de cambios en grupo que puede mejorarse
+    # Otros atributos los remplaza.
+    def ldap_actualiza_grupo(cnini, grupo, cambios, prob)
+      if cambios.include?('cn') || cambios.include?('usuarios')
+        if ldap_elimina_grupo(cnini, prob)
+          if ldap_crea_grupo(grupo, prob)
+            return true
+          end
+        end
+      end
+      if !ENV['JN316_CLAVE']
+        prob << 'Falta clave LDAP para agregar usuario'
+        return false
+      end
+      ret = true # valor por retornar
+      dn = "cn=#{limpia_cn(grupo.cn)}," +
+        "#{Rails.application.config.x.jn316_basegrupos}"
+      opcon = {
+        host: Rails.application.config.x.jn316_servidor,
+        port: Rails.application.config.x.jn316_puerto,
+        auth: {
+          method: :simple, 
+          username: Rails.application.config.x.jn316_admin,
+          password: ENV['JN316_CLAVE']
+        }
+      }.merge(Rails.application.config.x.jn316_opcon)
+      ldap_conadmin = Net::LDAP.new( opcon )
+      ldap_conadmin.open do |ldap|
+        if !ret || !ldap_actualiza_si_falta(ldap, dn, :nombre, :description,
+                                            cambios, grupo.nombre, prob)
+          ret = false
+        end
+      end
+
+      return ret
+    rescue Exception => exception
+      prob << 'Problema conectando a servidor LDAP (ldap_actualiza_grupo). ' +
+        ' Excepción: ' + exception.to_s
+      puts prob
+      return false
+    end
 
     # Un cn portable solo puede tener letras del alfabet inglés, digitos y _
     # Evitamos escapar pues https://www.ietf.org/rfc/rfc4514.txt no
@@ -624,6 +668,97 @@ module Jn316Gen
       end
       return r
     end
+
+    # Crea un grupo LDAP con las convenciones descritas en README.md
+    def ldap_crea_grupo(grupo, prob)
+      if !ENV['JN316_CLAVE']
+        prob << 'Falta clave LDAP para agregar grupo'
+        return nil
+      end
+      opcon = {
+        host: Rails.application.config.x.jn316_servidor,
+        port: Rails.application.config.x.jn316_puerto,
+        auth: {
+          method: :simple, 
+          username: Rails.application.config.x.jn316_admin,
+          password: ENV['JN316_CLAVE']
+        }
+      }.merge(Rails.application.config.x.jn316_opcon)
+      ldap_conadmin = Net::LDAP.new( opcon )
+      cn = limpia_cn(grupo.cn)
+      dn = "cn=#{cn},#{Rails.application.config.x.jn316_basegrupos}"
+      if grupo.gidNumber.nil?
+        grupo.gidNumber = Sip::Grupo.maximum('gidNumber')
+        if grupo.gidNumber.nil?
+          prob << "No pudo obtenerse gidNumber máximo.  Parece que no ha sincronizado (cree algún usuario en LDAP antes)"
+          return false
+        end
+        grupo.gidNumber += 1
+      end
+      attr = {
+        cn: cn,
+        gidNumber: grupo.gidNumber.to_s,
+        description: grupo.nombre,
+        objectclass: ["top", "posixGroup"]
+      }
+      gusuarios = grupo.usuario.map(&:nusuario).sort.uniq
+      ldap_conadmin.open do |ldap|
+        if !ldap.add(:dn => dn, :attributes => attr)
+          prob << ldap.get_operation_result.code.to_s +
+            ' - ' + ldap.get_operation_result.message 
+          return false
+        end
+        gusuarios.each do |nusuario|
+          unless ldap.add_attribute(dn, 'memberUid', nusuario)
+            prob << ldap.get_operation_result.code.to_s +
+              ' - ' + ldap.get_operation_result.message 
+            return nil
+          end
+        end
+      end
+      return true
+    rescue Exception => exception
+      prob << 'Problema conectando a servidor LDAP (ldap_crea_grupo). ' +
+        ' Excepción: ' + exception.to_s
+      puts prob
+      return false
+    end
+
+    # Elimina un grupo LDAP
+    def ldap_elimina_grupo(cn, prob)
+      if !ENV['JN316_CLAVE']
+        prob << 'Falta clave LDAP para eliminar usuario'
+        return false
+      end
+      opcon = {
+        host: Rails.application.config.x.jn316_servidor,
+        port: Rails.application.config.x.jn316_puerto,
+        auth: {
+          method: :simple, 
+          username: Rails.application.config.x.jn316_admin,
+          password: ENV['JN316_CLAVE']
+        }
+      }.merge(Rails.application.config.x.jn316_opcon)
+      cn = limpia_cn(cn)
+      dn = "cn=#{cn},#{Rails.application.config.x.jn316_basegrupos}"
+      ldap_conadmin = Net::LDAP.new( opcon )
+      ldap_conadmin.open do |ldap|
+        unless ldap.delete(dn: dn)
+          prob << ldap.get_operation_result.code.to_s +
+            ' - ' + ldap.get_operation_result.message 
+          puts prob
+          return false
+        end
+      end
+
+      return true
+    rescue Exception => exception
+      prob << 'Problema conectando a servidor LDAP (ldap_elimina_grupo). ' +
+        ' Excepción: ' + exception.to_s
+      puts prob
+      return false
+    end
+
 
   end
 end

@@ -101,7 +101,8 @@ module Jn316Gen
                 params[:usuario][:encrypted_password],
                 {:cost => Rails.application.config.devise.stretches})
             elsif !params[:usuario][:fechadeshabilitacion].nil?
-              @usuario.clave = params[:usuario][:encrypted_password] = ''
+              @usuario.clave_ldap = @usuario.clave = 
+                params[:usuario][:encrypted_password] = ''
             else
               params[:usuario].delete(:encrypted_password)
             end
