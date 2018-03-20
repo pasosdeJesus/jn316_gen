@@ -28,10 +28,10 @@ module Jn316Gen
               i = changed & ['encrypted_password', 'nusuario',
                              'email','nombres', 'apellidos', 'uidNumber']
               gruposd = sip_grupo_usuario.map(&:sip_grupo_id).sort 
-              if i != [] || gruposd == gruposini
+              if i != [] || gruposd != gruposini
                 prob = ''
                 cambios = changed
-                if sip_grupo_usuario.map(&:sip_grupo_id).sort != gruposini
+                if gruposd != gruposini
                   cambios << "grupos"
                 end
                 if !self.valid?
