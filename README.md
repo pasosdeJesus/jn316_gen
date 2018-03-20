@@ -6,7 +6,7 @@ básicas de administración de usuarios y grupos
 
 # Invariantes
 
-* El directorio LDAP es autoridad respecto a identificación y autenticacion
+* El directorio LDAP es autoridad respecto a identificación y autenticación
 	- Se usa prioritariamente
 	- Un usuario típico no puede modificarlo excepto cambiar su clave,
 	  sólo administradores (o por ejemplo un  grupo con privilegios 
@@ -15,9 +15,8 @@ básicas de administración de usuarios y grupos
 * Se usan tablas para usuarios y grupos en la base de datos que replican
   información del LDAP, aunque puede haber usuarios y grupos solo en
   base (los que tienen su campo ultimasincldap en NULL).  
-  Esto permite renombrar usuarios y grupos con facilidad (que es soportado 
-  por LDAPv3, pero no por LDAPv2 que es el protocolo soportado por algunos 
-  motores LDAP como ldapd de OpenBSD).
+  Esto permite renombrar usuarios y grupos con facilidad en servidores LDAPv2
+  que no lo soportan (como ocurre con ldapd de OpenBSD).
 
 * El directorio LDAP se basa en la propuesta de grupos y usuarios para 
   LDAP del RFC2307 https://www.ietf.org/rfc/rfc2307.txt.  Pero agregando:
@@ -29,8 +28,8 @@ básicas de administración de usuarios y grupos
   	  inglés, mayúsculas del alfabeto ingles, digitos del 0 a 9 y `_`
 
 [^1] Por ejemplo hay problema entre phpldapadmin y ldapd para 
-	escapar caracteres en un cn como la coma aunque es lo esperado 
- 	de acuerdo a  https://www.ietf.org/rfc/rfc4514.txt. 
+	escapar caracteres en un cn como la coma, aunque es válido
+	tener una coma en un cn de acuerdo a https://www.ietf.org/rfc/rfc4514.txt. 
 
 # Características 
 
@@ -79,7 +78,7 @@ básicas de administración de usuarios y grupos
   que estén almacenadas en la base de datos (más parecido a la forma como 
   hace un cliente en un dominio Windows que a la forma que usa por ejemplo
   GLPI al usar un directorio LDAP).  Así que la prioridad la tiene el 
-  directorio LDAP mientras esté disponible, pero se usa base de datos local 
+  directorio LDAP mientras esté disponible, pero se usa base de datos 
   para respaldar el LDAP y para permitir usuarios que no estén en el LDAP.
 
 * Tras cada conexión con el directorio LDAP para autenticar un usuario

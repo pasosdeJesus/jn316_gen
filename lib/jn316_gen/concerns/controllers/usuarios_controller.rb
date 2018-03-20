@@ -50,8 +50,13 @@ module Jn316Gen
           end
 
           def create
-            #byebug
             authorize! :edit, ::Usuario
+            if !usuario_params[:encrypted_password] ||
+                usuario_params[:encrypted_password] == ''
+              params['usuario']['encrypted_password'] = (0...50).map { 
+                ('a'..'z').to_a[rand(26)] 
+              }.join
+            end
             @registro = @usuario = ::Usuario.new(usuario_params)
             @usuario.no_modificar_ldap = 
               request.params[:usuario][:no_modificar_ldap] == '1'
