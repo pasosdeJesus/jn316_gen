@@ -22,6 +22,8 @@ module Jn316Gen
           attr :usuariosini
           attr_accessor :usuariosini
 
+          campofecha_localizado :ultimasincldap
+
           before_update do
             if !nombre.nil?  && !cn.nil? && 
               !ultimasincldap.nil?  && 

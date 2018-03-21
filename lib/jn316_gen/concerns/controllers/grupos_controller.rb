@@ -14,13 +14,13 @@ module Jn316Gen
           include Jn316Gen::LdapHelper
 
           def atributos_index
-            [ "id", "nombre", "cn", "gidNumber", "ultimasincldap" ] +
+            [ "id", "nombre", "cn", "gidNumber", "ultimasincldap_localizada" ] +
               [ :usuario_ids => [] ] +
               ["observaciones", "fechacreacion", "fechadeshabilitacion" ]
           end
  
           def atributos_form
-            [ "nombre", "cn", "gidNumber", "ultimasincldap" ] +
+            [ "nombre", "cn", "gidNumber", "ultimasincldap_localizada" ] +
               [ :usuario_ids => [] ] +
               ["observaciones", 
                "no_modificar_ldap",
