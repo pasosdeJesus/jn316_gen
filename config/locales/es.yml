@@ -17,12 +17,15 @@ es:
         filainicial: Fila inicial
       "sip/grupo":
         cn: cn en LDAP
-        ultimasincldap: Fecha última sincronización desde LDAP
+        ultimasincldap: Verificada presencia en LDAP
+        ultimasincldap_localizada: Verificada presencia en LDAP
         gidNumber: gid en LDAP
       usuario:
-        nusuario: Identificación
-        sip_grupo: Grupo(s)
         email: Correo
         encrypted_password: Clave
+        nusuario: Identificación
+        sip_grupo: Grupo(s)
         uidNumber: uidNumber en LDAP
+        ultimasincldap: Verificada presencia en LDAP
+        ultimasincldap_localizada: Verificada presencia en LDAP
 

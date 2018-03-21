@@ -39,6 +39,7 @@ module Jn316Gen
             r += [
               "idioma",
               "encrypted_password",
+              "ultimasincldap_localizada",
               "no_modificar_ldap",
               "uidNumber",
               "fechacreacion_localizada",

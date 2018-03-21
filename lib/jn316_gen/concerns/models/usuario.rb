@@ -21,12 +21,15 @@ module Jn316Gen
           attr :gruposini
           attr_accessor :gruposini
 
+          campofecha_localizado :ultimasincldap
+
           before_update do
             if !nusuarioini.nil?  && 
               !ultimasincldap.nil?  && 
               !(no_modificar_ldap && no_modificar_ldap != '0')
-              i = changed & ['encrypted_password', 'nusuario',
-                             'email','nombres', 'apellidos', 'uidNumber']
+              i = changed & ['apellidos', 'email', 'encrypted_password', 
+                             'fechadeshabilitacion', 
+                             'nombres', 'nusuario', 'uidNumber']
               gruposd = sip_grupo_usuario.map(&:sip_grupo_id).sort 
               if i != [] || gruposd != gruposini
                 prob = ''

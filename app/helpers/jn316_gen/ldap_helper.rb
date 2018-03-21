@@ -62,12 +62,14 @@ module Jn316Gen
       usuario.apellidos = valor_campo_ldap(ldapus, :sn)
       usuario.email = valor_campo_ldap(ldapus, :mail)
       usuario.uidNumber = valor_campo_ldap(ldapus, :uidNumber)
-      if (!ldapus.respond_to?(:userPassword) && 
-          usuario.fechadeshabilitacion.nil?)
-        # deshabilitar
-        usuario.fechadeshabilitacion = Date.today
+      if !ldapus.respond_to?(:userPassword)
+        # deshabilitado en LDAP
+        # Si falta deshabilitar en base
+        if usuario.fechadeshabilitacion.nil?
+          usuario.fechadeshabilitacion = Date.today
+        end
       else 
-        # habilitado, guardar clave si hay
+        # habilitado en LDAP, habilitar y guardar clave si hay
         usuario.fechadeshabilitacion = nil
         unless clave.nil?
           usuario.encrypted_password = BCrypt::Password.create(
@@ -128,7 +130,7 @@ module Jn316Gen
     end
 
 
-    # crea un usuario y/o actualizarlo si ya existe
+    # crea un usuario y/o lo actualiza si ya existe
     def crear_actualizar_usuario(nusuario, ldapus, grupos, prob, 
                                  clave = nil)
       usuario = Usuario.where(nusuario: nusuario).take
@@ -244,6 +246,7 @@ module Jn316Gen
           return nil
       end
       lusuarios.each do |entry|
+        #byebug
         u = crear_actualizar_usuario(entry.cn[0], entry, nil, prob)
         if (u.nil?)
           return [usuarios, []]
@@ -251,11 +254,12 @@ module Jn316Gen
         usuarios << u.id
       end
       puts "Actualizados " + usuarios.length.to_s + " registros de usuarios"
-      # Si se eliminaron registros (que no se recomienda) deshabilitar en
-      # base
+      # Si se eliminaron registros del LDAP (que no se recomienda) 
+      # deshabilitar en base
       ::Usuario.habilitados.where('ultimasincldap IS NOT NULL').each do |u|
         unless usuarios.include?(u.id)
           u.fechadeshabilitacion = Date.today
+          u.ultimasincldap = nil
           u.save
           deshab << u.id
         end
@@ -336,6 +340,7 @@ module Jn316Gen
       Sip::Grupo.habilitados.where('ultimasincldap IS NOT NULL').each do |g|
         unless grupos.include?(g.id)
           g.fechadeshabilitacion = Date.today
+          g.ultimasincldap = nil
           g.save
           deshab << g.id
         end
@@ -595,6 +600,14 @@ module Jn316Gen
           !ldap_actualiza_si_falta(ldap, dn, :uidNumber, :uidNumber, cambios, 
                               usuario.uidNumber, prob)
           ret = false
+        end
+        # Deshabilitar en LDAP si está deshabilitado en base
+        if !usuario.fechadeshabilitacion.nil?
+            unless ldap.delete_attribute dn, 'userPassword'
+              prob << ldap.get_operation_result.code.to_s +
+                ' - ' + ldap.get_operation_result.message 
+              ret = false
+            end
         end
       end
 
