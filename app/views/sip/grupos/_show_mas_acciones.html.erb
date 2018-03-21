@@ -1,0 +1,7 @@
+<% if @registro.gidNumber %>
+  <%= link_to 'Eliminar de base y LDAP',
+    jn316_gen.grupoldap_path(@registro),
+    :method => :delete,
+    :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => '¿Está seguro?')) },
+    :class => 'btn btn-danger' %>
+<% end %>
