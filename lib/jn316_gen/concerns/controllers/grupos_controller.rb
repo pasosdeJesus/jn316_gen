@@ -99,7 +99,7 @@ module Jn316Gen
             else
               flash[:error] = 'No pudo eliminar grupo de LDAP: ' + prob +
                 '.  Saltando eliminación de base de datos'
-              redirect_to main_app.admin_grupo_url(@grupo), layout: 'application'
+              redirect_to modelos_path(@grupo), layout: 'application'
               return
             end
             respond_to do |format|
