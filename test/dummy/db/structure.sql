@@ -486,7 +486,7 @@ ALTER SEQUENCE sip_fuenteprensa_id_seq OWNED BY sip_fuenteprensa.id;
 
 CREATE TABLE sip_grupo (
     id integer NOT NULL,
-    nombre character varying(500) NOT NULL,
+    nombre character varying(500) COLLATE public.es_co_utf_8 NOT NULL,
     observaciones character varying(5000),
     fechacreacion date NOT NULL,
     fechadeshabilitacion date,
@@ -1407,6 +1407,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170417131432'),
 ('20170418143627'),
 ('20170419010845'),
-('20170419135948');
+('20170419135948'),
+('20180320230847');
 
 
