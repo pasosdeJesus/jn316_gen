@@ -2,7 +2,8 @@
 [![Esado Construcción](https://api.travis-ci.org/pasosdeJesus/jn316_gen.svg?branch=master)](https://travis-ci.org/pasosdeJesus/jn316_gen) [![Clima del Código](https://codeclimate.com/github/pasosdeJesus/jn316_gen/badges/gpa.svg)](https://codeclimate.com/github/pasosdeJesus/jn316_gen) [![Cobertura de Pruebas](https://codeclimate.com/github/pasosdeJesus/jn316_gen/badges/coverage.svg)](https://codeclimate.com/github/pasosdeJesus/jn316_gen) [![security](https://hakiri.io/github/pasosdeJesus/jn316_gen/master.svg)](https://hakiri.io/github/pasosdeJesus/jn316_gen/master) [![Dependencias](https://gemnasium.com/pasosdeJesus/jn316_gen.svg)](https://gemnasium.com/pasosdeJesus/jn316_gen) 
 
 Este es un motor para autenticar con directorio LDAP y realizar operaciones 
-básicas de administración de usuarios y grupos
+básicas de administración de usuarios y grupos en el directorio LDAP y/o en
+un directorio activo.
 
 # Invariantes
 
@@ -115,19 +116,25 @@ básicas de administración de usuarios y grupos
   Después se actualizan los grupos del usuario para asegurar que está
   sólo en los del directorio LDAP.
 
+
+# Operaciones en un Directorio Activo
+
+Es posible realizar diversas operaciones en un directorio activo pero
+se requiere:
+1. Que esté configurado para recibir conexiones SSL
+2. Contar con cuenta y clave de administrador y configurarlas en 
+   secrets.yml (se recomienda cifrado):
+```
+
 # Aún no implementado
 
-* Aún nos falta creación, eliminación, actualización de grupos
 * Se puede mejorar implementación de actualización en LDAP de un
   usuario cuando sus grupos cambian
   (en el momento se hace igual que renombrabiento, borrando 
   todo y agregando todo, pero podría: ver grupos eliminados
   y grupos nuevos, sacar de eliminados, agregar a nuevos)
-* Mejorar deshabilitación de usuarios (en base) para que se 
-  trasmita a LDAP (tanto al editar, como al crear, como 
-  al sincronizar).
 * Diseñar e implementar deshabilitación de grupos
-* Diseñar e implementar subgrupos
+* Implementar subgrupos (se ha hecho en CRECER)
 * Sería bueno tener bitácora de conexiones e intentos.  Junto con cada
   usuario mantener fecha de la última sincronización exitosa desde el
   LDAP.
@@ -276,6 +283,25 @@ JN316_CLAVE=estaclave rails s
   en el directorio y para administrar usuarios.  Si no necesita la
   funcionalidad de administrar usuarios puede especificar un usuario
   sólo con privilegios de busqueda sobre grupos y usuarios del directorio.
+
+10. Si necesita ralizar operaciones con un Directorio Activo configure, por 
+   ejemplo:
+
+```
+$ EDITOR=vim bin/rails secrets:edit
+
+development:
+  secret_key_base: ed9fd425a3763ae83f2ef9d507ddc2e16e7a478d6a9fd45c2865871f4b3997a7f529c8682a48fca0b7bee7d2e6b8806b4a44ea6f744302e9c4a6863e29a0b02a
+  JN316_LDAP_CLAVE: 'facil'
+  JN316_DA_MAQUINA: 'SDOMINIO.MIDOMINIO.local'
+  JN316_DA_PUERTO: 636
+  JN316_DA_BASE: 'OU=MIORG,DC=MIDOMINIO,DC=local'
+  JN316_DA_BASE_USUARIOS: 'OU=USUARIOS,OU=MIORG,DC=MIDOMINIO,DC=local'
+  JN316_DA_BASE_GRUPOS: 'OU=GRUPOS,OU=MIORG,DC=MIDOMINIO,DC=local'
+  JN316_DA_CUENTA: 'MIDOMINIO\Administrador'
+  JN316_DA_CLAVE: 'AquiLaClaveDeAdministrador'
+```
+
 
 10. Ingrese con un administrador que esté en base de datos pero no en LDAP
    y sincronice. 
