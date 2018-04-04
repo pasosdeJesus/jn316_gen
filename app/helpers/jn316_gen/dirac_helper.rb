@@ -27,9 +27,9 @@ module Jn316Gen
  
     def self.respuesta_ldap(ldap, prob)
       if ldap.get_operation_result.code != 0
-        prob += "Código de respuesta: " +
+        prob << "Código de respuesta: " +
           "#{ ldap.get_operation_result.code }, " +
-          "Mensaje: #{ ldap.get_operation_result.message }"
+          "Mensaje: #{ ldap.get_operation_result.message }. "
       end
     end
 
@@ -84,7 +84,7 @@ module Jn316Gen
       ldap.add(:dn => dn, :attributes => attrs)
 
       if ldap.get_operation_result.code != 0
-        prob += "Falló añadir usuario #{usuario}"
+        prob << "Falló añadir usuario #{usuario}. "
         respuesta_ldap(ldap, prob)
       end
     end 
@@ -92,13 +92,13 @@ module Jn316Gen
     def self.eliminar_usuario(ldap, usuario, prob)
       u = buscar_usuario(ldap, usuario, prob)
       if u.nil?
-        prob += "No existe usuario #{usuario}"
+        prob << "No existe usuario #{usuario}. "
         return
       end
       dnu = u[:dn][0]
       ldap.delete(dn: dnu)
       if ldap.get_operation_result.code != 0
-        prob += "Falló al elimina usuario #{usuario}. "
+        prob << "Falló al elimina usuario #{usuario}. "
         respuesta_ldap(ldap, prob)
       end
     end
@@ -115,7 +115,7 @@ module Jn316Gen
       ldap.add(:dn => dn, :attributes => attrs)
 
       if ldap.get_operation_result.code != 0
-        prob += "Falló añadir grupo #{nombre}. "
+        prob << "Falló añadir grupo #{nombre}. "
         respuesta_ldap(ldap, prob)
       end
     end 
@@ -123,13 +123,13 @@ module Jn316Gen
     def self.eliminar_grupo(ldap, grupo, prob)
       g = buscar_grupo(ldap, grupo)
       if g.nil?
-        prob += "No existe grupo #{grupo}"
+        prob << "No existe grupo #{grupo}. "
         return
       end
       dng = g[:dn][0]
       ldap.delete(dn: dng)
       if ldap.get_operation_result.code != 0
-        prob += "Falló al elimina grupo #{grupo}"
+        prob << "Falló al elimina grupo #{grupo}. "
         respuesta_ldap(ldap, prob)
       end
     end
@@ -144,22 +144,22 @@ module Jn316Gen
       ldap.replace_attribute(dn, 'pwdLastSet', '-1')
 
       if ldap.get_operation_result.code != 0
-        prob += "Falló cambiar clave de #{usuario}"
+        prob << "Falló cambiar clave de #{usuario}. "
         respuesta_ldap(ldap, prob)
       end
     end 
 
 
-    def self.agregar_usuario_a_grupo(ldap, usuario, grupo, prob)
+    def self.agregar_usuario_a_grupo(ldap, grupo, usuario, prob)
       u = buscar_usuario(ldap, usuario, prob)
       if u.nil?
-        prob += "No existe usuario #{usuario}. "
+        prob << "No existe usuario #{usuario}. "
         return
       end
       dnu = u[:dn][0]
       g = buscar_grupo(ldap, grupo, prob)
       if g.nil?
-        prob += "No se encontró grupoe #{grupo}. "
+        prob << "No se encontró grupoe #{grupo}. "
         return
       end
       dng = g[:dn][0]
@@ -169,7 +169,7 @@ module Jn316Gen
       respuesta_ldap(ldap, prob)
     end
 
-    def self.sacar_usuario_de_grupo(ldap, usuario, grupo, prob)
+    def self.sacar_usuario_de_grupo(ldap, grupo, usuario, prob)
       u = buscar_usuario(ldap, usuario, prob)
       if u.nil?
         puts "No existe usuario #{usuario}"
@@ -193,13 +193,13 @@ module Jn316Gen
     def self.agregar_subgrupo_a_grupo(ldap, grupo, subgrupo, prob)
       g = buscar_grupo(ldap, grupo, prob)
       if g.nil?
-        prob += "No existe grupo #{grupo}. "
+        prob << "No existe grupo #{grupo}. "
         return
       end
       dng = g[:dn][0]
       s = buscar_grupo(ldap, subgrupo, prob)
       if s.nil?
-        prob += "No se encontró grupo #{subgrupo}"
+        prob << "No se encontró grupo #{subgrupo}. "
         return
       end
       dns = s[:dn][0]
@@ -212,13 +212,13 @@ module Jn316Gen
     def self.sacar_subgrupo_de_grupo(ldap, grupo, subgrupo, prob)
       g = buscar_grupo(ldap, grupo, prob)
       if g.nil?
-        prob += "No existe grupo #{grupo}. "
+        prob << "No existe grupo #{grupo}. "
         return
       end
       dng = g[:dn][0]
       s = buscar_grupo(ldap, subgrupo, prob)
       if s.nil?
-        prob += "No se encontró grupo #{subgrupo}. "
+        prob << "No se encontró grupo #{subgrupo}. "
         return
       end
       dns = s[:dn][0]
