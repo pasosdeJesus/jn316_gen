@@ -50,6 +50,9 @@ module Jn316Gen
             ]
           end
 
+          def medio_create(usuario)
+          end
+
           def create
             authorize! :edit, ::Usuario
             if !usuario_params[:encrypted_password] ||
@@ -70,6 +73,7 @@ module Jn316Gen
               #redirect_back fallback_location: root_path,
               return
             end
+            medio_create(@usuario)
             unless @usuario.no_modificar_ldap
               unless ldap_crea_usuario(
                 @usuario, @usuario.clave_ldap, nil, prob)
@@ -88,6 +92,9 @@ module Jn316Gen
           def edit
             authorize! :edit, ::Usuario
             render layout: '/application'
+          end
+
+          def medio_update(usuario)
           end
 
           # PATCH/PUT /usuarios/1
@@ -112,6 +119,7 @@ module Jn316Gen
             else
               params[:usuario].delete(:encrypted_password)
             end
+            medio_update(@usuario)
             @registro = @usuario
             respond_to do |format|
               if @usuario.update(usuario_params)
