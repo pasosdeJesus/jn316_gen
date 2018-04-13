@@ -66,6 +66,7 @@ module Jn316Gen
               request.params[:usuario][:no_modificar_ldap] == '1'
             @usuario.clave_ldap = usuario_params[:encrypted_password]
             prob = ''
+            medio_create(@usuario)
             if !@usuario.valid?
               mens = 'Usuario no valido'
               @usuario.errors.add( :base, mens)
@@ -73,7 +74,6 @@ module Jn316Gen
               #redirect_back fallback_location: root_path,
               return
             end
-            medio_create(@usuario)
             unless @usuario.no_modificar_ldap
               unless ldap_crea_usuario(
                 @usuario, @usuario.clave_ldap, nil, prob)
