@@ -893,6 +893,7 @@ CREATE TABLE usuario (
     apellidos character varying(50) COLLATE public.es_co_utf_8,
     ultimasincldap date,
     "uidNumber" integer,
+    persona_id integer,
     CONSTRAINT usuario_check CHECK (((fechadeshabilitacion IS NULL) OR (fechadeshabilitacion >= fechacreacion))),
     CONSTRAINT usuario_rol_check CHECK ((rol >= 1))
 );
@@ -1240,6 +1241,14 @@ ALTER TABLE ONLY sip_grupo_usuario
 
 
 --
+-- Name: usuario fk_rails_7947b08826; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY usuario
+    ADD CONSTRAINT fk_rails_7947b08826 FOREIGN KEY (persona_id) REFERENCES sip_persona(id);
+
+
+--
 -- Name: sip_grupo_usuario fk_rails_8d24f7c1c0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1408,6 +1417,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170418143627'),
 ('20170419010845'),
 ('20170419135948'),
-('20180320230847');
+('20180320230847'),
+('20180409085315');
 
 

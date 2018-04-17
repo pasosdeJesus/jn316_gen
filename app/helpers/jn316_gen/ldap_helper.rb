@@ -120,6 +120,12 @@ module Jn316Gen
       }) if !clave.nil?
       usuario.fechacreacion = Date.today
       usuario.no_modificar_ldap = "1"
+      persona = Sip::Persona.new
+      usuario.nombres = persona.nombres = valor_campo_ldap(ldapus, :givenname)
+      usuario.apellidos = persona.apellidos = valor_campo_ldap(ldapus, :sn)
+      persona.sexo = 'S'
+      persona.save
+      usuario.persona_id = persona.id
       usuario.save
       if (usuario.errors.messages.length > 0)
         prob << usuario.errors.messages.to_s
