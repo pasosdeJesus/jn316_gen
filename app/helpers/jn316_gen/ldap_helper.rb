@@ -676,6 +676,9 @@ module Jn316Gen
     # cn con coma, aunque si con espacios y caracteres de español)
     def limpia_cn(u)
       r = ""
+      if u.nil?
+        return r
+      end
       u.split("").each do |c|
         r += case c
              when 'a'..'z' then c
