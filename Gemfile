@@ -82,6 +82,7 @@ group :test do
 
   gem 'simplecov'
 
+  gem 'rails-controller-testing'
 end 
 
 group :development do
