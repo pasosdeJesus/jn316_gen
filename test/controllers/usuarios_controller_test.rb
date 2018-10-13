@@ -25,7 +25,6 @@ module Sip
       email: 'x@x.org',
       fechacreacion: '2014-01-01',
       encrypted_password: 'x',
-      no_modificar_ldap: 1,
       created_at: "2014-11-11" 
     }
 

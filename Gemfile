@@ -2,9 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-#gem "rails", '~> 5.2.0'
-# Resuelve problema con minitest y 5.2.0
-gem "rails", '~> 5.2.0', git: 'https://github.com/rails/rails.git', ref: '4887f97bd8a8859294ad02ccea20d83a94ec0812'
+gem "rails", '~> 5.2.1'
 
 # Arranque rapido
 gem 'bootsnap', '>=1.1.0', require: false
