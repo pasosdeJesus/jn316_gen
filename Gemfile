@@ -7,6 +7,8 @@ gem "rails", '~> 5.2.1'
 # Arranque rapido
 gem 'bootsnap', '>=1.1.0', require: false
 
+gem 'bigdecimal'
+
 # Use sqlite3 as the database for Active Record
 gem 'pg'
 # Use Puma as the app server
