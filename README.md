@@ -127,7 +127,6 @@ se requiere:
 1. Que esté configurado para recibir conexiones SSL
 2. Contar con cuenta y clave de administrador y configurarlas en 
    secrets.yml (se recomienda cifrado):
-```
 
 # Aún no implementado
 
@@ -159,6 +158,7 @@ se requiere:
   pública entre las conocidas por el sistema (en adJ en `/etc/ssl/cert.pem`).
 
   Un ejemplo de configuración en el caso de ldapd es:
+
 ```
 schema "/etc/ldap/core.schema"
 schema "/etc/ldap/inetorgperson.schema"
