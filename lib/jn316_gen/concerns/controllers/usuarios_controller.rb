@@ -74,6 +74,10 @@ module Jn316Gen
               #redirect_back fallback_location: root_path,
               return
             end
+            @usuario.encrypted_password = BCrypt::Password.create(
+              @usuario.clave_ldap, 
+              {:cost => Rails.application.config.devise.stretches}
+            )
             unless @usuario.no_modificar_ldap
               unless ldap_crea_usuario(
                 @usuario, @usuario.clave_ldap, nil, prob)
