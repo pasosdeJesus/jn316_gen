@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", '~> 5.2.1'
+gem "rails", '~> 6.0.0.rc1'
 
 # Arranque rapido
 gem 'bootsnap', '>=1.1.0', require: false
@@ -20,7 +20,7 @@ gem 'sass'
 gem 'sass-rails'
 
 # Campos de selección bonitos
-gem 'chosen-rails'
+gem 'chosen-rails', git: "https://github.com/vtamara/chosen-rails.git", branch: 'several-fixes'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -70,7 +70,7 @@ gem "tzinfo"
 gem 'net-ldap'
 
 # Motor de sistemas de información estilo Pasos de Jesús
-gem 'sip', git: "https://github.com/pasosdeJesus/sip.git"
+gem 'sip', git: "https://github.com/pasosdeJesus/sip.git", branch: :rails6
 #gem 'sip', path: '../sip'
 
 group :development, :test do
