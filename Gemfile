@@ -16,8 +16,9 @@ gem 'puma'
 
 gem 'colorize'
 # Use SCSS for stylesheets
-gem 'sass'
 gem 'sass-rails'
+
+gem 'webpacker'
 
 # Campos de selección bonitos
 gem 'chosen-rails', git: "https://github.com/vtamara/chosen-rails.git", branch: 'several-fixes'
