@@ -12,6 +12,9 @@ function cableado {
 	done
 }
 
+d=`grep "gem.*pasosdeJesus" Gemfile | sed -e "s/gem ['\"]//g;s/['\"].*//g"`
+cableado $d
+
 grep "^ *gem *.debugger*" Gemfile > /dev/null 2> /dev/null
 if (test "$?" = "0") then {
 	echo "Gemfile incluye debugger"
