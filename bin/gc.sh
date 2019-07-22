@@ -31,7 +31,7 @@ if (test "$SINAC" != "1") then {
 	if (test "$?" != "0") then {
 		exit 1;
 	} fi;
-	cd test/dummy; CXX=c++ yarn upgrade
+        (cd test/dummy; CXX=c++ yarn upgrade)
 	if (test "$?" != "0") then {
 		exit 1;
 	} fi;
@@ -39,6 +39,10 @@ if (test "$SINAC" != "1") then {
 
 if (test "$SININS" != "1") then {
 	NOKOGIRI_USE_SYSTEM_LIBRARIES=1 MAKE=gmake make=gmake QMAKE=qmake4 bundle install
+	if (test "$?" != "0") then {
+		exit 1;
+	} fi;
+        (cd test/dummy; CXX=c++ yarn install)
 	if (test "$?" != "0") then {
 		exit 1;
 	} fi;
