@@ -29,7 +29,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.2'
 
 # Use jquery as the JavaScript library
-gem 'jquery-rails'
+gem 'jquery-rails', '>= 4.3.5'
 gem 'jquery-ui-rails'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks'
@@ -43,7 +43,7 @@ gem "bootstrap-datepicker-rails"
 gem "font-awesome-rails"
 
 # Facilita elegir colores en tema
-gem 'pick-a-color-rails'
+gem 'pick-a-color-rails', '>= 0.0.1'
 gem 'tiny-color-rails'
 
 # Formularios simples 
