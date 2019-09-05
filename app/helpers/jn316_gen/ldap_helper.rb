@@ -24,6 +24,7 @@ module Jn316Gen
       }.merge(Rails.application.config.x.jn316_opcon)
       lusuario = []
       ldap_conadmin = Net::LDAP.new( opcon )
+      #byebug
       ldap_conadmin.open do |ldap|
         filter = Net::LDAP::Filter.eq( "objectClass", 'posixAccount') &
           Net::LDAP::Filter.eq( "cn", nusuario ) 
@@ -37,12 +38,12 @@ module Jn316Gen
       return lusuario[0]
     rescue Exception => exception
       prob << 'Problema conectando a servidor LDAP (ldap_busca_como_admin). '+
-        ldap.get_operation_result.code.to_s + '-' +
-        ldap.get_operation_result.message.to_s + '.  Excepción: ' + 
-        exception.to_s
+        ' Excepción: ' + exception.to_s
       puts prob
       return nil
     end
+    module_function :ldap_busca_como_admin
+
 
     # Retorna valor de un campo ldap de un registro r
     def valor_campo_ldap(r, campo)
@@ -50,6 +51,7 @@ module Jn316Gen
       return r[campo.to_sym][0] if r[campo.to_sym].kind_of?(Array)
       return r[campo.to_sym]
     end
+    module_function :valor_campo_ldap
 
     # Actualiza en base de datos informacion de usuario sacada de LDAP
     # usuario es modelo de usuario por actualizar
@@ -106,6 +108,7 @@ module Jn316Gen
 
       return usuario
     end
+    module_function :actualizar_usuario
 
 
     # Crea un usuario con datos mínimos
@@ -134,6 +137,7 @@ module Jn316Gen
 
       return usuario
     end
+    module_function :crear_usuario_min
 
 
     # crea un usuario y/o lo actualiza si ya existe
@@ -149,6 +153,7 @@ module Jn316Gen
       end
       return actualizar_usuario(usuario, ldapus, grupos, prob, clave)
     end
+    module_function :crear_actualizar_usuario
 
 
     # crea un grupo y/o actualiza si ya existe
@@ -175,8 +180,8 @@ module Jn316Gen
       end
       return grupo
     end
+    module_function :crear_actualizar_grupo
 
-       
 
     #  Se conecta a LDAP como admin y busca grupos a los que pertence un 
     #  usuario
@@ -222,6 +227,7 @@ module Jn316Gen
       puts prob
       return nil
     end
+    module_function :ldap_busca_grupos_usuario_como_admin
 
 
     # Sincroniza de LDAP a base (sin grupos) y retorna vector
@@ -280,6 +286,7 @@ module Jn316Gen
       puts prob
       return [usuarios, deshab]
     end
+    module_function :ldap_sincroniza_usuarios
 
 
     def actualizar_miembros_grupos(grupo, entry, prob)
@@ -312,6 +319,7 @@ module Jn316Gen
         end
       end
     end
+    module_function :actualizar_miembros_grupos
 
     # Sincroniza grupos después de haber sincronizado usuarios
     def ldap_sincroniza_grupos(prob)
@@ -359,8 +367,8 @@ module Jn316Gen
         ' Excepción: ' + exception.to_s
       puts prob
       return [grupos, deshab]
-
     end
+    module_function :ldap_sincroniza_grupos
 
     def ldap_cambia_clave(nusuario, claveactual, nuevaclave, prob)
       if !ENV['JN316_CLAVE']
@@ -403,6 +411,7 @@ module Jn316Gen
       puts prob
       return false
     end
+    module_function :ldap_cambia_clave
 
     # Agrega al directorio LDAP un usuario como miembro de varios grupos
     def ldap_agrega_membresia(ldap, nusuario, grupos, prob)
@@ -416,7 +425,7 @@ module Jn316Gen
       end
       return grupos
     end
-
+    module_function :ldap_agrega_membresia
 
     # Crea un usuario LDAP con las convenciones descritas en README.md
     # Referencias: 
@@ -486,6 +495,7 @@ module Jn316Gen
       puts prob
       return false
     end
+    module_function :ldap_crea_usuario
 
 
     # Elimina un usuario LDAP
@@ -539,8 +549,8 @@ module Jn316Gen
       puts prob
       return false
     end
+    module_function :ldap_elimina_usuario
 
-      
     def ldap_actualiza_si_falta(ldap, dn, campo, atr, cambios, val, prob)
       if cambios.include?(campo.to_s)
         unless ldap.replace_attribute dn, atr, val
@@ -551,6 +561,7 @@ module Jn316Gen
       end
       return true
     end
+    module_function :ldap_actualiza_si_falta
 
     # Actualiza un usuario LDAP
     # Soporta renombramiento en caso LDAPv2 eliminando anterior y agregando
@@ -624,6 +635,7 @@ module Jn316Gen
       puts prob
       return false
     end
+    module_function :ldap_actualiza_usuario
 
     # Actualiza un grupo LDAP
     # Soporta renombramiento en caso LDAPv2 eliminando anterior y agregando
@@ -669,6 +681,7 @@ module Jn316Gen
       puts prob
       return false
     end
+    module_function :ldap_actualiza_grupo
 
     # Un cn portable solo puede tener letras del alfabet inglés, digitos y _
     # Evitamos escapar pues https://www.ietf.org/rfc/rfc4514.txt no
@@ -690,6 +703,7 @@ module Jn316Gen
       end
       return r
     end
+    module_function :limpia_cn
 
     # Crea un grupo LDAP con las convenciones descritas en README.md
     def ldap_crea_grupo(grupo, prob)
@@ -745,6 +759,7 @@ module Jn316Gen
       puts prob
       return false
     end
+    module_function :ldap_crea_grupo
 
     # Elimina un grupo LDAP
     def ldap_elimina_grupo(cn, prob)
@@ -780,7 +795,7 @@ module Jn316Gen
       puts prob
       return false
     end
-
+    module_function :ldap_elimina_grupo
 
   end
 end
