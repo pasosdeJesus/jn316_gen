@@ -47,7 +47,8 @@ gem 'sass-rails'
 
 gem "simple_form" # Formularios simples 
 
-gem 'sip', git: "https://github.com/pasosdeJesus/sip.git" # Motor de sistemas de información estilo Pasos de Jesús #gem 'sip', path: '../sip'
+gem 'sip', git: "https://github.com/pasosdeJesus/sip.git" # Motor de sistemas de información estilo Pasos de Jesús 
+#gem 'sip', path: '../sip'
 
 gem 'tiny-color-rails'
 
