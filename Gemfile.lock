@@ -37,6 +37,14 @@ GIT
   specs:
     cocoon (1.2.11)
 
+PATH
+  remote: .
+  specs:
+    jn316_gen (1.0.a2)
+      net-ldap
+      rails
+      sip
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -310,6 +318,7 @@ DEPENDENCIES
   devise-i18n
   font-awesome-rails
   jbuilder (~> 2.5)
+  jn316_gen!
   jquery-rails
   jquery-ui-rails
   net-ldap
