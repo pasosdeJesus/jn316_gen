@@ -1,6 +1,6 @@
 <% if can?(:edit, Sip::Grupo) %>
   <%= link_to t('.edit', :default => t("helpers.links.edit")),
-    edit_modelo_path(registro), :class => 'btn btn-xs'
+    edit_modelo_path(registro), :class => 'btn btn-sm'
   %>
 <% end %>
 <% if can?(:destroy, Sip::Grupo) %>
@@ -12,7 +12,7 @@
                     :default => t("helpers.links.confirm", 
                                   :default => '¿EStá seguro?')) 
     },
-    :class => 'btn btn-xs btn-danger' %>
+    :class => 'btn btn-sm btn-danger' %>
   <% if registro.gidNumber %>
     <%= link_to 'Eliminar de base y LDAP',
       jn316_gen.grupoldap_path(registro),
@@ -22,7 +22,7 @@
                       :default => t("helpers.links.confirm", 
                                     :default => 'Are you sure?')) 
       },
-      :class => 'btn btn-xs btn-danger' %>
+      :class => 'btn btn-sm btn-danger' %>
   <% end %>
 
 <% end %>
