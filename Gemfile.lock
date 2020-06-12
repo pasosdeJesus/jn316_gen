@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/pasosdeJesus/sip.git
-  revision: cfccd627e827ad6175a25b015d8201f916d4585b
+  revision: bc9eac3d287e0c6ede2f46261a677668655f78d3
   specs:
     sip (2.0.b10)
       cancancan
@@ -113,7 +113,7 @@ GEM
     colorize (0.8.1)
     concurrent-ruby (1.1.6)
     crass (1.0.6)
-    devise (4.7.1)
+    devise (4.7.2)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 4.1.0)
@@ -124,7 +124,7 @@ GEM
     docile (1.3.2)
     erubi (1.9.0)
     execjs (2.7.0)
-    ffi (1.13.0)
+    ffi (1.13.1)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     i18n (1.8.3)
