@@ -16,9 +16,14 @@ class Jn316Gen::RegistrationsController < ::Devise::RegistrationsController
       params[:usuario][:password] != '' && 
       params[:usuario][:password_confirmation] == params[:usuario][:password]
       prob = ''
+      if current_usuario && !current_usuario.ultimasincldap
+        # no está en LDAP se maneja como si no hubiera LDAP
+        super
+        return
+      end
       if ldap_cambia_clave(current_usuario.nusuario, 
-                           params[:usuario][:current_password],
-                           params[:usuario][:password], prob)
+          params[:usuario][:current_password],
+          params[:usuario][:password], prob)
         flash[:notice] = 'Clave cambiada en directorio LDAP'
         puts "Jn316Gen::RegistrationsController#update si cambio clave en ldap"
         # Para salir super usará after_update_path_for(resource)
