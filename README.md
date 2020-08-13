@@ -4,7 +4,7 @@
 
 ![Logo de jn316_gen](https://raw.githubusercontent.com/pasosdeJesus/jn316_gen/master/test/dummy/app/assets/images/logo.jpg)
 
-Este es un motor para autenticar con directorio LDAP y realizar operaciones 
+Este es un motor para autenticar con un directorio LDAP y realizar operaciones 
 básicas de administración de usuarios y grupos en el directorio LDAP y/o en
 un directorio activo.
 
@@ -18,26 +18,26 @@ un directorio activo.
 
 * Se usan tablas para usuarios y grupos en la base de datos que replican
   información del LDAP, aunque puede haber usuarios y grupos solo en
-  base (los que tienen su campo ultimasincldap en NULL).  
+  base (los que tienen su campo `ultimasincldap` en NULL).  
   Esto permite renombrar usuarios y grupos con facilidad en servidores LDAPv2
-  que no lo soportan (como ocurre con ldapd de OpenBSD).
+  que no lo soportan (como ocurre con `ldapd` de OpenBSD/adJ).
 
 * El directorio LDAP se basa en la propuesta de grupos y usuarios para 
   LDAP del RFC2307 https://www.ietf.org/rfc/rfc2307.txt.  Pero agregando:
-	- Se requiere un grupo genérico (digamos usuarios con gid 500) que 
+	- Se requiere un grupo genérico (digamos `usuarios` con gid 500) que 
 	  se utilice como grupo principal de todos los usuarios. 
-	- Mayores restricciones para las identificaciones (cn) de usuarios y 
-   	  grupos para evitar incompatibilidades[^1].  Una identificación  (cn)
+	- Mayores restricciones para las identificaciones (`cn`) de usuarios y 
+   	  grupos para evitar incompatibilidades[^1]:  Una identificación  (`cn`)
 	  puede constar sólo de letras mínusculas del alfabeto 
   	  inglés, mayúsculas del alfabeto ingles, digitos del 0 a 9 y `_`
 
 [^1] Por ejemplo hay problema entre phpldapadmin y ldapd para 
-	escapar caracteres en un cn como la coma, aunque es válido
-	tener una coma en un cn de acuerdo a https://www.ietf.org/rfc/rfc4514.txt. 
+	escapar caracteres en un `cn` como la coma, aun cuando es válido
+	tener una coma en un `cn` de acuerdo a https://www.ietf.org/rfc/rfc4514.txt. 
 
 # Características 
 
-* Un usuario LDAP tiene los objectClass: `top`, `posixAccount` e `inetOrgPerson`.
+* Un usuario LDAP tiene los `objectClass`: `top`, `posixAccount` e `inetOrgPerson`.
   En base de datos usa el modelo `::Usuario` con campos que corresponden asi:
 
 	|LDAP                   | Base de Datos                    |
@@ -101,7 +101,7 @@ un directorio activo.
   usuario está en el directorio LDAP se pone la nueva clave y en 
   base de datos.  Si el usuario no está en el directorio LDAP sólo se 
   actualiza clave en base de datos.   El directorio LDAP debe permitir
-  este cambio, en el caso de ldapd se logra con una configuración como esta
+  este cambio, en el caso de `ldapd` se logra con una configuración como esta
   en ```/etc/ldapd.conf```:
 
 ```
@@ -137,9 +137,7 @@ se requiere:
   y grupos nuevos, sacar de eliminados, agregar a nuevos)
 * Diseñar e implementar deshabilitación de grupos
 * Implementar subgrupos (se ha hecho en CRECER)
-* Sería bueno tener bitácora de conexiones e intentos.  Junto con cada
-  usuario mantener fecha de la última sincronización exitosa desde el
-  LDAP.
+* Sería bueno tener bitácora de conexiones e intentos. 
 
 
 # Configuración de este motor en su aplicación
@@ -207,7 +205,7 @@ bundle install
 rake db:migrate
 ```
 
-5. Especificar datos de conexión LDAP agregando a `config/application.rb` 
+5. Especifique datos de conexión LDAP agregando a `config/application.rb` 
 
 ```
     config.x.jn316_basegente = "ou=gente,dc=miorg,dc=net"
@@ -279,7 +277,7 @@ as :usuario do
   de ambiente `JN316_CLAVE` por ejemplo
 
 ```
-JN316_CLAVE=estaclave rails s
+JN316_CLAVE=estaclave bin/rails s
 ```
 
   Se requiere usuario y clave del administrador LDAP para realizar búsquedas
