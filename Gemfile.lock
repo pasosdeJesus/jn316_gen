@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/pasosdeJesus/sip.git
-  revision: 26047ecf238d45a9389f356cc94c77ac80674b27
+  revision: c329f4ed3eeacec01f50d81f5123b9bdf27a0eba
   specs:
     sip (2.0.b10)
       cancancan
@@ -249,7 +249,7 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
-    webpacker (5.1.1)
+    webpacker (5.2.1)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
