@@ -59,7 +59,7 @@ module Jn316Gen
           end
 
           belongs_to :oficina, class_name: 'Sip::Oficina',
-            foreign_key: "oficina_id", validate: true
+            foreign_key: "oficina_id", validate: true, optional: true
 
           validates_format_of :nusuario, 
             with: /\A[a-zA-Z_0-9]+\z/
