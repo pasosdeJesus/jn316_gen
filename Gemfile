@@ -12,14 +12,14 @@ gem 'bootsnap', '>=1.1.0', require: false # Arranque rapido
 
 gem "cancancan" # Roles
 
-gem 'coffee-rails', '~> 4.2'
+gem 'coffee-rails', '~> 4.2', '>= 4.2.2'
 
 gem "cocoon", git: "https://github.com/vtamara/cocoon.git", 
   branch: 'new_id_with_ajax' # Formularios anidados (algunos con ajax)
 
-gem "devise" # Autenticación 
+gem "devise" , ">= 4.7.2" # Autenticación 
 
-gem "devise-i18n"
+gem "devise-i18n", ">= 1.9.2"
 
 gem 'jbuilder', '~> 2.5'
 
@@ -31,17 +31,17 @@ gem 'pg'
 
 gem 'puma'
 
-gem "rails", '~> 6.0.0.rc1'
+gem "rails", "~> 6.0.3.3"
 
-gem 'sassc-rails'
+gem 'sassc-rails', '>= 2.1.2'
 
-gem "simple_form" # Formularios simples 
+gem "simple_form" , ">= 5.0.2" # Formularios simples 
 
 gem 'twitter_cldr' # ICU con CLDR
 
 gem "tzinfo" # Zonas horarias
 
-gem 'webpacker'
+gem 'webpacker', '>= 5.2.1'
 
 gem "will_paginate" # Listados en páginas
 
@@ -64,7 +64,7 @@ end
 
 group :test do
 
-  gem 'rails-controller-testing'
+  gem 'rails-controller-testing', '>= 1.0.5'
 
   # Problemas con 0.18 que en travis genera:
   # Error: json: cannot unmarshal object into Go struct field input.coverage of type []formatters.NullInt
@@ -78,6 +78,6 @@ group :development do
 
   gem 'spring'
 
-  gem 'web-console'
+  gem 'web-console', '>= 4.0.4'
 end
 
