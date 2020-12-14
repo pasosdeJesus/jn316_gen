@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/pasosdeJesus/sip.git
-  revision: f0d33b5974a7284e580619572338395763bcc137
+  revision: f2690d5cce0c3a46d8686bac2ad29219d24a240a
   specs:
     sip (2.0.b10)
       cancancan
@@ -96,7 +96,7 @@ GEM
       msgpack (~> 1.0)
     builder (3.2.4)
     camertron-eprun (1.1.1)
-    cancancan (3.1.0)
+    cancancan (3.2.0)
     chosen-rails (1.9.0)
       coffee-rails (>= 3.2)
       railties (>= 3.0)
@@ -162,7 +162,7 @@ GEM
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
     pg (1.2.3)
-    puma (5.1.0)
+    puma (5.1.1)
       nio4r (~> 2.0)
     rack (2.2.3)
     rack-proxy (0.6.5)
@@ -279,7 +279,7 @@ DEPENDENCIES
   paperclip
   pg
   puma
-  rails (~> 6.0.0.rc1)
+  rails (~> 6.0.3.4)
   rails-controller-testing
   sassc-rails
   simple_form
