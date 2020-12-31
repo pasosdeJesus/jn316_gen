@@ -25,6 +25,8 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'net-ldap'
 
+gem 'nokogiri', '>=1.11.0.rc4'
+
 gem "paperclip" # Maneja adjuntos
 
 gem 'pg'
