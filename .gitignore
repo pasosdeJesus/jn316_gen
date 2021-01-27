@@ -8,6 +8,7 @@
 /.bundle
 config/database.yml
 
+.env
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
@@ -28,6 +29,7 @@ test/dummy/db/*.sqlite3-journal
 test/dummy/log/*.log
 test/dummy/tmp/
 test/dummy/.sass-cache
+test/dummy/public
 tmp/
 herram/
 
