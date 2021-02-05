@@ -31,8 +31,6 @@ gem "paperclip" # Maneja adjuntos
 
 gem 'pg'
 
-gem 'puma'
-
 gem "rails", '~> 6.0.3.4'
 
 gem 'sassc-rails'
@@ -63,8 +61,6 @@ group :development, :test do
   gem 'colorize'
 
   gem 'dotenv-rails'
-
-  gem 'puma'
 end
 
 
@@ -81,6 +77,8 @@ end
 
 
 group :development do
+
+  gem 'puma'
 
   gem 'spring'
 
