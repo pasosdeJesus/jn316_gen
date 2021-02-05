@@ -41,3 +41,4 @@ test/dummy/node_modules/
 coverage
 corre.sh
 test/dummy/config/application.rb
+*.cp
