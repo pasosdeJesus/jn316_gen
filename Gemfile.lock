@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/pasosdeJesus/sip.git
-  revision: 614df30c836b34cec2a8ff581e384662eef69a8e
+  revision: c62c2b3f444c131f4eedd26ed368832f747a5ddb
   branch: main
   specs:
     sip (2.0.b11)
@@ -93,7 +93,7 @@ GEM
     bcrypt (3.1.16)
     bigdecimal (3.0.0)
     bindex (0.8.1)
-    bootsnap (1.7.1)
+    bootsnap (1.7.2)
       msgpack (~> 1.0)
     builder (3.2.4)
     camertron-eprun (1.1.1)
@@ -156,7 +156,7 @@ GEM
     minitest (5.14.3)
     msgpack (1.4.2)
     net-ldap (0.17.0)
-    nio4r (2.5.4)
+    nio4r (2.5.5)
     nokogiri (1.11.1)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
@@ -168,7 +168,7 @@ GEM
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
     pg (1.2.3)
-    puma (5.2.0)
+    puma (5.2.1)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
