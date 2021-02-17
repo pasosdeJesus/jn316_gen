@@ -42,3 +42,4 @@ coverage
 corre.sh
 test/dummy/config/application.rb
 *.cp
+test/dummy/public
