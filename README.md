@@ -222,6 +222,15 @@ rake db:migrate
     }
 ```
 
+Note que esa configuración usa TLS para agregar cifrado a una conexión
+inicialmente no cifrada sobre el puerto 389.
+
+Si prefiere usar LDAPS (LDAP sobre SSL) cambie el puerto por el 636
+y `:start_tls` por `:simple_tls`.
+Ver detalles en documentación de net-ldap:
+<https://www.rubydoc.info/github/ruby-ldap/ruby-net-ldap/Net%2FLDAP:initialize>
+
+
 6. Amplie el modelo Usuario, el más simple sería en `app/models/usuario`:
 
 ```
