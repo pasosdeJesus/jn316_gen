@@ -29,6 +29,9 @@ module Dummy
 
     config.active_record.schema_format = :sql
 
+
+    config.hosts << ENV.fetch('CONFIG_HOSTS', '127.0.0.1')
+
     config.x.formato_fecha = 'yyyy-mm-dd'
 
     config.x.jn316_basegente = "ou=gente,dc=miong,dc=org,dc=co"
