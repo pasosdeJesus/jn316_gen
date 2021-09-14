@@ -34,7 +34,6 @@ test:
     - whoami
     - echo "HOME=${HOME}"
     - pwd
-    - psql --version
     - which ruby
     - ruby -v
     - which node
