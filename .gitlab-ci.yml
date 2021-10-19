@@ -17,6 +17,7 @@ variables:
   POSTGRES_HOST_AUTH_METHOD: trust
   NOKOGIRI_USE_SYSTEM_LIBRARIES: "true"
   SELENIUM_REMOTE_URL: http://chrome:4444/wd/hub
+  CC_TEST_REPORTER_ID: "51d3bb69174ad5d54fbb9b4434cdc0285f3e64172c871f64743e7e46ff4fc5c6"
 
 
 stages:
@@ -46,6 +47,9 @@ test:
     - apt-get update -qq && apt-get -o dir::cache::archives="$APT_CACHE_DIR" install -yqq yarn
     - gem install bundler --no-document
     - bundle install --jobs $(nproc) "${FLAGS[@]}"
+    - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+    - chmod +x ./cc-test-reporter
+    - ./cc-test-reporter before-build
     - cd test/dummy
     - cp .env.gitlab .env
     - cp db/structure.sql db/structure.sql.copia 
@@ -57,5 +61,6 @@ test:
     - cd ../..
   script:
     - CONFIG_HOSTS=www.example.com bin/rails test
+    - ./cc-test-reporter after-build -t simplecov --exit-code $?
 
 
