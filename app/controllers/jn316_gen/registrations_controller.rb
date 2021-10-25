@@ -3,6 +3,8 @@ require 'devise/registrations_controller'
 class Jn316Gen::RegistrationsController < ::Devise::RegistrationsController
   include Jn316Gen::LdapHelper
 
+  # sin authorize porque se usa para no autenticados
+  
   def after_update_path_for(resource)
     Rails.configuration.relative_url_root
   end
