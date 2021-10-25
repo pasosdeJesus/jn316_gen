@@ -33,7 +33,11 @@ module Jn316Gen
       {}
     end
 
-    # Autorizacion con CanCanCan
+    # Se definen habilidades con cancancan
+    # Util en motores y aplicaciones de prueba
+    # En aplicaciones es mejor escribir completo el modelo de autorización
+    # para facilitar su análisis
+    # @usuario Usuario que hace petición
     def initialize_jn316_gen(usuario = nil)
       initialize_sip(usuario)
     end
