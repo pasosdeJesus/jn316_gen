@@ -1,5 +1,3 @@
-#econding: UTF-8
-
 # Operaciones básicas en un directorio activo
 # - Recuperar datos de un usuario
 # - Crea un usuario

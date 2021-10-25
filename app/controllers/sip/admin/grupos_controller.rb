@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 require 'jn316_gen/concerns/controllers/grupos_controller'
 
 module Sip

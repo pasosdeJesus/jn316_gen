@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require 'devise/registrations_controller'
 
 class Jn316Gen::RegistrationsController < ::Devise::RegistrationsController

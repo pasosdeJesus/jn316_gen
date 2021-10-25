@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 module Jn316Gen
   class Engine < ::Rails::Engine
     isolate_namespace Jn316Gen

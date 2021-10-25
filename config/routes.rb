@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 Jn316Gen::Engine.routes.draw do
 
   get '/sincronizarug' => 'usuarios#sincronizarug', as: 'sincronizarug'
