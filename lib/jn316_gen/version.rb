@@ -1,3 +1,3 @@
 module Jn316Gen
-  VERSION = "1.0.a2"
+  VERSION = "2.1a1"
 end

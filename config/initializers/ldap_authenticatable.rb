@@ -1,5 +1,6 @@
 require 'net/ldap'
 require 'devise/strategies/authenticatable'
+require 'jn316_gen/ldap_helper'
 
 module Devise
   module Strategies
