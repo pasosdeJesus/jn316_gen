@@ -46,7 +46,6 @@ module Sip
 
     test "get show: asigna el usuario requerido como @usuario" do
       usuario = Usuario.create! ATRIBUTOS_VALIDOS
-      debugger
       get usuario_url(usuario)
       assert_response :success
       assert_select 'dd', text: 'nusuario'
