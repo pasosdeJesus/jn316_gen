@@ -93,7 +93,7 @@ module Jn316Gen
 
           def edit
             authorize! :edit, ::Usuario
-            render layout: '/application'
+            render layout: 'application'
           end
 
           def medio_update(usuario)

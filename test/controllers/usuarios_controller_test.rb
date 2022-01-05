@@ -21,6 +21,7 @@ module Sip
       apellidos: "n",
       nusuario: 'nusuario',
       email: 'x@x.org',
+      rol: 1,  
       fechacreacion: '2014-01-01',
       encrypted_password: 'x',
       created_at: "2014-11-11" 
@@ -45,6 +46,7 @@ module Sip
 
     test "get show: asigna el usuario requerido como @usuario" do
       usuario = Usuario.create! ATRIBUTOS_VALIDOS
+      debugger
       get usuario_url(usuario)
       assert_response :success
       assert_select 'dd', text: 'nusuario'

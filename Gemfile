@@ -58,7 +58,7 @@ gem 'sip', # Motor generico
 
 
 group :development, :test do
-  #gem 'byebug', platform: :mri
+  gem 'debug'
  
   gem 'colorize'
 
