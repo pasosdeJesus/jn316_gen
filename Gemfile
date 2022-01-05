@@ -23,6 +23,8 @@ gem "devise-i18n"
 
 gem 'jbuilder', '~> 2.5'
 
+gem 'jsbundling-rails'
+
 gem 'kt-paperclip',                 # Anexos
   git: 'https://github.com/kreeti/kt-paperclip.git'
 
@@ -39,11 +41,11 @@ gem 'sassc-rails'
 
 gem "simple_form" # Formularios simples 
 
+gem 'sprockets-rails'
+
 gem 'twitter_cldr' # ICU con CLDR
 
 gem "tzinfo" # Zonas horarias
-
-gem 'webpacker', '~> 6.0.0.rc.1'       # Traduce y compila modulos Javascript
 
 gem "will_paginate" # Listados en páginas
 
@@ -53,7 +55,7 @@ gem "will_paginate" # Listados en páginas
 # lógico y no alfabetico como las gemas anteriores)
 
 gem 'sip', # Motor generico
-  git: 'https://github.com/pasosdeJesus/sip.git', branch: :rails7
+  git: 'https://github.com/pasosdeJesus/sip.git', branch: :rails7jses
   #gem 'sip', path: '../sip'
 
 

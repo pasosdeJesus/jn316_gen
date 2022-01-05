@@ -43,3 +43,5 @@ corre.sh
 test/dummy/config/application.rb
 *.cp
 test/dummy/public
+test/dummy/app/assets/builds
+
