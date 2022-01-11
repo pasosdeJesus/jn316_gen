@@ -28,7 +28,9 @@ module Dummy
     config.active_record.schema_format = :sql
 
 
-    config.hosts << ENV.fetch('CONFIG_HOSTS', '127.0.0.1')
+    puts "CONFIG_HOSTS="+ENV.fetch('CONFIG_HOSTS', 'defensor.info').to_s
+    config.hosts.concat(
+      ENV.fetch('CONFIG_HOSTS', 'defensor.info').downcase.split(";"))
 
     config.x.formato_fecha = 'yyyy-mm-dd'
 
