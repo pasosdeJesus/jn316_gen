@@ -117,7 +117,7 @@ GEM
       babel-source (>= 4.0, < 6)
       execjs (~> 2.0)
     bcrypt (3.1.16)
-    bigdecimal (3.1.1)
+    bigdecimal (3.1.2)
     bindex (0.8.1)
     bootsnap (1.10.1)
       msgpack (~> 1.2)
