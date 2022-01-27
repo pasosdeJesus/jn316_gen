@@ -38,9 +38,7 @@ promesaRecursosSprocketsYDocumento.then((mensaje) => {
   var root = window;
   sip_prepara_eventos_comunes(root);
   jn316_gen_prepara_eventos_comunes(root);
-});
 })
-
 
 document.addEventListener('turbo:load', (e) => {
  /* Lo que debe ejecutarse cada vez que turbo cargue una página,
