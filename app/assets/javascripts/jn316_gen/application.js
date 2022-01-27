@@ -13,14 +13,3 @@
 //= require sip/motor
 //= require jn316_gen/motor
 //= require_tree .
-
-document.addEventListener('turbo:load', function() {
-	var root;
-	root = typeof exports !== "undefined" && exports !== null ? 
-		exports : window;
-	sip_prepara_eventos_comunes(root);
-	/* Formato fecha manejado por sip */
-	jn316_gen_prepara_eventos_comunes(root);
-});
-
-
