@@ -5,8 +5,6 @@ image: "ruby:3.0.2"
 services:
   - name: vtamara/postgis-es_co:13.3-1
     alias: postgres
-  - name: selenium/standalone-chrome
-    alias: chrome
 
 variables:
   RAILS_ENV: test
@@ -16,7 +14,6 @@ variables:
   POSTGRES_DB: jn316gen_pru
   POSTGRES_HOST_AUTH_METHOD: trust
   NOKOGIRI_USE_SYSTEM_LIBRARIES: "true"
-  SELENIUM_REMOTE_URL: http://chrome:4444/wd/hub
   CC_TEST_REPORTER_ID: "51d3bb69174ad5d54fbb9b4434cdc0285f3e64172c871f64743e7e46ff4fc5c6"
 
 
@@ -37,8 +34,6 @@ test:
     - pwd
     - which ruby
     - ruby -v
-    - which node
-    - node -v
     - export APT_CACHE_DIR=`pwd`/apt-cache && mkdir -pv $APT_CACHE_DIR
     - apt-get update -yy && apt-get install build-essential libpq-dev postgresql-client -y
     - apt-get install -y -qq nodejs
