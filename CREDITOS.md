@@ -16,12 +16,13 @@ gemas ruby y paquetes npm.
 El sistema operativo de desarrollo y objetivo principal para producción
 ha sido adJ/OpenBSD, ver https://aprendiendo.pasosdeJesus.org
 
+---
 
-Agradecemos a Jesús/Dios por su misericordia.
+Agradecemos a Dios por la salvación
 
-Mas Jesús no se lo permitió, sino que le dijo: Vete a tu casa, a los tuyos, 
-y cuéntales cuán grandes cosas el Señor ha hecho contigo, 
-y cómo ha tenido misericordia de ti.
+Porque de tal manera amó Dios al mundo,
+que ha dado su hijo unigénito, para que todo aquel 
+que en Él cree, no se pierda, más tenga vida eterna.
 
-Marcos 5:19
+Juan 3:16
 
