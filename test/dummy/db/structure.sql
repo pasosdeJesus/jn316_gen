@@ -458,8 +458,45 @@ CREATE TABLE public.sip_clase (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     observaciones character varying(5000) COLLATE public.es_co_utf_8,
+    ultvigenciaini date,
+    ultvigenciafin date,
     CONSTRAINT clase_check CHECK (((fechadeshabilitacion IS NULL) OR (fechadeshabilitacion >= fechacreacion)))
 );
+
+
+--
+-- Name: sip_clase_histvigencia; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sip_clase_histvigencia (
+    id bigint NOT NULL,
+    clase_id integer,
+    vigenciaini date,
+    vigenciafin date NOT NULL,
+    nombre character varying(256),
+    id_clalocal integer,
+    id_tclase character varying,
+    observaciones character varying(5000)
+);
+
+
+--
+-- Name: sip_clase_histvigencia_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.sip_clase_histvigencia_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sip_clase_histvigencia_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.sip_clase_histvigencia_id_seq OWNED BY public.sip_clase_histvigencia.id;
 
 
 --
@@ -493,8 +530,47 @@ CREATE TABLE public.sip_departamento (
     codiso character varying(6),
     catiso character varying(64),
     codreg integer,
+    ultvigenciaini date,
+    ultvigenciafin date,
     CONSTRAINT departamento_check CHECK (((fechadeshabilitacion IS NULL) OR (fechadeshabilitacion >= fechacreacion)))
 );
+
+
+--
+-- Name: sip_departamento_histvigencia; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sip_departamento_histvigencia (
+    id bigint NOT NULL,
+    departamento_id integer,
+    vigenciaini date,
+    vigenciafin date NOT NULL,
+    nombre character varying(256),
+    id_deplocal integer,
+    codiso integer,
+    catiso integer,
+    codreg integer,
+    observaciones character varying(5000)
+);
+
+
+--
+-- Name: sip_departamento_histvigencia_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.sip_departamento_histvigencia_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sip_departamento_histvigencia_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.sip_departamento_histvigencia_id_seq OWNED BY public.sip_departamento_histvigencia.id;
 
 
 --
@@ -716,6 +792,9 @@ CREATE TABLE public.sip_municipio (
     updated_at timestamp without time zone,
     observaciones character varying(5000) COLLATE public.es_co_utf_8,
     codreg integer,
+    ultvigenciaini date,
+    ultvigenciafin date,
+    tipomun character varying(32),
     CONSTRAINT municipio_check CHECK (((fechadeshabilitacion IS NULL) OR (fechadeshabilitacion >= fechacreacion)))
 );
 
@@ -748,6 +827,41 @@ CREATE MATERIALIZED VIEW public.sip_mundep AS
    FROM public.sip_mundep_sinorden
   ORDER BY (sip_mundep_sinorden.nombre COLLATE public.es_co_utf_8)
   WITH NO DATA;
+
+
+--
+-- Name: sip_municipio_histvigencia; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sip_municipio_histvigencia (
+    id bigint NOT NULL,
+    municipio_id integer,
+    vigenciaini date,
+    vigenciafin date NOT NULL,
+    nombre character varying(256),
+    id_munlocal integer,
+    observaciones character varying(5000),
+    codreg integer
+);
+
+
+--
+-- Name: sip_municipio_histvigencia_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.sip_municipio_histvigencia_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sip_municipio_histvigencia_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.sip_municipio_histvigencia_id_seq OWNED BY public.sip_municipio_histvigencia.id;
 
 
 --
@@ -1408,6 +1522,44 @@ ALTER SEQUENCE public.sip_ubicacionpre_id_seq OWNED BY public.sip_ubicacionpre.i
 
 
 --
+-- Name: sip_vereda; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sip_vereda (
+    id bigint NOT NULL,
+    nombre character varying(500) NOT NULL COLLATE public.es_co_utf_8,
+    municipio_id integer,
+    verlocal_id integer,
+    observaciones character varying(5000),
+    latitud double precision,
+    longitud double precision,
+    fechacreacion date NOT NULL,
+    fechadeshabilitacion date,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: sip_vereda_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.sip_vereda_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sip_vereda_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.sip_vereda_id_seq OWNED BY public.sip_vereda.id;
+
+
+--
 -- Name: usuario_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -1495,6 +1647,20 @@ ALTER TABLE ONLY public.sip_bitacora ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
+-- Name: sip_clase_histvigencia id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sip_clase_histvigencia ALTER COLUMN id SET DEFAULT nextval('public.sip_clase_histvigencia_id_seq'::regclass);
+
+
+--
+-- Name: sip_departamento_histvigencia id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sip_departamento_histvigencia ALTER COLUMN id SET DEFAULT nextval('public.sip_departamento_histvigencia_id_seq'::regclass);
+
+
+--
 -- Name: sip_estadosol id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1520,6 +1686,13 @@ ALTER TABLE ONLY public.sip_grupo ALTER COLUMN id SET DEFAULT nextval('public.si
 --
 
 ALTER TABLE ONLY public.sip_grupoper ALTER COLUMN id SET DEFAULT nextval('public.sip_grupoper_id_seq'::regclass);
+
+
+--
+-- Name: sip_municipio_histvigencia id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sip_municipio_histvigencia ALTER COLUMN id SET DEFAULT nextval('public.sip_municipio_histvigencia_id_seq'::regclass);
 
 
 --
@@ -1597,6 +1770,13 @@ ALTER TABLE ONLY public.sip_trivalente ALTER COLUMN id SET DEFAULT nextval('publ
 --
 
 ALTER TABLE ONLY public.sip_ubicacionpre ALTER COLUMN id SET DEFAULT nextval('public.sip_ubicacionpre_id_seq'::regclass);
+
+
+--
+-- Name: sip_vereda id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sip_vereda ALTER COLUMN id SET DEFAULT nextval('public.sip_vereda_id_seq'::regclass);
 
 
 --
@@ -1704,11 +1884,27 @@ ALTER TABLE ONLY public.sip_bitacora
 
 
 --
+-- Name: sip_clase_histvigencia sip_clase_histvigencia_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sip_clase_histvigencia
+    ADD CONSTRAINT sip_clase_histvigencia_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: sip_clase sip_clase_id_municipio_id_clalocal_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.sip_clase
     ADD CONSTRAINT sip_clase_id_municipio_id_clalocal_key UNIQUE (id_municipio, id_clalocal);
+
+
+--
+-- Name: sip_departamento_histvigencia sip_departamento_histvigencia_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sip_departamento_histvigencia
+    ADD CONSTRAINT sip_departamento_histvigencia_pkey PRIMARY KEY (id);
 
 
 --
@@ -1765,6 +1961,14 @@ ALTER TABLE ONLY public.sip_grupo
 
 ALTER TABLE ONLY public.sip_grupoper
     ADD CONSTRAINT sip_grupoper_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sip_municipio_histvigencia sip_municipio_histvigencia_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sip_municipio_histvigencia
+    ADD CONSTRAINT sip_municipio_histvigencia_pkey PRIMARY KEY (id);
 
 
 --
@@ -1893,6 +2097,14 @@ ALTER TABLE ONLY public.sip_trivalente
 
 ALTER TABLE ONLY public.sip_ubicacionpre
     ADD CONSTRAINT sip_ubicacionpre_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sip_vereda sip_vereda_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sip_vereda
+    ADD CONSTRAINT sip_vereda_pkey PRIMARY KEY (id);
 
 
 --
@@ -2499,6 +2711,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211216125250'),
 ('20220213031520'),
 ('20220214121713'),
+('20220214232150'),
+('20220215095957'),
 ('20220413123127'),
 ('20220417203841'),
 ('20220417220914'),
@@ -2510,6 +2724,14 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220613224844'),
 ('20220713200101'),
 ('20220713200444'),
-('20220719111148');
+('20220714191500'),
+('20220714191505'),
+('20220714191510'),
+('20220714191555'),
+('20220719111148'),
+('20220721170452'),
+('20220721200858'),
+('20220722000850'),
+('20220722192214');
 
 
