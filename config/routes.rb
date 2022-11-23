@@ -2,7 +2,7 @@ Jn316Gen::Engine.routes.draw do
 
   get '/sincronizarug' => 'usuarios#sincronizarug', as: 'sincronizarug'
 
-  delete '/grupoldap/:id' => '/sip/admin/grupos#destroyldap', as: 'grupoldap'
+  delete '/grupoldap/:id' => '/msip/admin/grupos#destroyldap', as: 'grupoldap'
   delete '/usuarioldap/:id' => 'usuarios#destroyldap', as: 'usuarioldap'
 
   namespace :admin do

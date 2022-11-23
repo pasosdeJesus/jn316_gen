@@ -89,17 +89,17 @@ module Jn316Gen
         # Los grupos debieron sincronizarse antes, ahora solo 
         # asegurar que están los de grupos y solo esos.
         grupobd = []
-        Sip::GrupoUsuario.where(usuario_id: usuario.id).map do |gu|
-          grupobd << gu.sip_grupo_id
+        Msip::GrupoUsuario.where(usuario_id: usuario.id).map do |gu|
+          grupobd << gu.msip_grupo_id
         end
         pore = grupobd-grupos
         pora = grupos-grupobd
         pore.each do |g|
-          mg = Sip::GrupoUsuario.find(usuario_id: usuario.id, sip_grupo_id: g)
+          mg = Msip::GrupoUsuario.find(usuario_id: usuario.id, msip_grupo_id: g)
           mg.delete
         end
         pora.each.each do |g|
-          n = Sip::GrupoUsuario.new(usuario_id: usuario.id, sip_grupo_id: g)
+          n = Msip::GrupoUsuario.new(usuario_id: usuario.id, msip_grupo_id: g)
           n.save
         end
       end
@@ -121,7 +121,7 @@ module Jn316Gen
       }) if !clave.nil?
       usuario.fechacreacion = Date.today
       usuario.no_modificar_ldap = "1"
-      persona = Sip::Persona.new
+      persona = Msip::Persona.new
       usuario.nombres = persona.nombres = valor_campo_ldap(ldapus, :givenname)
       usuario.apellidos = persona.apellidos = valor_campo_ldap(ldapus, :sn)
       persona.sexo = 'S'
@@ -158,9 +158,9 @@ module Jn316Gen
     def crear_actualizar_grupo(ldapgr, prob)
       cn = ldapgr.cn[0]
       d = ldapgr.respond_to?(:description) ? ldapgr.description[0] : cn
-      grupo = Sip::Grupo.where(cn: cn).take
+      grupo = Msip::Grupo.where(cn: cn).take
       if grupo.nil?
-        grupo = Sip::Grupo.new(fechacreacion: Date.today)
+        grupo = Msip::Grupo.new(fechacreacion: Date.today)
         if grupo.nil?
           prob << 'No pudo crear grupo: ' + prob
           return nil
@@ -290,7 +290,7 @@ module Jn316Gen
     def actualizar_miembros_grupos(grupo, entry, prob)
       buenos = []
       sobran = []
-      grupo.sip_grupo_usuario.each do |gu|
+      grupo.msip_grupo_usuario.each do |gu|
         if entry.respond_to?(:memberuid) && 
           entry[:memberuid].include?(gu.usuario.nusuario)
           buenos << gu.usuario.nusuario
@@ -299,8 +299,8 @@ module Jn316Gen
         end
       end
       sobran.each do |uid|
-        Sip::GrupoUsuario.connection.execute <<-SQL
-          DELETE FROM sip_grupo_usuario WHERE sip_grupo_id=#{grupo.id}
+        Msip::GrupoUsuario.connection.execute <<-SQL
+          DELETE FROM msip_grupo_usuario WHERE msip_grupo_id=#{grupo.id}
             AND usuario_id=#{uid};
         SQL
       end
@@ -310,7 +310,7 @@ module Jn316Gen
         unless buenos.include?(nu)
           u = ::Usuario.find_by(nusuario: nu)
           if u
-            Sip::GrupoUsuario.create(sip_grupo_id: grupo.id, usuario_id: u.id)
+            Msip::GrupoUsuario.create(msip_grupo_id: grupo.id, usuario_id: u.id)
           else
             prob << "  No se encontró en base al usuario #{nu} referenciando en grupo #{entry.cn[0]}."
           end
@@ -349,7 +349,7 @@ module Jn316Gen
       puts "Actualizados " + grupos.length.to_s + " registros de grupos"
       # Si se eliminaron registros (que no se recomienda) deshabilitar en
       # base
-      Sip::Grupo.habilitados.where('ultimasincldap IS NOT NULL').each do |g|
+      Msip::Grupo.habilitados.where('ultimasincldap IS NOT NULL').each do |g|
         unless grupos.include?(g.id)
           g.fechadeshabilitacion = Date.today
           g.ultimasincldap = nil
@@ -474,7 +474,7 @@ module Jn316Gen
         uidNumber: usuario.uidNumber.to_s,
         objectclass: ["top", "inetOrgPerson", "posixAccount"]
       }
-      grupos = usuario.sip_grupo.map(&:cn)
+      grupos = usuario.msip_grupo.map(&:cn)
       ldap_conadmin.open do |ldap|
         if !ldap.add(:dn => dn, :attributes => attr)
           prob << ldap.get_operation_result.code.to_s +
@@ -722,7 +722,7 @@ module Jn316Gen
       cn = limpia_cn(grupo.cn)
       dn = "cn=#{cn},#{Rails.application.config.x.jn316_basegrupos}"
       if grupo.gidNumber.nil?
-        grupo.gidNumber = Sip::Grupo.maximum('gidNumber')
+        grupo.gidNumber = Msip::Grupo.maximum('gidNumber')
         if grupo.gidNumber.nil?
           prob << "No pudo obtenerse gidNumber máximo.  Parece que no ha sincronizado (cree algún usuario en LDAP antes)"
           return false

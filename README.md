@@ -63,20 +63,20 @@ un directorio activo.
   no es `NULL`).
 
 * Un grupo LDAP tiene los `objectClass`: `top` y `posixGroup`. En base de datos
-  usamos `Sip::Grupo` y `Sip::GrupoUsuario` así:
+  usamos `Msip::Grupo` y `Msip::GrupoUsuario` así:
   
   	|LDAP          | Base de datos                  |
 	|--------------|--------------------------------|
 	|`cn`          | `cn` máximo 255 caracteres     |
 	|`gidNumber`   | `gidNumber`                    |
 	|`description` | `nombre` en UTF-8 máximo 500   |
-	|`memberUid`   | registros de Sip::GrupoUsuario |
+	|`memberUid`   | registros de Msip::GrupoUsuario |
 	
   El `dn` usa el `cn`.  El `cn` se limita a 255 caracteres.  Para facilitar 
   compatibilidad recomendamos usar capitalización camello con el nombre 
   completo del grupo (cambiando tildes, eñes y sin espacios).  
 
-* Esta gema emplea Devise y la tabla `usuario` de sip, pone la estrategía 
+* Esta gema emplea Devise y la tabla `usuario` de msip, pone la estrategía 
   ```ldap_authenticable``` después de la estrategía que usa cookies 
   ```rememberable``` y antes de la estrategía que usa los datos de la base
   (```database_authenticable```),
@@ -115,7 +115,7 @@ un directorio activo.
   allow write access to children of "ou=gente,dc=miorg,dc=net" by self
 ```
 
-* Grupos.  Se  usa modelo de `sip`, un grupo referencia varios
+* Grupos.  Se  usa modelo de `msip`, un grupo referencia varios
   usuarios. En base de datos no maneja concepto de grupo principal. 
   Cuando un usuario se autentica, se actualiza la información de 
   grupos a los que pertenece sincronizandola en base.  Si un grupo del LDAP
@@ -146,8 +146,8 @@ se requiere:
 
 # Configuración de este motor en su aplicación
 
-1. Asegurese de que su aplicación use el motor `sip` para manejar
-   usuarios y grupos (ver <https://github.com/pasosdeJesus/sip> )
+1. Asegurese de que su aplicación use el motor `msip` para manejar
+   usuarios y grupos (ver <https://github.com/pasosdeJesus/msip> )
 
 2. LDAP utilizable con las convenciones descritas al comienzo. La
   funcionalidad de sincronizar puede ayudarle a detectar problemas en
@@ -204,7 +204,7 @@ y ejecute:
 bundle install
 ```
 
-4. Ejecute migraciones para hacer cambios a modelos usuario y sip::grupo
+4. Ejecute migraciones para hacer cambios a modelos usuario y msip::grupo
 ```
 rake db:migrate
 ```
@@ -241,10 +241,10 @@ Ver detalles en documentación de net-ldap:
 # encoding: UTF-8
 
 require 'jn316_gen/concerns/models/usuario'
-require 'sip/concerns/models/usuario'
+require 'msip/concerns/models/usuario'
 
 class Usuario < ActiveRecord::Base
-  include Sip::Concerns::Models::Usuario
+  include Msip::Concerns::Models::Usuario
   include Jn316Gen::Concerns::Models::Usuario
 
 end

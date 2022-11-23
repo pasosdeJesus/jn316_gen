@@ -1,4 +1,4 @@
-require 'sip/concerns/controllers/usuarios_controller'
+require 'msip/concerns/controllers/usuarios_controller'
 
 module Jn316Gen
   module Concerns
@@ -8,7 +8,7 @@ module Jn316Gen
         extend ActiveSupport::Concern
 
         included do
-          include Sip::Concerns::Controllers::UsuariosController
+          include Msip::Concerns::Controllers::UsuariosController
           include Jn316Gen::LdapHelper
 
           def atributos_index
@@ -31,8 +31,8 @@ module Jn316Gen
               "rol",
               "email",
             ]
-            if can?(:manage, Sip::Grupo)
-              r += ["sip_grupo"]
+            if can?(:manage, Msip::Grupo)
+              r += ["msip_grupo"]
             end
             r += [
               "idioma",
@@ -107,8 +107,8 @@ module Jn316Gen
               request.params[:usuario][:no_modificar_ldap] == '1'
             @usuario.clave_ldap = usuario_params[:encrypted_password]
             @usuario.nusuarioini = @usuario.nusuario
-            @usuario.gruposini = Sip::GrupoUsuario.where(
-              usuario_id: @usuario.id).map(&:sip_grupo_id).sort
+            @usuario.gruposini = Msip::GrupoUsuario.where(
+              usuario_id: @usuario.id).map(&:msip_grupo_id).sort
             if (params[:usuario][:fechadeshabilitacion].nil? &&
                 !params[:usuario][:encrypted_password].nil? &&
                 params[:usuario][:encrypted_password] != "")
@@ -205,7 +205,7 @@ module Jn316Gen
               :current_sign_in_at, :last_sign_in_at, :current_sign_in_ip, 
               :failed_attempts, :unlock_token, :locked_at,
               :last_sign_in_ip, :etiqueta_ids => [],
-              :sip_grupo_ids => []
+              :msip_grupo_ids => []
             )
             return p
           end

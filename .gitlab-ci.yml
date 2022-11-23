@@ -52,9 +52,9 @@ test:
     - sed -e 's/provider = libc,//g;s/SET default_table_access_method.*/-- &/g' db/structure.sql.copia > db/structure.sql 
     #- psql -h postgres -U runner --set ON_ERROR_STOP=1 --no-psqlrc --file /builds/pasosdeJesus/si_jrscol/db/structure.sql jn316gen_pru
     - bin/rails db:drop db:create db:setup
-    - bin/rails sip:indices
+    - bin/rails msip:indices
     - yarn install
-    - bin/rails sip:stimulus_motores
+    - bin/rails msip:stimulus_motores
     - bin/rails assets:precompile
     - cd ../..
   script:

@@ -10,6 +10,6 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require sip/motor
+//= require msip/motor
 //= require jn316_gen/motor
 //= require_tree .

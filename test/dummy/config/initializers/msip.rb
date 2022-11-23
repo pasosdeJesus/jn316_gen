@@ -1,6 +1,6 @@
 require 'jn316_gen/version'
 
-Sip.setup do |config|
+Msip.setup do |config|
 
   config.ruta_anexos = ENV.fetch('SIP_RUTA_ANEXOS', 
                                  "#{Rails.root}/archivos/anexos")
