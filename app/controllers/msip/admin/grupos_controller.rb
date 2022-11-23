@@ -1,6 +1,6 @@
 require 'jn316_gen/concerns/controllers/grupos_controller'
 
-module Sip
+module Msip
   module Admin
     class GruposController < Msip::Admin::BasicasController
       load_and_authorize_resource  class: Msip::Grupo
