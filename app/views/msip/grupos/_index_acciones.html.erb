@@ -1,11 +1,11 @@
-<% if can?(:edit, Sip::Grupo) %>
+<% if can?(:edit, Msip::Grupo) %>
   <%= link_to t('.edit', :default => t("helpers.links.edit")),
     edit_modelo_path(registro), :class => 'btn btn-sm'
   %>
 <% end %>
-<% if can?(:destroy, Sip::Grupo) %>
+<% if can?(:destroy, Msip::Grupo) %>
   <%= link_to 'Eliminar de base',
-    sip.admin_grupo_path(registro),
+    msip.admin_grupo_path(registro),
     :method => :delete,
     :data => { 
       :confirm => t('.confirm', 

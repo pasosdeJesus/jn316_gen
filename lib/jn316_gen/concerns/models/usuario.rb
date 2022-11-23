@@ -1,4 +1,4 @@
-require 'sip/concerns/models/usuario'
+require 'msip/concerns/models/usuario'
 
 module Jn316Gen
   module Concerns
@@ -7,7 +7,7 @@ module Jn316Gen
         extend ActiveSupport::Concern
 
         included do
-          include Sip::Concerns::Models::Usuario
+          include Msip::Concerns::Models::Usuario
           include Jn316Gen::LdapHelper 
 
           attr :no_modificar_ldap
@@ -28,7 +28,7 @@ module Jn316Gen
               i = changed & ['apellidos', 'email', 'encrypted_password', 
                              'fechadeshabilitacion', 
                              'nombres', 'nusuario', 'uidNumber']
-              gruposd = sip_grupo_ids.sort 
+              gruposd = msip_grupo_ids.sort 
               if i != [] || gruposd != gruposini
                 prob = ''
                 cambios = changed
@@ -56,7 +56,7 @@ module Jn316Gen
             end
           end
 
-          belongs_to :oficina, class_name: 'Sip::Oficina',
+          belongs_to :oficina, class_name: 'Msip::Oficina',
             foreign_key: "oficina_id", validate: true, optional: true
 
           validates_format_of :nusuario, 

@@ -15,7 +15,7 @@ es:
       "jn316_gen/plantillahcm":
         nombremenu: Nombre por presentar en aplicación
         filainicial: Fila inicial
-      "sip/grupo":
+      "msip/grupo":
         cn: cn en LDAP
         ultimasincldap: Verificada presencia en LDAP
         ultimasincldap_localizada: Verificada presencia en LDAP
@@ -24,7 +24,7 @@ es:
         email: Correo
         encrypted_password: Clave
         nusuario: Identificación
-        sip_grupo: Grupo(s)
+        msip_grupo: Grupo(s)
         uidNumber: uidNumber en LDAP
         ultimasincldap: Verificada presencia en LDAP
         ultimasincldap_localizada: Verificada presencia en LDAP

@@ -1,7 +1,7 @@
 module Jn316Gen
   module ApplicationHelper
 
-    include Sip::PaginacionAjaxHelper
+    include Msip::PaginacionAjaxHelper
 
   end
 end

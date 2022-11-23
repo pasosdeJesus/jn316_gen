@@ -1,4 +1,4 @@
-require 'sip/concerns/controllers/grupos_controller'
+require 'msip/concerns/controllers/grupos_controller'
 
 module Jn316Gen
   module Concerns
@@ -8,7 +8,7 @@ module Jn316Gen
         extend ActiveSupport::Concern
 
         included do
-          include Sip::Concerns::Controllers::GruposController
+          include Msip::Concerns::Controllers::GruposController
           include Jn316Gen::LdapHelper
 
           def atributos_index
@@ -26,8 +26,8 @@ module Jn316Gen
           end
 
           def create
-            authorize! :edit, Sip::Grupo
-            @registro = @grupo = Sip::Grupo.new(grupo_params)
+            authorize! :edit, Msip::Grupo
+            @registro = @grupo = Msip::Grupo.new(grupo_params)
             @grupo.no_modificar_ldap = request.params[:grupo][:no_modificar_ldap] == '1'
             prob = ''
             if !@grupo.valid?
@@ -50,14 +50,14 @@ module Jn316Gen
           end
 
           def edit
-            authorize! :edit, Sip::Grupo
+            authorize! :edit, Msip::Grupo
             render layout: '/application'
           end
 
           # PATCH/PUT /grupos/1
           # PATCH/PUT /grupos/1.json
           def update
-            authorize! :edit, Sip::Grupo
+            authorize! :edit, Msip::Grupo
             @grupo.no_modificar_ldap = 
               request.params[:grupo][:no_modificar_ldap] == '1'
             @grupo.cnini = @grupo.cn
@@ -87,7 +87,7 @@ module Jn316Gen
 
           # Elimina un grupo del LDAP y de la base
           def destroyldap
-            authorize! :manage, Sip::Grupo
+            authorize! :manage, Msip::Grupo
             set_grupo
             prob = ""
             if ldap_elimina_grupo(@grupo.cn, prob)

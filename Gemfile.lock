@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/kreeti/kt-paperclip.git
-  revision: 705092aa709076fc2d8d066f23e678f4d9323bc4
+  revision: 11abf222dc31bff71160a1d138b445214f434b2b
   specs:
     kt-paperclip (7.1.1)
       activemodel (>= 4.2.0)
@@ -10,37 +10,39 @@ GIT
       terrapin (~> 0.6.0)
 
 GIT
-  remote: https://github.com/pasosdeJesus/sip.git
-  revision: 684198787e0b31260d490081ae865196c84aa8a3
-  branch: main
-  specs:
-    sip (2.1.0.beta1)
-      cancancan
-      coffee-rails
-      devise
-      devise-i18n
-      kt-paperclip
-      minitest
-      rails
-      rails-i18n
-      sassc-rails
-      simple_form
-      twitter_cldr
-
-GIT
   remote: https://github.com/vtamara/cocoon.git
   revision: 9f1892403c3dbdb8f7d457a06f237ff58e7dfb07
   branch: new_id_with_ajax
   specs:
     cocoon (1.2.11)
 
+GIT
+  remote: https://gitlab.com/pasosdeJesus/msip.git
+  revision: 15febca1a72746c226f3b9eb2dcd725a16df4f56
+  branch: main
+  specs:
+    msip (2.2.0.alfa3)
+      cancancan (~> 3)
+      devise (~> 4)
+      devise-i18n (~> 1)
+      kt-paperclip (~> 7)
+      pg (~> 1)
+      rails (~> 7.0)
+      rails-i18n (~> 7)
+      sassc-rails (~> 2)
+      simple_form (~> 5)
+      sprockets-rails (~> 3)
+      stimulus-rails (~> 1)
+      twitter_cldr (~> 6)
+      will_paginate (~> 3)
+
 PATH
   remote: .
   specs:
     jn316_gen (2.1a1)
+      msip
       net-ldap
       rails
-      sip
 
 GEM
   remote: https://rubygems.org/
@@ -177,7 +179,7 @@ GEM
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     io-console (0.5.11)
-    irb (1.4.3)
+    irb (1.5.0)
       reline (>= 0.3.0)
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
@@ -340,6 +342,7 @@ DEPENDENCIES
   jn316_gen!
   jsbundling-rails
   kt-paperclip!
+  msip!
   net-ldap
   nokogiri (>= 1.11.1)
   pg
@@ -349,7 +352,6 @@ DEPENDENCIES
   sassc-rails
   simple_form
   simplecov (~> 0.10, < 0.18)
-  sip!
   spring
   sprockets-rails
   stimulus-rails

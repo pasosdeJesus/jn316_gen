@@ -1,21 +1,21 @@
 module Jn316Gen
-  class Ability  < Sip::Ability
+  class Ability  < Msip::Ability
 
     BASICAS_PROPIAS = []
 
     def tablasbasicas 
-      Sip::Ability::BASICAS_PROPIAS + 
+      Msip::Ability::BASICAS_PROPIAS + 
         Jn316Gen::Ability::BASICAS_PROPIAS - [
-          ['Sip', 'pais'],
-          ['Sip', 'departamento'],
-          ['Sip', 'municipio'],
-          ['Sip', 'clase'],
-          ['Sip', 'fuenteprensa'],
-          ['Sip', 'oficina'],
-          ['Sip', 'tclase'],
-          ['Sip', 'tdocumento'],
-          ['Sip', 'trelacion'],
-          ['Sip', 'tsitio']
+          ['Msip', 'pais'],
+          ['Msip', 'departamento'],
+          ['Msip', 'municipio'],
+          ['Msip', 'clase'],
+          ['Msip', 'fuenteprensa'],
+          ['Msip', 'oficina'],
+          ['Msip', 'tclase'],
+          ['Msip', 'tdocumento'],
+          ['Msip', 'trelacion'],
+          ['Msip', 'tsitio']
         ] 
     end
 
@@ -39,7 +39,7 @@ module Jn316Gen
     # para facilitar su análisis
     # @usuario Usuario que hace petición
     def initialize_jn316_gen(usuario = nil)
-      initialize_sip(usuario)
+      initialize_msip(usuario)
     end
 
   end

@@ -1,4 +1,4 @@
-require 'sip/concerns/models/grupo'
+require 'msip/concerns/models/grupo'
 
 module Jn316Gen
   module Concerns
@@ -9,8 +9,8 @@ module Jn316Gen
 
         included do
 
-          include Sip::Basica
-          include Sip::Concerns::Models::Grupo
+          include Msip::Basica
+          include Msip::Concerns::Models::Grupo
           include Jn316Gen::LdapHelper 
 
           attr :no_modificar_ldap

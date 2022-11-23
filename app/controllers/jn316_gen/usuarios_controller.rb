@@ -1,7 +1,7 @@
 require 'jn316_gen/concerns/controllers/usuarios_controller'
 
 module Jn316Gen
-  class UsuariosController < Sip::ModelosController
+  class UsuariosController < Msip::ModelosController
 
     # Sin autorización porque se requiere para autenticar
     
