@@ -1,6 +1,6 @@
 require_relative '../test_helper'
 
-module Sip
+module Msip
   class UsuariosControllerTest < ActionDispatch::IntegrationTest
     include Engine.routes.url_helpers
     include Devise::Test::IntegrationHelpers
