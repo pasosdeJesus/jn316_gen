@@ -2101,67 +2101,67 @@ ALTER TABLE ONLY public.msip_vereda
 
 
 --
--- Name: msip_clase msip_clase_id_municipio_id_clalocal_key; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: msip_clase sip_clase_id_municipio_id_clalocal_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.msip_clase
-    ADD CONSTRAINT msip_clase_id_municipio_id_clalocal_key UNIQUE (id_municipio, id_clalocal);
+    ADD CONSTRAINT sip_clase_id_municipio_id_clalocal_key UNIQUE (id_municipio, id_clalocal);
 
 
 --
--- Name: msip_departamento msip_departamento_id_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.msip_departamento
-    ADD CONSTRAINT msip_departamento_id_key UNIQUE (id);
-
-
---
--- Name: msip_departamento msip_departamento_id_pais_id_deplocal_unico; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: msip_departamento sip_departamento_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.msip_departamento
-    ADD CONSTRAINT msip_departamento_id_pais_id_deplocal_unico UNIQUE (id_pais, id_deplocal);
+    ADD CONSTRAINT sip_departamento_id_key UNIQUE (id);
 
 
 --
--- Name: msip_municipio msip_municipio_id_departamento_id_munlocal_unico; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: msip_departamento sip_departamento_id_pais_id_deplocal_unico; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.msip_departamento
+    ADD CONSTRAINT sip_departamento_id_pais_id_deplocal_unico UNIQUE (id_pais, id_deplocal);
+
+
+--
+-- Name: msip_municipio sip_municipio_id_departamento_id_munlocal_unico; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.msip_municipio
-    ADD CONSTRAINT msip_municipio_id_departamento_id_munlocal_unico UNIQUE (id_departamento, id_munlocal);
+    ADD CONSTRAINT sip_municipio_id_departamento_id_munlocal_unico UNIQUE (id_departamento, id_munlocal);
 
 
 --
--- Name: msip_pais msip_pais_codiso_unico; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: msip_pais sip_pais_codiso_unico; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.msip_pais
-    ADD CONSTRAINT msip_pais_codiso_unico UNIQUE (codiso);
+    ADD CONSTRAINT sip_pais_codiso_unico UNIQUE (codiso);
 
 
 --
--- Name: msip_persona_trelacion msip_persona_trelacion_id_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.msip_persona_trelacion
-    ADD CONSTRAINT msip_persona_trelacion_id_key UNIQUE (id);
-
-
---
--- Name: msip_persona_trelacion msip_persona_trelacion_persona1_persona2_id_trelacion_key; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: msip_persona_trelacion sip_persona_trelacion_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.msip_persona_trelacion
-    ADD CONSTRAINT msip_persona_trelacion_persona1_persona2_id_trelacion_key UNIQUE (persona1, persona2, id_trelacion);
+    ADD CONSTRAINT sip_persona_trelacion_id_key UNIQUE (id);
 
 
 --
--- Name: msip_persona_trelacion msip_persona_trelacion_persona1_persona2_id_trelacion_key1; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: msip_persona_trelacion sip_persona_trelacion_persona1_persona2_id_trelacion_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.msip_persona_trelacion
-    ADD CONSTRAINT msip_persona_trelacion_persona1_persona2_id_trelacion_key1 UNIQUE (persona1, persona2, id_trelacion);
+    ADD CONSTRAINT sip_persona_trelacion_persona1_persona2_id_trelacion_key UNIQUE (persona1, persona2, id_trelacion);
+
+
+--
+-- Name: msip_persona_trelacion sip_persona_trelacion_persona1_persona2_id_trelacion_key1; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.msip_persona_trelacion
+    ADD CONSTRAINT sip_persona_trelacion_persona1_persona2_id_trelacion_key1 UNIQUE (persona1, persona2, id_trelacion);
 
 
 --
@@ -2259,31 +2259,31 @@ CREATE UNIQUE INDEX index_usuario_on_email ON public.usuario USING btree (email)
 
 
 --
--- Name: msip_busca_mundep; Type: INDEX; Schema: public; Owner: -
+-- Name: sip_busca_mundep; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX msip_busca_mundep ON public.msip_mundep USING gin (mundep);
-
-
---
--- Name: msip_nombre_ubicacionpre_b; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX msip_nombre_ubicacionpre_b ON public.msip_ubicacionpre USING gin (to_tsvector('spanish'::regconfig, public.f_unaccent((nombre)::text)));
+CREATE INDEX sip_busca_mundep ON public.msip_mundep USING gin (mundep);
 
 
 --
--- Name: msip_persona_anionac_ind; Type: INDEX; Schema: public; Owner: -
+-- Name: sip_nombre_ubicacionpre_b; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX msip_persona_anionac_ind ON public.msip_persona USING btree (anionac);
+CREATE INDEX sip_nombre_ubicacionpre_b ON public.msip_ubicacionpre USING gin (to_tsvector('spanish'::regconfig, public.f_unaccent((nombre)::text)));
 
 
 --
--- Name: msip_persona_sexo_ind; Type: INDEX; Schema: public; Owner: -
+-- Name: sip_persona_anionac_ind; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX msip_persona_sexo_ind ON public.msip_persona USING btree (sexo);
+CREATE INDEX sip_persona_anionac_ind ON public.msip_persona USING btree (anionac);
+
+
+--
+-- Name: sip_persona_sexo_ind; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX sip_persona_sexo_ind ON public.msip_persona USING btree (sexo);
 
 
 --
@@ -2606,11 +2606,11 @@ ALTER TABLE ONLY public.msip_persona_trelacion
 
 
 --
--- Name: msip_municipio msip_municipio_id_departamento_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: msip_municipio sip_municipio_id_departamento_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.msip_municipio
-    ADD CONSTRAINT msip_municipio_id_departamento_fkey FOREIGN KEY (id_departamento) REFERENCES public.msip_departamento(id);
+    ADD CONSTRAINT sip_municipio_id_departamento_fkey FOREIGN KEY (id_departamento) REFERENCES public.msip_departamento(id);
 
 
 --
