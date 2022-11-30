@@ -18,7 +18,7 @@ GIT
 
 GIT
   remote: https://gitlab.com/pasosdeJesus/msip.git
-  revision: 38db83b6644c30450a303ca15910c7e916b74d51
+  revision: f603e5105151f086c0e91035b19e0095dfc6b1ec
   branch: main
   specs:
     msip (2.2.0.alfa3)
@@ -288,7 +288,7 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
-    stimulus-rails (1.2.0)
+    stimulus-rails (1.2.1)
       railties (>= 6.0.0)
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
