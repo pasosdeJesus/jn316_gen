@@ -2101,6 +2101,14 @@ ALTER TABLE ONLY public.msip_solicitud
 
 
 --
+-- Name: msip_tclase msip_tclase_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.msip_tclase
+    ADD CONSTRAINT msip_tclase_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: msip_tdocumento msip_tdocumento_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2122,6 +2130,14 @@ ALTER TABLE ONLY public.msip_tema
 
 ALTER TABLE ONLY public.msip_tipoorg
     ADD CONSTRAINT msip_tipoorg_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: msip_trelacion msip_trelacion_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.msip_trelacion
+    ADD CONSTRAINT msip_trelacion_pkey PRIMARY KEY (id);
 
 
 --
@@ -2162,22 +2178,6 @@ ALTER TABLE ONLY public.msip_ubicacionpre
 
 ALTER TABLE ONLY public.msip_vereda
     ADD CONSTRAINT msip_vereda_pkey PRIMARY KEY (id);
-
-
---
--- Name: msip_tclase tclase_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.msip_tclase
-    ADD CONSTRAINT tclase_pkey PRIMARY KEY (id);
-
-
---
--- Name: msip_trelacion trelacion_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.msip_trelacion
-    ADD CONSTRAINT trelacion_pkey PRIMARY KEY (id);
 
 
 --
@@ -2259,31 +2259,31 @@ CREATE UNIQUE INDEX index_usuario_on_email ON public.usuario USING btree (email)
 
 
 --
--- Name: sip_busca_mundep; Type: INDEX; Schema: public; Owner: -
+-- Name: msip_busca_mundep; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX sip_busca_mundep ON public.msip_mundep USING gin (mundep);
-
-
---
--- Name: sip_nombre_ubicacionpre_b; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX sip_nombre_ubicacionpre_b ON public.msip_ubicacionpre USING gin (to_tsvector('spanish'::regconfig, public.f_unaccent((nombre)::text)));
+CREATE INDEX msip_busca_mundep ON public.msip_mundep USING gin (mundep);
 
 
 --
--- Name: sip_persona_anionac_ind; Type: INDEX; Schema: public; Owner: -
+-- Name: msip_nombre_ubicacionpre_b; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX sip_persona_anionac_ind ON public.msip_persona USING btree (anionac);
+CREATE INDEX msip_nombre_ubicacionpre_b ON public.msip_ubicacionpre USING gin (to_tsvector('spanish'::regconfig, public.f_unaccent((nombre)::text)));
 
 
 --
--- Name: sip_persona_sexo_ind; Type: INDEX; Schema: public; Owner: -
+-- Name: msip_persona_anionac_ind; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX sip_persona_sexo_ind ON public.msip_persona USING btree (sexo);
+CREATE INDEX msip_persona_anionac_ind ON public.msip_persona USING btree (anionac);
+
+
+--
+-- Name: msip_persona_sexo_ind; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX msip_persona_sexo_ind ON public.msip_persona USING btree (sexo);
 
 
 --
@@ -2773,6 +2773,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20221102144613'),
 ('20221102145906'),
 ('20221118032223'),
-('20221201143440');
+('20221201143440'),
+('20221201154025');
 
 
