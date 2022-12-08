@@ -90,16 +90,16 @@ module Jn316Gen
         # asegurar que están los de grupos y solo esos.
         grupobd = []
         Msip::GrupoUsuario.where(usuario_id: usuario.id).map do |gu|
-          grupobd << gu.msip_grupo_id
+          grupobd << gu.grupo_id
         end
         pore = grupobd-grupos
         pora = grupos-grupobd
         pore.each do |g|
-          mg = Msip::GrupoUsuario.find(usuario_id: usuario.id, msip_grupo_id: g)
+          mg = Msip::GrupoUsuario.find(usuario_id: usuario.id, grupo_id: g)
           mg.delete
         end
         pora.each.each do |g|
-          n = Msip::GrupoUsuario.new(usuario_id: usuario.id, msip_grupo_id: g)
+          n = Msip::GrupoUsuario.new(usuario_id: usuario.id, grupo_id: g)
           n.save
         end
       end
@@ -300,7 +300,7 @@ module Jn316Gen
       end
       sobran.each do |uid|
         Msip::GrupoUsuario.connection.execute <<-SQL
-          DELETE FROM msip_grupo_usuario WHERE msip_grupo_id=#{grupo.id}
+          DELETE FROM msip_grupo_usuario WHERE grupo_id=#{grupo.id}
             AND usuario_id=#{uid};
         SQL
       end
@@ -310,7 +310,7 @@ module Jn316Gen
         unless buenos.include?(nu)
           u = ::Usuario.find_by(nusuario: nu)
           if u
-            Msip::GrupoUsuario.create(msip_grupo_id: grupo.id, usuario_id: u.id)
+            Msip::GrupoUsuario.create(grupo_id: grupo.id, usuario_id: u.id)
           else
             prob << "  No se encontró en base al usuario #{nu} referenciando en grupo #{entry.cn[0]}."
           end

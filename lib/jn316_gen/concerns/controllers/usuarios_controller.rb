@@ -108,7 +108,7 @@ module Jn316Gen
             @usuario.clave_ldap = usuario_params[:encrypted_password]
             @usuario.nusuarioini = @usuario.nusuario
             @usuario.gruposini = Msip::GrupoUsuario.where(
-              usuario_id: @usuario.id).map(&:msip_grupo_id).sort
+              usuario_id: @usuario.id).map(&:grupo_id).sort
             if (params[:usuario][:fechadeshabilitacion].nil? &&
                 !params[:usuario][:encrypted_password].nil? &&
                 params[:usuario][:encrypted_password] != "")
@@ -205,7 +205,7 @@ module Jn316Gen
               :current_sign_in_at, :last_sign_in_at, :current_sign_in_ip, 
               :failed_attempts, :unlock_token, :locked_at,
               :last_sign_in_ip, :etiqueta_ids => [],
-              :msip_grupo_ids => []
+              :grupo_ids => []
             )
             return p
           end
