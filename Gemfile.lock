@@ -18,7 +18,7 @@ GIT
 
 GIT
   remote: https://gitlab.com/pasosdeJesus/msip.git
-  revision: f71be0ae16947ec7af8776383923bd1b785a9857
+  revision: fee9a31d39b0b026a3fd34e97b56d367d1719160
   branch: main
   specs:
     msip (2.2.0.alfa3)
@@ -263,7 +263,7 @@ GEM
       thor (~> 1.0)
       zeitwerk (~> 2.5)
     rake (13.0.6)
-    regexp_parser (2.6.1)
+    regexp_parser (2.6.2)
     reline (0.3.2)
       io-console (~> 0.5)
     responders (3.0.1)
