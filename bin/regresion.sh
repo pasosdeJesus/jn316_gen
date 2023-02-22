@@ -82,7 +82,7 @@ echo "== Unificando resultados de pruebas en directorio clásico coverage"
 mkdir -p coverage/
 rm -rf coverage/{*,.*}
 
-if (test "$RC" = "msip" -o "$rutaap" = "test/dummy/") then {
+if (test "$RC" = "msip") then { #-o "$rutaap" = "test/dummy/") then {
   ${RAILS} app:msip:reporteregresion
 } else {
   ${RAILS} msip:reporteregresion
