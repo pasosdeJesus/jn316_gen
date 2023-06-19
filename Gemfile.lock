@@ -39,7 +39,7 @@ GIT
 PATH
   remote: .
   specs:
-    jn316_gen (2.2.0.beta2)
+    jn316_gen (2.2.0.beta4)
       msip
       net-ldap
       rails
