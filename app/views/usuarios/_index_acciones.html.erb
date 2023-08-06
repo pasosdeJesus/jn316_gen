@@ -1,6 +1,8 @@
 <% if can?(:edit, ::Usuario) %>
   <%= link_to t('.edit', :default => t("helpers.links.edit")),
-    edit_modelo_path(registro), :class => 'btn btn-sm'
+    edit_modelo_path(registro), 
+    "data-turbo": false,
+    :class => 'btn btn-sm'
   %>
 <% end %>
 <% if can?(:destroy, ::Usuario) %>
