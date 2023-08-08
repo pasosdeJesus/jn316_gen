@@ -39,7 +39,7 @@
     <div class='input string'>
       <label class='string control-label'>Grupos:</label>
       <ul>
-        <% @usuario.msip_grupo.each do |g| %>
+        <% @usuario.grupo.each do |g| %>
           <li> <%= g.nombre %> </li>
         <% end %>
       </ul>
