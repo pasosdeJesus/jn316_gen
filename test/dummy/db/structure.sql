@@ -690,6 +690,41 @@ CREATE TABLE public.msip_etiqueta_municipio (
 
 
 --
+-- Name: msip_etiqueta_persona; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.msip_etiqueta_persona (
+    id bigint NOT NULL,
+    etiqueta_id integer NOT NULL,
+    persona_id integer NOT NULL,
+    usuario_id integer NOT NULL,
+    fecha date NOT NULL,
+    observaciones character varying(5000),
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: msip_etiqueta_persona_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.msip_etiqueta_persona_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: msip_etiqueta_persona_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.msip_etiqueta_persona_id_seq OWNED BY public.msip_etiqueta_persona.id;
+
+
+--
 -- Name: msip_fuenteprensa; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1302,7 +1337,7 @@ CREATE TABLE public.msip_tclase (
 CREATE TABLE public.msip_tdocumento (
     id integer NOT NULL,
     nombre character varying(500) NOT NULL COLLATE public.es_co_utf_8,
-    sigla character varying(100),
+    sigla character varying(500) NOT NULL,
     formatoregex character varying(500),
     fechacreacion date NOT NULL,
     fechadeshabilitacion date,
@@ -1729,6 +1764,13 @@ ALTER TABLE ONLY public.msip_estadosol ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
+-- Name: msip_etiqueta_persona id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.msip_etiqueta_persona ALTER COLUMN id SET DEFAULT nextval('public.msip_etiqueta_persona_id_seq'::regclass);
+
+
+--
 -- Name: msip_fuenteprensa id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1958,6 +2000,14 @@ ALTER TABLE ONLY public.msip_departamento
 
 ALTER TABLE ONLY public.msip_estadosol
     ADD CONSTRAINT msip_estadosol_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: msip_etiqueta_persona msip_etiqueta_persona_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.msip_etiqueta_persona
+    ADD CONSTRAINT msip_etiqueta_persona_pkey PRIMARY KEY (id);
 
 
 --
@@ -2346,6 +2396,14 @@ ALTER TABLE ONLY public.msip_departamento
 
 
 --
+-- Name: msip_etiqueta_persona fk_rails_05a9a878fd; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.msip_etiqueta_persona
+    ADD CONSTRAINT fk_rails_05a9a878fd FOREIGN KEY (etiqueta_id) REFERENCES public.msip_etiqueta(id);
+
+
+--
 -- Name: msip_municipio fk_rails_089870a38d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2359,6 +2417,14 @@ ALTER TABLE ONLY public.msip_municipio
 
 ALTER TABLE ONLY public.msip_etiqueta_municipio
     ADD CONSTRAINT fk_rails_10d88626c3 FOREIGN KEY (etiqueta_id) REFERENCES public.msip_etiqueta(id);
+
+
+--
+-- Name: msip_etiqueta_persona fk_rails_1856abc5d3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.msip_etiqueta_persona
+    ADD CONSTRAINT fk_rails_1856abc5d3 FOREIGN KEY (usuario_id) REFERENCES public.usuario(id);
 
 
 --
@@ -2495,6 +2561,14 @@ ALTER TABLE ONLY public.msip_orgsocial_sectororgsocial
 
 ALTER TABLE ONLY public.msip_solicitud
     ADD CONSTRAINT fk_rails_a670d661ef FOREIGN KEY (usuario_id) REFERENCES public.usuario(id);
+
+
+--
+-- Name: msip_etiqueta_persona fk_rails_beb3a49837; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.msip_etiqueta_persona
+    ADD CONSTRAINT fk_rails_beb3a49837 FOREIGN KEY (persona_id) REFERENCES public.msip_persona(id);
 
 
 --
@@ -2795,6 +2869,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220722000850'),
 ('20220722192214'),
 ('20220805181901'),
+('20220808141102'),
 ('20220822132754'),
 ('20221024221557'),
 ('20221025025402'),
@@ -2811,6 +2886,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20221212021533'),
 ('20230301145222'),
 ('20230301212546'),
-('20230404025025');
+('20230404025025'),
+('20230504084246'),
+('20230613111532'),
+('20230622205530'),
+('20230712163859'),
+('20230722180204'),
+('20230723011110');
 
 
