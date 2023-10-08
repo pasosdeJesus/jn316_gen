@@ -23,7 +23,7 @@ module Jn316Gen
           end
 
           def atributos_form
-            r = [ 
+            r = [
               "nusuario",
               "nombres",
               "apellidos",
@@ -55,12 +55,12 @@ module Jn316Gen
             authorize! :edit, ::Usuario
             if !usuario_params[:encrypted_password] ||
                 usuario_params[:encrypted_password] == ''
-              params['usuario']['encrypted_password'] = (0...50).map { 
-                ('a'..'z').to_a[rand(26)] 
+              params['usuario']['encrypted_password'] = (0...50).map {
+                ('a'..'z').to_a[rand(26)]
               }.join
             end
             @registro = @usuario = ::Usuario.new(usuario_params)
-            @usuario.no_modificar_ldap = 
+            @usuario.no_modificar_ldap =
               request.params[:usuario][:no_modificar_ldap] == '1'
             @usuario.clave_ldap = usuario_params[:encrypted_password]
             prob = ''
@@ -68,12 +68,12 @@ module Jn316Gen
             if !@usuario.valid?
               mens = 'Usuario no valido'
               @usuario.errors.add( :base, mens)
-              render action: "new", layout: 'application' 
+              render action: "new", layout: 'application'
               #redirect_back fallback_location: root_path,
               return
             end
             @usuario.encrypted_password = BCrypt::Password.create(
-              @usuario.clave_ldap, 
+              @usuario.clave_ldap,
               {:cost => Rails.application.config.devise.stretches}
             )
             unless @usuario.no_modificar_ldap
@@ -82,7 +82,7 @@ module Jn316Gen
                 mens = 'No pudo crear usuario en directorio LDAP:' +
                   prob + '. Saltando creación en base de datos'
                 @usuario.errors.add( :base, mens)
-                render action: "new", layout: 'application' 
+                render action: "new", layout: 'application'
                 return
               end
               @usuario.ultimasincldap = Date.today
@@ -103,7 +103,7 @@ module Jn316Gen
           # PATCH/PUT /usuarios/1.json
           def update
             authorize! :edit, ::Usuario
-            @usuario.no_modificar_ldap = 
+            @usuario.no_modificar_ldap =
               request.params[:usuario][:no_modificar_ldap] == '1'
             @usuario.clave_ldap = usuario_params[:encrypted_password]
             @usuario.nusuarioini = @usuario.nusuario
@@ -116,7 +116,7 @@ module Jn316Gen
                 params[:usuario][:encrypted_password],
                 {:cost => Rails.application.config.devise.stretches})
             elsif !params[:usuario][:fechadeshabilitacion].nil?
-              @usuario.clave_ldap = @usuario.clave = 
+              @usuario.clave_ldap = @usuario.clave =
                 params[:usuario][:encrypted_password] = ''
             else
               params[:usuario].delete(:encrypted_password)
@@ -131,7 +131,7 @@ module Jn316Gen
                 format.html {
                   if !@usuario.valid?
                     #redirect_back fallback_location: root_path
-                    render action: "edit", layout: 'application' 
+                    render action: "edit", layout: 'application'
                   else
                     redirect_back fallback_location: root_path,
                       flash: {error: "No pudo actualizar usuario"}
@@ -195,14 +195,14 @@ module Jn316Gen
 
           def usuario_params
             p = params.require(:usuario).permit(
-              :id, :nusuario, :password, 
-              :nombres, :apellidos, :descripcion, :oficina_id,
-              :rol, :idioma, :email, :encrypted_password, 
+              :id, :nusuario, :password,
+              :nombres, :apellidos, :descripcion,
+              :rol, :idioma, :email, :encrypted_password,
               :no_modificar_ldap, :uidNumber,
-              :fechacreacion_localizada, :fechadeshabilitacion_localizada, 
-              :reset_password_token, 
-              :reset_password_sent_at, :remember_created_at, :sign_in_count, 
-              :current_sign_in_at, :last_sign_in_at, :current_sign_in_ip, 
+              :fechacreacion_localizada, :fechadeshabilitacion_localizada,
+              :reset_password_token,
+              :reset_password_sent_at, :remember_created_at, :sign_in_count,
+              :current_sign_in_at, :last_sign_in_at, :current_sign_in_ip,
               :failed_attempts, :unlock_token, :locked_at,
               :last_sign_in_ip, :etiqueta_ids => [],
               :grupo_ids => []
