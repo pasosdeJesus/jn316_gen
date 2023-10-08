@@ -1044,7 +1044,7 @@ CREATE TABLE public.msip_oficina (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     observaciones character varying(5000) COLLATE public.es_co_utf_8,
-    CONSTRAINT regionsjr_check CHECK (((fechadeshabilitacion IS NULL) OR (fechadeshabilitacion >= fechacreacion)))
+    CONSTRAINT msip_oficina_fechadeshabilitacion_chequeo CHECK (((fechadeshabilitacion IS NULL) OR (fechadeshabilitacion >= fechacreacion)))
 );
 
 
@@ -1772,7 +1772,6 @@ CREATE TABLE public.usuario (
     last_sign_in_ip character varying(255),
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    regionsjr_id integer,
     nombres character varying(50) COLLATE public.es_co_utf_8,
     apellidos character varying(50) COLLATE public.es_co_utf_8,
     ultimasincldap date,
@@ -2985,6 +2984,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230712163859'),
 ('20230722180204'),
 ('20230723011110'),
-('20230927001422');
+('20230927001422'),
+('20231007095930');
 
 
