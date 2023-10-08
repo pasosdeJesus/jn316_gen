@@ -27,11 +27,6 @@
       <%= @usuario.email%>
     </div>
 
-    <div class='input string'>
-      <label class='string control-label'>Oficina:</label>
-      <%= @usuario.oficina.nombre if @usuario.oficina %>
-    </div>
- 
     <%= f.input :descripcion, label: 'Descripción',
       :required => false, :autofocus => true 
     %>
