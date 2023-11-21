@@ -9,10 +9,10 @@ module Jn316Gen
           ['Msip', 'pais'],
           ['Msip', 'departamento'],
           ['Msip', 'municipio'],
-          ['Msip', 'clase'],
+          ['Msip', 'centropoblado'],
           ['Msip', 'fuenteprensa'],
           ['Msip', 'oficina'],
-          ['Msip', 'tclase'],
+          ['Msip', 'tcentropoblado'],
           ['Msip', 'tdocumento'],
           ['Msip', 'trelacion'],
           ['Msip', 'tsitio']
