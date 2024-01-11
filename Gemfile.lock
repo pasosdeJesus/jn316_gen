@@ -18,8 +18,8 @@ GIT
 
 GIT
   remote: https://gitlab.com/pasosdeJesus/msip.git
-  revision: ca24a661b3fd2f3d7c8f744e9cca8ef5022eddbd
-  branch: renclase
+  revision: 89a073192a6f27559237d1966c044aeaee7c8837
+  branch: rails7.0fin
   specs:
     msip (2.2.0.beta4)
       cancancan (~> 3)
@@ -180,9 +180,9 @@ GEM
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     io-console (0.7.1)
-    irb (1.11.0)
+    irb (1.11.1)
       rdoc
-      reline (>= 0.3.8)
+      reline (>= 0.4.2)
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)

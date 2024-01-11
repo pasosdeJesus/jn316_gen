@@ -163,6 +163,94 @@ CREATE FUNCTION public.msip_eliminar_familiar_inverso() RETURNS trigger
 
 
 --
+-- Name: msip_nombre_vereda(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.msip_nombre_vereda() RETURNS character varying
+    LANGUAGE sql
+    AS $$
+        SELECT 'Vereda '
+      $$;
+
+
+--
+-- Name: msip_ubicacionpre_dpa_nomenclatura(character varying, character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.msip_ubicacionpre_dpa_nomenclatura(pais character varying, departamento character varying, municipio character varying, vereda character varying, centropoblado character varying) RETURNS text[]
+    LANGUAGE sql
+    AS $$
+        SELECT CASE
+        WHEN pais IS NULL OR pais = '' THEN
+          array[NULL, NULL]
+        WHEN departamento IS NULL OR departamento = '' THEN
+          array[pais, NULL]
+        WHEN municipio IS NULL OR municipio = '' THEN
+          array[departamento || ' / ' || pais, departamento]
+        WHEN (vereda IS NULL OR vereda = '') AND
+        (centropoblado IS NULL OR centropoblado = '') THEN
+          array[
+            municipio || ' / ' || departamento || ' / ' || pais,
+            municipio || ' / ' || departamento ]
+        WHEN vereda IS NOT NULL THEN
+          array[
+            msip_nombre_vereda() || vereda || ' / ' ||
+            municipio || ' / ' || departamento || ' / ' || pais,
+            msip_nombre_vereda() || vereda || ' / ' ||
+            municipio || ' / ' || departamento ]
+        ELSE
+          array[
+            centropoblado || ' / ' ||
+            municipio || ' / ' || departamento || ' / ' || pais,
+            centropoblado || ' / ' ||
+            municipio || ' / ' || departamento ]
+         END
+      $$;
+
+
+--
+-- Name: msip_ubicacionpre_id_rtablabasica(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.msip_ubicacionpre_id_rtablabasica() RETURNS integer
+    LANGUAGE sql
+    AS $$
+        SELECT max(id+1) FROM msip_ubicacionpre WHERE 
+          (id+1) NOT IN (SELECT id FROM msip_ubicacionpre) AND 
+          id<10000000
+      $$;
+
+
+--
+-- Name: msip_ubicacionpre_nomenclatura(character varying, character varying, character varying, character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.msip_ubicacionpre_nomenclatura(pais character varying, departamento character varying, municipio character varying, vereda character varying, centropoblado character varying, lugar character varying, sitio character varying) RETURNS text[]
+    LANGUAGE sql
+    AS $$
+        SELECT CASE
+        WHEN (lugar IS NULL OR lugar = '') THEN
+          msip_ubicacionpre_dpa_nomenclatura(pais, departamento,
+          municipio, vereda, centropoblado)
+        WHEN (sitio IS NULL OR sitio= '') THEN
+          array[lugar || ' / ' || 
+            (msip_ubicacionpre_dpa_nomenclatura(pais, departamento,
+              municipio, vereda, centropoblado))[0],
+          lugar || ' / ' || 
+            (msip_ubicacionpre_dpa_nomenclatura(pais, departamento,
+              municipio, vereda, centropoblado))[1] ]
+        ELSE
+          array[sitio || ' / ' || lugar || ' / ' || 
+            (msip_ubicacionpre_dpa_nomenclatura(pais, departamento,
+              municipio, vereda, centropoblado))[0],
+          sitio || ' / ' || lugar || ' / ' || 
+            (msip_ubicacionpre_dpa_nomenclatura(pais, departamento,
+              municipio, vereda, centropoblado))[1] ]
+        END
+      $$;
+
+
+--
 -- Name: soundexesp(text); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -1651,7 +1739,7 @@ CREATE TABLE public.msip_ubicacion (
 CREATE TABLE public.msip_ubicacionpre (
     id bigint NOT NULL,
     nombre character varying(2000) NOT NULL COLLATE public.es_co_utf_8,
-    pais_id integer,
+    pais_id integer NOT NULL,
     departamento_id integer,
     municipio_id integer,
     centropoblado_id integer,
@@ -1662,7 +1750,11 @@ CREATE TABLE public.msip_ubicacionpre (
     longitud double precision,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    nombre_sin_pais character varying(500)
+    nombre_sin_pais character varying(500),
+    vereda_id integer,
+    observaciones character varying(5000),
+    fechacreacion date DEFAULT now() NOT NULL,
+    fechadeshabilitacion date
 );
 
 
@@ -2031,6 +2123,14 @@ ALTER TABLE ONLY public.msip_centropoblado
 
 
 --
+-- Name: msip_centropoblado msip_centropoblado_municipio_id_id_unico; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.msip_centropoblado
+    ADD CONSTRAINT msip_centropoblado_municipio_id_id_unico UNIQUE (municipio_id, id);
+
+
+--
 -- Name: msip_centropoblado msip_centropoblado_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2060,6 +2160,14 @@ ALTER TABLE ONLY public.msip_departamento
 
 ALTER TABLE ONLY public.msip_departamento
     ADD CONSTRAINT msip_departamento_id_pais_id_deplocal_unico UNIQUE (pais_id, deplocal_cod);
+
+
+--
+-- Name: msip_departamento msip_departamento_pais_id_id_unico; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.msip_departamento
+    ADD CONSTRAINT msip_departamento_pais_id_id_unico UNIQUE (pais_id, id);
 
 
 --
@@ -2116,6 +2224,14 @@ ALTER TABLE ONLY public.msip_grupo
 
 ALTER TABLE ONLY public.msip_grupoper
     ADD CONSTRAINT msip_grupoper_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: msip_municipio msip_municipio_departamento_id_id_unico; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.msip_municipio
+    ADD CONSTRAINT msip_municipio_departamento_id_id_unico UNIQUE (departamento_id, id);
 
 
 --
@@ -2327,6 +2443,14 @@ ALTER TABLE ONLY public.msip_ubicacionpre
 
 
 --
+-- Name: msip_vereda msip_vereda_municipio_id_id_unico; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.msip_vereda
+    ADD CONSTRAINT msip_vereda_municipio_id_id_unico UNIQUE (municipio_id, id);
+
+
+--
 -- Name: msip_vereda msip_vereda_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2406,6 +2530,13 @@ CREATE INDEX index_msip_ubicacion_on_pais_id ON public.msip_ubicacion USING btre
 
 
 --
+-- Name: index_msip_ubicacionpre_on_vereda_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_msip_ubicacionpre_on_vereda_id ON public.msip_ubicacionpre USING btree (vereda_id);
+
+
+--
 -- Name: index_usuario_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2438,6 +2569,76 @@ CREATE INDEX msip_persona_anionac_ind ON public.msip_persona USING btree (aniona
 --
 
 CREATE INDEX msip_persona_sexo_ind ON public.msip_persona USING btree (sexo);
+
+
+--
+-- Name: msip_ubicacionpre_centropoblado_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX msip_ubicacionpre_centropoblado_id_idx ON public.msip_ubicacionpre USING btree (centropoblado_id);
+
+
+--
+-- Name: msip_ubicacionpre_departamento_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX msip_ubicacionpre_departamento_id_idx ON public.msip_ubicacionpre USING btree (departamento_id);
+
+
+--
+-- Name: msip_ubicacionpre_departamento_id_municipio_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX msip_ubicacionpre_departamento_id_municipio_id_idx ON public.msip_ubicacionpre USING btree (departamento_id, municipio_id);
+
+
+--
+-- Name: msip_ubicacionpre_municipio_id_centropoblado_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX msip_ubicacionpre_municipio_id_centropoblado_id_idx ON public.msip_ubicacionpre USING btree (municipio_id, centropoblado_id);
+
+
+--
+-- Name: msip_ubicacionpre_municipio_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX msip_ubicacionpre_municipio_id_idx ON public.msip_ubicacionpre USING btree (municipio_id);
+
+
+--
+-- Name: msip_ubicacionpre_municipio_id_vereda_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX msip_ubicacionpre_municipio_id_vereda_id_idx ON public.msip_ubicacionpre USING btree (municipio_id, vereda_id);
+
+
+--
+-- Name: msip_ubicacionpre_pais_id_departamento_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX msip_ubicacionpre_pais_id_departamento_id_idx ON public.msip_ubicacionpre USING btree (pais_id, departamento_id);
+
+
+--
+-- Name: msip_ubicacionpre_pais_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX msip_ubicacionpre_pais_id_idx ON public.msip_ubicacionpre USING btree (pais_id);
+
+
+--
+-- Name: msip_ubicacionpre_tsitio_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX msip_ubicacionpre_tsitio_id_idx ON public.msip_ubicacionpre USING btree (vereda_id);
+
+
+--
+-- Name: msip_ubicacionpre_vereda_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX msip_ubicacionpre_vereda_id_idx ON public.msip_ubicacionpre USING btree (vereda_id);
 
 
 --
@@ -2547,6 +2748,14 @@ ALTER TABLE ONLY public.msip_ubicacionpre
 
 ALTER TABLE ONLY public.msip_orgsocial_persona
     ADD CONSTRAINT fk_rails_4672f6cbcd FOREIGN KEY (persona_id) REFERENCES public.msip_persona(id);
+
+
+--
+-- Name: msip_ubicacionpre fk_rails_558c98f353; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.msip_ubicacionpre
+    ADD CONSTRAINT fk_rails_558c98f353 FOREIGN KEY (vereda_id) REFERENCES public.msip_vereda(id);
 
 
 --
@@ -2715,6 +2924,38 @@ ALTER TABLE ONLY public.msip_centropoblado
 
 ALTER TABLE ONLY public.msip_solicitud
     ADD CONSTRAINT fk_rails_ffa31a0de6 FOREIGN KEY (estadosol_id) REFERENCES public.msip_estadosol(id);
+
+
+--
+-- Name: msip_ubicacionpre fk_ubicacionpre_departamento_municipio; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.msip_ubicacionpre
+    ADD CONSTRAINT fk_ubicacionpre_departamento_municipio FOREIGN KEY (departamento_id, municipio_id) REFERENCES public.msip_municipio(departamento_id, id);
+
+
+--
+-- Name: msip_ubicacionpre fk_ubicacionpre_municipio_centropoblado; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.msip_ubicacionpre
+    ADD CONSTRAINT fk_ubicacionpre_municipio_centropoblado FOREIGN KEY (municipio_id, centropoblado_id) REFERENCES public.msip_centropoblado(municipio_id, id);
+
+
+--
+-- Name: msip_ubicacionpre fk_ubicacionpre_municipio_vereda; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.msip_ubicacionpre
+    ADD CONSTRAINT fk_ubicacionpre_municipio_vereda FOREIGN KEY (municipio_id, vereda_id) REFERENCES public.msip_vereda(municipio_id, id);
+
+
+--
+-- Name: msip_ubicacionpre fk_ubicacionpre_pais_departamento; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.msip_ubicacionpre
+    ADD CONSTRAINT fk_ubicacionpre_pais_departamento FOREIGN KEY (pais_id, departamento_id) REFERENCES public.msip_departamento(pais_id, id);
 
 
 --
@@ -2987,6 +3228,14 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230927001422'),
 ('20231007095930'),
 ('20231120094041'),
-('20231121203443');
+('20231121203443'),
+('20231124200056'),
+('20231125152802'),
+('20231125152810'),
+('20231125230000'),
+('20231205202418'),
+('20231205205549'),
+('20231205205600'),
+('20231208162022');
 
 
