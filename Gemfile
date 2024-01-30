@@ -36,7 +36,7 @@ gem "nokogiri", ">=1.11.1"
 
 gem "pg"
 
-gem "rails", ">= 7.0", "< 7.1"
+gem "rails", "~> 7.1"
   #git: "https://github.com/rails/rails.git", branch: "6-1-stable"
 
 gem "sassc-rails"
@@ -61,7 +61,7 @@ gem "will_paginate" # Listados en páginas
 # lógico y no alfabetico como las gemas anteriores)
 
 gem "msip", # Motor generico
-  git: "https://gitlab.com/pasosdeJesus/msip.git", branch: "rails7.0fin"
+ git: "https://gitlab.com/pasosdeJesus/msip.git", branch: "main"
   #path: "../msip"
 
 
