@@ -37,7 +37,7 @@ if (test "$RUTA_RELATIVA" = "") then {
 } fi;
 
 echo "== Prepara base"
- 
+
 (cd $rutaap;  ${RAILS} db:environment:set RAILS_ENV=test; RAILS_ENV=test ${RAILS} db:drop db:create db:setup db:seed msip:indices)
 if (test "$?" != "0") then {
   echo "No se pudo inicializar base de pruebas";
@@ -47,11 +47,12 @@ if (test "$?" != "0") then {
 echo "== Pruebas de regresión unitarias"
 mkdir -p cobertura-unitarias/
 rm -rf cobertura-unitarias/{*,.*}
-CONFIG_HOSTS=www.example.com RUTA_RELATIVA=/ ${RAILS} test
+CONFIG_HOSTS=www.example.com RUTA_RELATIVA=/ ${RAILS} test test/models test/controllers test/helpers
 if (test "$?" != "0") then {
   echo "No pasaron pruebas de regresión unitarias";
   exit 1;
 } fi;
+
 
 CONFIG_HOSTS=www.example.com RUTA_RELATIVA=/ bin/rails test `find test/integration -name "*rb" -type f`
 if (test "$?" != "0") then {
