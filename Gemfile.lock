@@ -18,8 +18,8 @@ GIT
 
 GIT
   remote: https://gitlab.com/pasosdeJesus/msip.git
-  revision: 6bb8517bb1ed4348174be834cad233f92614f062
-  branch: main
+  revision: b4916ff97261dd5790dd1efe5e471abc301460d3
+  branch: v2.2
   specs:
     msip (2.2.0.beta5)
       cancancan (~> 3)
@@ -129,7 +129,7 @@ GEM
       execjs (~> 2.0)
     base64 (0.2.0)
     bcrypt (3.1.20)
-    bigdecimal (3.1.6)
+    bigdecimal (3.1.7)
     bindex (0.8.1)
     bootsnap (1.18.3)
       msgpack (~> 1.2)

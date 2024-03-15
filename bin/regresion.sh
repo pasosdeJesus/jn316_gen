@@ -80,7 +80,7 @@ if (test "$CI" = "" -a "$SALTACAPYBARA" != "1") then { # Por ahora no en gitlab-
   } fi;
 } fi;
 
-if (test -f $rutaap/bin/pruebasjs.sh -a "x$NOPRUEBAJS" != "x1") then {
+if (test -f $rutaap/bin/pruebasjs.sh -a -d $rutaap/test/puppeteer -a "x$NOPRUEBAJS" != "x1") then {
   echo "== Con puppeteer"
   (cd $rutaap; ${RAILS} msip:stimulus_motores; IPDES=127.0.0.1 bin/pruebasjs.sh)
   if (test "$?" != "0") then {
