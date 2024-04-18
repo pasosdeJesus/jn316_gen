@@ -1,13 +1,13 @@
 Puede ver el listado de personas que han implementado en:
-<https://github.com/pasosdeJesus/jn316_gen/graphs/contributors>
+<https://gitlab.com/pasosdeJesus/jn316_gen/-/graphs/main>
 
 Este motor usa el motor 
-[msip](https://github.com/pasosdeJesus/msip)
+[msip](https://gitlab.com/pasosdeJesus/msip)
 también mantenido y re-factorizado por Pasos de Jesús de 
 aplicaciones web desarrolladas voluntariamente o financiadas por 
 diversas organizaciones que han cedido al dominio público lo desarrollado, 
 ver por ejemplo
-<https://github.com/pasosdeJesus/sivel2/blob/master/CREDITOS.md>
+<https://gitlab.com/pasosdeJesus/sivel2/-/blob/master/CREDITOS.md>
 
 También usa una pila tecnológica de código abierto que incluye 
 PostgreSQL, nginx, Ruby, nodejs y Ruby on Rails, así como muchas

@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = Jn316Gen::VERSION
   s.authors     = ["Vladimir Támara Patiño"]
   s.email       = ["vtamara@pasosdeJesus.org"]
-  s.homepage    = "https://github.com/pasosdeJesus/jn316_gen"
+  s.homepage    = "https://gitlab.com/pasosdeJesus/jn316_gen"
   s.summary     = "Motor para autenticar con directorio LDAP y administración básica de usuarios y grupos"
   s.description = ""
   s.license     = "Dominio Público de acuerdo a Legislación Colombiana"

@@ -12,9 +12,9 @@ Msip.setup do |config|
   end
   config.titulo = "Jn316Gen #{Jn316Gen::VERSION}"
   config.descripcion = "Motor para manejar directorio LDAP"
-  config.codigofuente = "https://github.com/pasosdeJesus/jn316_gen"
-  config.urlcontribuyentes = "https://github.com/pasosdeJesus/jn316_gen/graphs/contributors"
-  config.urlcreditos = "https://github.com/pasosdeJesus/jn316_gen/blob/master/CREDITOS.md"
+  config.codigofuente = "https://gitlab.com/pasosdeJesus/jn316_gen"
+  config.urlcontribuyentes = "https://gitlab.com/pasosdeJesus/jn316_gen/-/graphs/main"
+  config.urlcreditos = "https://gitlab.com/pasosdeJesus/jn316_gen/-/blob/master/CREDITOS.md"
   config.agradecimientoDios = "<p>
   Agradecemos a Dios por la salvación 
 <blockquote>

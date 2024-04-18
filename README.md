@@ -6,7 +6,7 @@
 
 
 
-![Logo de jn316_gen](https://raw.githubusercontent.com/pasosdeJesus/jn316_gen/master/test/dummy/app/assets/images/logo.jpg)
+![Logo de jn316_gen](https://gitlab.com/pasosdeJesus/jn316_gen/-/raw/main/test/dummy/app/assets/images/logo.jpg)
 
 Este es un motor para autenticar con un directorio LDAP y realizar operaciones 
 básicas de administración de usuarios y grupos en el directorio LDAP y/o en
@@ -147,7 +147,7 @@ se requiere:
 # Configuración de este motor en su aplicación
 
 1. Asegurese de que su aplicación use el motor `msip` para manejar
-   usuarios y grupos (ver <https://github.com/pasosdeJesus/msip> )
+   usuarios y grupos (ver <https://gitlab.com/pasosdeJesus/msip> )
 
 2. LDAP utilizable con las convenciones descritas al comienzo. La
   funcionalidad de sincronizar puede ayudarle a detectar problemas en
@@ -197,7 +197,7 @@ namespace "dc=miorg,dc=net" {
 
 3. Agregue la gema en Gemfile:
 ```
-gem 'jn316_gen', git: 'https://github.com/pasosdeJesus/jn316_gen.git'
+gem 'jn316_gen', git: 'https://gitlab.com/pasosdeJesus/jn316_gen.git'
 ```
 y ejecute:
 ```
