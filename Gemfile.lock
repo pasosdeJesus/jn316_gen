@@ -18,7 +18,7 @@ GIT
 
 GIT
   remote: https://gitlab.com/pasosdeJesus/msip.git
-  revision: 8c2c6c9137bf5073c79289515625855c8cbfefb9
+  revision: ca6831d194dae4343e96df6644fc355a00ece673
   branch: v2.2
   specs:
     msip (2.2.0.beta6)
@@ -234,7 +234,7 @@ GEM
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     orm_adapter (0.5.0)
-    pg (1.5.7)
+    pg (1.5.8)
     psych (5.1.2)
       stringio
     public_suffix (5.0.4)
