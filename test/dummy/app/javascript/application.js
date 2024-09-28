@@ -16,6 +16,11 @@ import 'chosen-js/chosen.jquery';       // Cuadros de seleccion potenciados
 import 'bootstrap-datepicker'
 import 'bootstrap-datepicker/dist/locales/bootstrap-datepicker.es.min.js'
 
+import Msip__Motor from "./controllers/msip/motor"
+window.Msip__Motor = Msip__Motor
+import Jn316Gen__Motor from "./controllers/jn316_gen/motor"
+window.Jn316Gen__Motor = Jn316Gen__Motor
+
 let esperarRecursosSprocketsYDocumento = function (resolver) {
   if (typeof window.puntomontaje == 'undefined') {
     setTimeout(esperarRecursosSprocketsYDocumento, 100, resolver)
@@ -48,7 +53,9 @@ document.addEventListener('turbo:load', (e) => {
   
   console.log('Escuchador turbo:load')
 
-  msip_ejecutarAlCargarPagina(window)
+  msip_ejecutarAlCargarPagina(window) // Establece root.puntomontaje
+  Msip__Motor.ejecutarAlCargarPagina()
+  Jn316Gen__Motor.ejecutarAlCargarPagina()
 })
 
 import "./controllers"
